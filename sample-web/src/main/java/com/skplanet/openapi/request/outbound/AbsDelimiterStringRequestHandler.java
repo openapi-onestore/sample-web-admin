@@ -3,6 +3,9 @@ package com.skplanet.openapi.request.outbound;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.springframework.stereotype.Component;
+
+@Component("outRequestHandler")
 public abstract class AbsDelimiterStringRequestHandler implements
 		OutBoundRequestHandler<Map<String, String>, String> {
 

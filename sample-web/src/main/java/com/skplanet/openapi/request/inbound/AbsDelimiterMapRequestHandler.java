@@ -3,6 +3,8 @@ package com.skplanet.openapi.request.inbound;
 import java.util.Collections;
 import java.util.Map;
 
+import org.springframework.stereotype.Component;
+
 public abstract class AbsDelimiterMapRequestHandler implements
 		InBoundRequestHandler<Map<String, String>> {
 

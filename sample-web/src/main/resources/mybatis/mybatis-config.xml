@@ -21,7 +21,7 @@
 	</settings>
 	
 	<typeAliases>
-		<typeAlias type="com.skplanet.payplanet.vo.BulkJob" alias="bulkJob"/>
+		<typeAlias type="com.skplanet.openapi.vo.BulkJob" alias="bulkJob"/>
 	</typeAliases>
 	
 </configuration>

@@ -13,7 +13,7 @@ public class TxNotiService {
 
 	@Autowired
 	private PayPlanetClient payPlanetClient;
-
+	
 	/**
 	 * 
 	 * @param param
