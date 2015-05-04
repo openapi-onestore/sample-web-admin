@@ -37,12 +37,12 @@ public class PayPlanetClient {
 		List<HttpHeader> header = new ArrayList<HttpHeader>();
 		header.add(new BatchFileVersionHeader("1"));
 		header.add(new MerchantIdHeader("skplanet"));
-		header.add(new NotiUrlHeader("http://[user_app_server_ip]/notification/noti_listener"));
+		header.add(new NotiUrlHeader("http://localhost:8080/sample-web/openapi/notification/noti_listener"));
 		header.add(new ProcessingCountHeader(Integer.toString(processingCount)));
 		
 		logger.debug("Path : " + path);
 		
-		HttpClient client = new HttpClient();
+		HttpClient client = new HttpClient(header);
 		String response = client.postChunkedString("http://localhost:8080/SpringMVC/rest/bulkjob/get", path);
 		
 		return response;

@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.skplanet.openapi.dao.BulkJobDAO;
 import com.skplanet.openapi.dao.BulkJobDAOImpl;
@@ -27,7 +28,7 @@ public class BulkJobService {
 	
 	@Autowired
 	private BulkJobDAO bulkJobDAO;
-
+	
 	@Autowired
 	private PayPlanetClient payPlanetClient;
 	
@@ -39,15 +40,30 @@ public class BulkJobService {
 		String result = null;
 		
 		try {
-			
 			BulkJobInfo bulkJobInfo = makeBulkFile(param);
-			
 			result = payPlanetClient.createBulkPayment(bulkJobInfo.getProcessingCount(),
 					bulkJobInfo.getFilePath());
-
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	public String requestBulkJob(MultipartFile multipartFile) {
+		String result = null;
+		File tmpFile = new File("D:/samplefolder/bulkfile/" + UUID.randomUUID().toString()
+				+ ".bulk");
+		
+		try {
+			multipartFile.transferTo(tmpFile);
+			BulkJobInfo bulkJobInfo = new BulkJobInfo(tmpFile.getAbsolutePath(), 1);
+			result = payPlanetClient.createBulkPayment(bulkJobInfo.getProcessingCount(), bulkJobInfo.getFilePath());			
+		} catch (IllegalStateException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -86,13 +102,13 @@ public class BulkJobService {
 					writer.write(",");
 				}
 			}
+			writer.write('\n');
 		}
-
 		writer.close();
 
 		return new BulkJobInfo(tmpFile.getAbsolutePath(), processingCount);
 	}
-
+	
 	class BulkJobInfo {
 		String filePath;
 		int processingCount;
@@ -102,7 +118,7 @@ public class BulkJobService {
 			this.filePath = filePath;
 			this.processingCount = processingCount;
 		}
-
+		
 		public String getFilePath() {
 			return filePath;
 		}

@@ -17,5 +17,6 @@
 
 	<select id="selectBulkJob" parameterType="map" resultMap="bulkJobMap">
 		SELECT * FROM BULK_JOB_TABLE
+		WHERE MID BETWEEN #{START_NO} AND #{END_NO}
 	</select>
 </mapper>
