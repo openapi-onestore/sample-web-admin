@@ -13,31 +13,29 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.servlet.ModelAndView;
 
-import com.skplanet.openapi.service.BulkJobService;
+import com.skplanet.openapi.service.PaymentService;
 
 @Controller
 @RequestMapping("/payment")
-public class BulkJobController {
+public class PaymentController {
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(BulkJobController.class);
+			.getLogger(PaymentController.class);
 
 	@Autowired
-	private BulkJobService bulkJobService;
+	private PaymentService paymentService;
 
 	@RequestMapping(value = "/bulkjob", method = RequestMethod.GET)
 	@ResponseBody
 	public String requestBulkJobUploadFromDB(String start_no, String end_no) {
-
+		
 		logger.debug("Request param : " + start_no + " " + end_no);
 		HashMap<String, String> hashMap = new HashMap<String, String>();
 		hashMap.put("START_NO", start_no);
 		hashMap.put("END_NO", end_no);
 		
-		String result = bulkJobService.requestBulkJob(hashMap);
+		String result = paymentService.requestBulkJob(hashMap);
 		
 		return result;
 	}
@@ -48,7 +46,7 @@ public class BulkJobController {
 			@RequestParam("bulkjob") MultipartFile request,
 			HttpServletRequest servletRequest) {
 		
-		String result = bulkJobService.requestBulkJob(request);
+		String result = paymentService.requestBulkJob(request);
 		
 		return result;
 	}

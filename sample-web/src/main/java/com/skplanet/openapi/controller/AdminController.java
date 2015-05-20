@@ -19,7 +19,6 @@ public class AdminController {
 		modelAndView.setViewName("admin_index");		
 		
 		return modelAndView;
-		
 	}
 	
 }

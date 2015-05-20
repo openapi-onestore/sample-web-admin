@@ -67,6 +67,7 @@
       <div class="page-header" align="center">
         <h1>Bulk payment file upload</h1>
       </div>
+<!--   
       <p align="center">
         <button type="button" class="btn btn-lg btn-default">Default</button>
         <button type="button" class="btn btn-lg btn-primary">Primary</button>
@@ -76,10 +77,11 @@
         <button type="button" class="btn btn-lg btn-danger">Danger</button>
         <button type="button" class="btn btn-lg btn-link">Link</button>
       </p>
+-->
       
     <form action="<c:url value='/openapi/payment/bulkjob'/>" method="post" enctype="multipart/form-data">
-		결제 파일 목록 : <input type="file" name="bulkjob" />
-		<br />
+		<input type="file" name="bulkjob" />
+		<br/>
 		<input type="submit" value="upload" />
 	</form>
     
@@ -88,29 +90,37 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th>Upload File</th>
-                <th>Status</th>
                 <th>Job number</th>
+                <th>Upload file</th>
+                <th>Status</th>
+                <th>Upload date</th>
+                <th>Complete date</th>                
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>1</td>
-                <td>bulk_job.txt</td>
-                <td>Processing</td>
+              	<td>1</td>
                 <td>10000</td>
+                <td>bulk_job.txt</td>
+                <td><button type="button" class="btn btn-sm btn-primary">Processing</button></td>
+                <td>2015-05-14</td>
+                <td>2015-05-14</td>
               </tr>
               <tr>
-                <td>2</td>
+              	<td>2</td>              
+                <td>10002</td>
                 <td>bulk_job.txt</td>
-                <td>Complete</td>
-                <td>1000</td>
+                <td><button type="button" class="btn btn-sm btn-success">Completed</button></td>
+                <td>2015-05-14</td>
+                <td>2015-05-14</td>
               </tr>
               <tr>
-                <td>3</td>
+              	<td>3</td>              
+                <td>10011</td>
                 <td>bulk_job.txt</td>
-                <td>Complete</td>
-                <td>500</td>
+                <td><button type="button" class="btn btn-sm btn-danger">Error</button></td>
+                <td>2015-05-14</td>
+                <td>not completed</td>
               </tr>
             </tbody>
           </table>

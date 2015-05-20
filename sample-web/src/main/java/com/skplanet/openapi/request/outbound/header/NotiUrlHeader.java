@@ -13,7 +13,7 @@ public class NotiUrlHeader implements HttpHeader{
 	public String getName() {
 		return "notiUrl";
 	}
-
+	
 	public String getValue() {
 		return value;
 	}

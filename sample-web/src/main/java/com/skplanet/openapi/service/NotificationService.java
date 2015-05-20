@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.skplanet.openapi.request.outbound.PayPlanetClient;
 
-@Service("txNotiService")
-public class TxNotiService {
+@Service("NotificationService")
+public class NotificationService {
 
 	@Autowired
 	private PayPlanetClient payPlanetClient;

@@ -22,7 +22,11 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.AbstractHttpMessage;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
+@Component
+@Scope("prototype")
 public class HttpClient {
 
 	private StatusLine statusLine;
@@ -35,13 +39,17 @@ public class HttpClient {
 	public HttpClient() {
 		this(Collections.<HttpHeader> emptyList());
 	}
+	
+	public void setHeaders(List<HttpHeader> headers) {
+		this.headers = headers;
+	}
 
 	private void addHeaders(AbstractHttpMessage httpMessage) {
 		for (HttpHeader header : headers) {
 			httpMessage.setHeader(header.getName(), header.getValue());
 		}
 	}
-
+	
 	public String get(String url) throws Exception {
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		HttpGet httpGet = new HttpGet(url);
@@ -71,7 +79,7 @@ public class HttpClient {
 
 		httpPost.setEntity(new UrlEncodedFormEntity(nvps));
 		CloseableHttpResponse response = httpclient.execute(httpPost);
-
+		
 		try {
 			setStatusLine(response.getStatusLine());
 			return EntityUtils.toString(response.getEntity());
