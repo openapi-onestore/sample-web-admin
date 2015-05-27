@@ -7,9 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.skplanet.openapi.request.outbound.PayPlanetClient;
+import com.skplanet.openapi.request.outbound.PayplanetClient;
 import com.skplanet.openapi.vo.ClientInfo;
 import com.skplanet.openapi.vo.OAuth;
+import com.skplanet.openapi.vo.OAuthVerifyResult;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -20,7 +21,7 @@ import com.skplanet.openapi.vo.OAuth;
 public class PayplanetClientTest {
 	
 	@Autowired
-	private PayPlanetClient payPlanetClient;
+	private PayplanetClient payPlanetClient;
 
 	@Autowired
 	private ClientInfo clientInfo;
@@ -43,5 +44,23 @@ public class PayplanetClientTest {
 		Assert.assertEquals("http://www.payplanet.com/openapi/v1/iap/createPaymentTransaction", scope[1]);
 		
 	}
+	
+	@Test
+	public void getAccessTokenValidation() {
+		
+		OAuth oauth = payPlanetClient.createOAuthToken(clientInfo);
+		OAuthVerifyResult oAuthVerifyResult = payPlanetClient.verifyOAuthToken(oauth);
+		
+		Assert.assertEquals(oauth.getAppId(), oAuthVerifyResult.getAppId());
+		Assert.assertEquals("Wed May 20 11:23:54 GMT+09:00 2015", oAuthVerifyResult.getExpiredAt());
+		Assert.assertEquals("GooPang", oAuthVerifyResult.getMerchantId());
+		Assert.assertEquals(true, oAuthVerifyResult.getMessage().startsWith("NA"));
+		Assert.assertEquals("NA", oAuthVerifyResult.getReason());
+		Assert.assertEquals("SUCCESS", oAuthVerifyResult.getStatus());
+		Assert.assertEquals(3, oAuthVerifyResult.getScopes().length);
+		
+	}
+	
+	
 	
 }

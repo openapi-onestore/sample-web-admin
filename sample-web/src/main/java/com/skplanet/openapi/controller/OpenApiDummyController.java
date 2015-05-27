@@ -1,5 +1,7 @@
 package com.skplanet.openapi.controller;
 
+import java.io.File;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +41,14 @@ public class OpenApiDummyController {
 		
 		boolean result = fileUploadService.fileUpload(request);
 		
-		return "result=" + result + "&jobid=oa002311134";
+		return "result=" + result + "&jobid=002311134";
+	}
+	
+	@RequestMapping(value = "/result", method = RequestMethod.GET)
+	@ResponseBody
+	public String requestResultFile(String jobid) {
+		
+		return "jobid=0012334&status=processing";
 	}
 	
 }

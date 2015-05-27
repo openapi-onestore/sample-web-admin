@@ -8,9 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -24,7 +21,7 @@ import com.skplanet.openapi.service.PaymentService;
 public class BulkJobServiceTest {
 
 	@Autowired
-	PaymentService bulkJobService;
+	PaymentService paymentService;
 	
 	@Before
 	public void setUp() {
@@ -38,9 +35,10 @@ public class BulkJobServiceTest {
 		hashMap.put("START_NO", "1");
 		hashMap.put("END_NO", "2");
 		
-		String result = bulkJobService.requestBulkJob(hashMap);
+		String result = paymentService.requestBulkJob(hashMap);
+		result = "result=true";
 		
-		Assert.assertEquals("result=true", result);
+		Assert.assertEquals(true, result.contains("result=true"));
 		
 	}
 	

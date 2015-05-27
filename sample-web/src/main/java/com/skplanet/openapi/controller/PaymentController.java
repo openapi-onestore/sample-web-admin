@@ -1,5 +1,6 @@
 package com.skplanet.openapi.controller;
 
+import java.io.File;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,4 +52,25 @@ public class PaymentController {
 		return result;
 	}
 
+	@RequestMapping(value = "/result", method = RequestMethod.GET)
+	@ResponseBody
+	public File requestResultFile(String jobid) {
+		
+		File file = null;
+		
+		
+		
+		return file;
+	}
+	
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	@ResponseBody
+	public String requestTest() {
+		
+		logger.debug("Current Thread : " + Thread.currentThread().getName() + " Current Object " + this);
+		
+		return "Current Thread : " + Thread.currentThread().getName() + " Current Object " + this;
+	}
+
+	
 }

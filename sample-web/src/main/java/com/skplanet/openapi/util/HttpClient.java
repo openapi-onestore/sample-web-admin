@@ -16,6 +16,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -31,11 +32,11 @@ public class HttpClient {
 
 	private StatusLine statusLine;
 	private List<HttpHeader> headers;
-
+	
 	public HttpClient(List<HttpHeader> headers) {
 		this.headers = headers;
 	}
-
+	
 	public HttpClient() {
 		this(Collections.<HttpHeader> emptyList());
 	}
@@ -49,7 +50,7 @@ public class HttpClient {
 			httpMessage.setHeader(header.getName(), header.getValue());
 		}
 	}
-	
+		
 	public String get(String url) throws Exception {
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		HttpGet httpGet = new HttpGet(url);
@@ -69,14 +70,14 @@ public class HttpClient {
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(url);
 		addHeaders(httpPost);
-
+		
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		Iterator<String> keys = data.keySet().iterator();
 		while (keys.hasNext()) {
 			String key = keys.next();
 			nvps.add(new BasicNameValuePair(key, data.get(key)));
 		}
-
+		
 		httpPost.setEntity(new UrlEncodedFormEntity(nvps));
 		CloseableHttpResponse response = httpclient.execute(httpPost);
 		
@@ -86,6 +87,25 @@ public class HttpClient {
 		} finally {
 			response.close();
 		}
+	}
+	
+	public String post(String url, String data) throws Exception {
+		
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+		HttpPost httpPost = new HttpPost(url);
+		addHeaders(httpPost);
+		
+		HttpEntity httpEntity = new StringEntity(data, ContentType.APPLICATION_JSON);
+		httpPost.setEntity(httpEntity);
+		CloseableHttpResponse response = httpclient.execute(httpPost);
+		
+		try {
+			setStatusLine(response.getStatusLine());
+			return EntityUtils.toString(response.getEntity());
+		} finally {
+			response.close();
+		}
+		
 	}
 
 	public String postChunkedString(String uri, String filePath)

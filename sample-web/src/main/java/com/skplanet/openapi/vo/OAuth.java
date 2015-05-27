@@ -1,6 +1,8 @@
 package com.skplanet.openapi.vo;
 
+import org.springframework.stereotype.Component;
 
+@Component
 public class OAuth {
 
 	private String accessToken;
@@ -57,6 +59,5 @@ public class OAuth {
 	public void setAppId(String appId) {
 		this.appId = appId;
 	}
-	
-	
+
 }

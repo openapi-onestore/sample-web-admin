@@ -16,12 +16,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.skplanet.openapi.dao.BulkJobDAO;
-import com.skplanet.openapi.request.outbound.PayPlanetClient;
+import com.skplanet.openapi.request.outbound.PayplanetClient;
 import com.skplanet.openapi.vo.BulkJobInfo;
 import com.skplanet.openapi.vo.ClientInfo;
 
@@ -41,7 +40,7 @@ public class PaymentService {
 	private ClientInfo clientInfo;
 
 	@Autowired
-	private PayPlanetClient payPlanetClient;
+	private PayplanetClient payplanetClient;
 	
 	private List<String> columns = Arrays.asList(new String[] { "mid",
 			"billingToken", "appid", "pid", "pName", "orderNo",
@@ -52,7 +51,7 @@ public class PaymentService {
 		 
 		try {
 			BulkJobInfo bulkJobInfo = makeBulkFile(param);
-			result = payPlanetClient
+			result = payplanetClient
 					.createBulkPayment(bulkJobInfo.getProcessingCount(),
 							bulkJobInfo.getFilePath());
 		} catch (FileNotFoundException e) {
@@ -62,7 +61,7 @@ public class PaymentService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		
 		return result;
 	}
 
@@ -74,7 +73,7 @@ public class PaymentService {
 			multipartFile.transferTo(tmpFile);
 			BulkJobInfo bulkJobInfo = new BulkJobInfo(
 					tmpFile.getAbsolutePath(), 1);
-			result = payPlanetClient
+			result = payplanetClient
 					.createBulkPayment(bulkJobInfo.getProcessingCount(),
 							bulkJobInfo.getFilePath());
 		} catch (IllegalStateException e) {
@@ -104,9 +103,9 @@ public class PaymentService {
 				writer.write(",");
 			}
 		}
-
+		
 		writer.write('\n');
-
+		
 		for (Map<String, String> bulkJob : bulkJobs) {
 			iterator = columns.iterator();
 			while (iterator.hasNext()) {

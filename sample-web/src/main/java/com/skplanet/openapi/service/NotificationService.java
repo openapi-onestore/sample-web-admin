@@ -6,13 +6,13 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.skplanet.openapi.request.outbound.PayPlanetClient;
+import com.skplanet.openapi.request.outbound.PayplanetClient;
 
 @Service("NotificationService")
 public class NotificationService {
 
 	@Autowired
-	private PayPlanetClient payPlanetClient;
+	private PayplanetClient payplanetClient;
 	
 	/**
 	 * 
@@ -56,8 +56,12 @@ public class NotificationService {
 		// TODO bulk job notification 처리를 한다.
 		
 		// TODO OpenAPI 서버에 Verify요청을 한다.
-		requestVerify(param, "bigcharging_notify_verification");
-		return "OK";
+		String result = requestVerify(param, "bigcharging_notify_verification");
+
+		if (result == null)
+			result = "Fail";
+		
+		return result;
 	}
 	
 	/**
@@ -70,11 +74,14 @@ public class NotificationService {
 	 */
 	public String processSinglePayment(Map<String, String> param) throws Exception {
 		// TODO single payment job notification 처리를 한다.
-
-		// TODO OpenAPI 서버에 Verify요청을 한다.
-		requestVerify(param, "singlepay_notify_verification");
 		
-		return "OK";
+		// TODO OpenAPI 서버에 Verify요청을 한다.
+		String result = requestVerify(param, "singlepay_notify_verification");
+		
+		if (result == null)
+			result = "Fail";
+		
+		return result;
 	}
 	
 	public String requestVerify(Map<String, String> param, String listenerType) throws Exception {
@@ -83,11 +90,11 @@ public class NotificationService {
 		Map<String, String> verifyParam = new HashMap<String, String>();
 		verifyParam.putAll(param);
 		verifyParam.put("listener_type", listenerType);
-
+		
 		// TODO OpenAPI 서버에 Verify요청을 한다.
-		payPlanetClient.verify(verifyParam);
-
-		return "OK";
+		String result = payplanetClient.verify(verifyParam);
+		
+		return result;
 	}
 	
 }
