@@ -28,9 +28,8 @@ public class PayplanetClientTest {
 	
 	@Test
 	public void getAccessToken() {
-		
 		OAuth oauth = payPlanetClient.createOAuthToken(clientInfo);
-
+		
 		Assert.assertEquals("dY4OkOwkhP5eA/lcQhpukZeDvtLUWwCXT9pm4seont1IpFHgf7EMScwN40x6g6FGiap7JXMsvdmZ", oauth.getAccessToken());
 		Assert.assertEquals("NA", oauth.getRefreshToken());
 		Assert.assertEquals("OA00001234", oauth.getAppId());
@@ -39,15 +38,12 @@ public class PayplanetClientTest {
 		
 		String[] scope = oauth.getScope();
 		Assert.assertEquals(2, scope.length);
-		
 		Assert.assertEquals("http://www.payplanet.com/openapi/v1/iap/paymentTransactionDetail", scope[0]);
 		Assert.assertEquals("http://www.payplanet.com/openapi/v1/iap/createPaymentTransaction", scope[1]);
-		
 	}
 	
 	@Test
 	public void getAccessTokenValidation() {
-		
 		OAuth oauth = payPlanetClient.createOAuthToken(clientInfo);
 		OAuthVerifyResult oAuthVerifyResult = payPlanetClient.verifyOAuthToken(oauth);
 		
@@ -58,9 +54,6 @@ public class PayplanetClientTest {
 		Assert.assertEquals("NA", oAuthVerifyResult.getReason());
 		Assert.assertEquals("SUCCESS", oAuthVerifyResult.getStatus());
 		Assert.assertEquals(3, oAuthVerifyResult.getScopes().length);
-		
 	}
-	
-	
 	
 }
