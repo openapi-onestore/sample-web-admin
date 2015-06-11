@@ -4,13 +4,13 @@ public class BulkJob {
 
 	private String mid;
 	private String billingToken;
-	private String appid;
 	private String pid;
 	private String pName;
 	private String orderNo;
-	private String carrierBillingAmt;
-	private String tMembershipAmt;
-	private String creditCardAmt;
+	private String amtRequestPurchase;
+	private String amtCarrier;
+	private String amtCreditCard;
+	private String amtTms;
 	
 	public String getMid() {
 		return mid;
@@ -23,12 +23,6 @@ public class BulkJob {
 	}
 	public void setBillingToken(String billingToken) {
 		this.billingToken = billingToken;
-	}
-	public String getAppid() {
-		return appid;
-	}
-	public void setAppid(String appid) {
-		this.appid = appid;
 	}
 	public String getPid() {
 		return pid;
@@ -48,26 +42,29 @@ public class BulkJob {
 	public void setOrderNo(String orderNo) {
 		this.orderNo = orderNo;
 	}
-	public String getCarrierBillingAmt() {
-		return carrierBillingAmt;
+	public String getAmtRequestPurchase() {
+		return amtRequestPurchase;
 	}
-	public void setCarrierBillingAmt(String carrierBillingAmt) {
-		this.carrierBillingAmt = carrierBillingAmt;
+	public void setAmtRequestPurchase(String amtRequestPurchase) {
+		this.amtRequestPurchase = amtRequestPurchase;
 	}
-	public String gettMembershipAmt() {
-		return tMembershipAmt;
+	public String getAmtCarrier() {
+		return amtCarrier;
 	}
-	public void settMembershipAmt(String tMembershipAmt) {
-		this.tMembershipAmt = tMembershipAmt;
+	public void setAmtCarrier(String amtCarrier) {
+		this.amtCarrier = amtCarrier;
 	}
-	public String getCreditCardAmt() {
-		return creditCardAmt;
+	public String getAmtCreditCard() {
+		return amtCreditCard;
 	}
-	public void setCreditCardAmt(String creditCardAmt) {
-		this.creditCardAmt = creditCardAmt;
+	public void setAmtCreditCard(String amtCreditCard) {
+		this.amtCreditCard = amtCreditCard;
 	}
-	
-	
-	
+	public String getAmtTms() {
+		return amtTms;
+	}
+	public void setAmtTms(String amtTms) {
+		this.amtTms = amtTms;
+	}
 	
 }

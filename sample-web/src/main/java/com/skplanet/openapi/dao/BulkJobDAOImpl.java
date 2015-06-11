@@ -39,4 +39,25 @@ public class BulkJobDAOImpl extends SqlSessionDaoSupport implements BulkJobDAO {
 		
 		return result;
 	}
+
+	@Override
+	public List<Map<String, String>> selectBulkJobRequest(
+			Map<String, String> param) {
+		
+		List<Map<String,String>> result = null;
+		
+		try {
+			result = getSqlSession().selectList("bulkJob.selectBulkJobRequest", param);
+		}catch(Exception e){
+			logger.error("fail to load bulk job request, error message : " + e.getMessage());
+		}
+		
+		return result;
+	}
+
+	@Override
+	public void addBulkJobRequest(Map<String, String> param) {
+		
+	}
+
 }

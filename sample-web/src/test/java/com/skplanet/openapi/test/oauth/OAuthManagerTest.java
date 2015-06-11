@@ -25,13 +25,14 @@ public class OAuthManagerTest {
 	
 	@Autowired
 	private OAuthClientInfo oauthClientInfo;
-		
+	
 	@Test
 	public void getAccessToken() {
 	
 		OAuthManager oauthManager = new OAuthManager();
 		oauthManager.setClientInfo(oauthClientInfo);
 		OAuth oauth = null;
+		
 		try {
 			Assert.assertEquals(true, oauthManager.createOAuthToken());
 			oauth = oauthManager.getOAuthToken();

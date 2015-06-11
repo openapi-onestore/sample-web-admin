@@ -6,13 +6,13 @@
 	<resultMap id="bulkJobMap" type="map">
 		<result property="mid" column="mid" />
 		<result property="billingToken" column="billing_token" />
-		<result property="appid" column="app_id" />
-		<result property="pid" column="p_id" />
-		<result property="pName" column="p_name" />
+		<result property="pid" column="product_id" />
+		<result property="pName" column="product_name" />
 		<result property="orderNo" column="order_no" />
-		<result property="carrierBillingAmt" column="carrier_billing_amt" />
-		<result property="tMembershipAmt" column="t_membership_amt" />
-		<result property="creditCardAmt" column="credit_card_amt" />
+		<result property="amtRequestPurchase" column="amt_request_purchase" />
+		<result property="amtCarrier" column="amt_carrier" />
+		<result property="amtCreditCard" column="amt_credit_card" />
+		<result property="amtTms" column="amt_tms" />
 	</resultMap>
 
 	<select id="selectBulkJob" parameterType="map" resultMap="bulkJobMap">

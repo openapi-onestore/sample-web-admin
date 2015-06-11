@@ -1,12 +1,23 @@
 CREATE TABLE bulk_job_table (
   `mid` varchar(45) NOT NULL,
   `billing_token` varchar(45) DEFAULT NULL,
-  `app_id` varchar(45) DEFAULT NULL,
-  `p_id` varchar(45) DEFAULT NULL,
-  `p_name` varchar(45) DEFAULT NULL,
+  `product_id` varchar(45) DEFAULT NULL,
+  `product_name` varchar(45) DEFAULT NULL,
   `order_no` varchar(45) DEFAULT NULL,
-  `carrier_billing_amt` varchar(45) DEFAULT NULL,
-  `t_membership_amt` varchar(45) DEFAULT NULL,
-  `credit_card_amt` varchar(45) DEFAULT NULL,
+  `amt_request_purchase` varchar(45) DEFAULT NULL,
+  `amt_carrier` varchar(45) DEFAULT NULL,
+  `amt_credit_card` varchar(45) DEFAULT NULL,
+  `amt_tms` varchar(45) DEFAULT NULL,  
+  PRIMARY KEY (`mid`)
+);
+
+CREATE TABLE bulk_job_request (
+  `mid` varchar(45) NOT NULL,
+  `status` varchar(45) DEFAULT NULL,
+  `reason` varchar(45) DEFAULT NULL,
+  `waiting_jobs` varchar(45) DEFAULT NULL,
+  `job_id` varchar(45) DEFAULT NULL,
+  `upload_file` varchar(45) DEFAULT NULL,
+  `upload_date` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`mid`)
 );

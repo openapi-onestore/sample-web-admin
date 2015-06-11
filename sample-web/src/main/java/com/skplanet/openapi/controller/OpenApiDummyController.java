@@ -39,7 +39,13 @@ public class OpenApiDummyController {
 		
 		boolean result = fileUploadService.fileUpload(request);
 		
-		return "result=" + result + "&jobid=002311134";
+		StringBuilder sb = new StringBuilder();
+		if (result)
+			sb.append("STATUS=SUCCESS&REASON=0000&WAITING_JOBS=0&JOB_ID=20150611");
+		else
+			sb.append("STATUS=FAIL&REASON=1000&WAITING_JOBS=0&JOB_ID=20150611");		
+		
+		return sb.toString();
 	}
 	
 	@RequestMapping(value = "/result", method = RequestMethod.GET)

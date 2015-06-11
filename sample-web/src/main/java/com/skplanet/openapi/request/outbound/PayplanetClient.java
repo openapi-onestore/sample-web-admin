@@ -1,23 +1,18 @@
 package com.skplanet.openapi.request.outbound;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.skplanet.openapi.external.oauth.OAuthClientInfo;
-import com.skplanet.openapi.external.oauth.OAuth;
-import com.skplanet.openapi.external.oauth.OAuthVerifyResult;
 import com.skplanet.openapi.request.outbound.header.BatchFileVersionHeader;
 import com.skplanet.openapi.request.outbound.header.MerchantIdHeader;
 import com.skplanet.openapi.request.outbound.header.NotiUrlHeader;
@@ -53,6 +48,7 @@ public class PayplanetClient {
 //	private OutBoundRequestHandler<Map<String,String>,String> outRequestHandler;
 	
 	public String verify(Map<String,String> param) throws Exception {
+		logger.debug("verify() called");
 		httpRequest.setCallUrl(verifyUrl);
 		httpRequest.setParamMap(param);
 		Future<String> future = jobExecutor.submit(httpRequest);
@@ -62,6 +58,7 @@ public class PayplanetClient {
 	}
 	
 	public String createBulkPayment(int processingCount, String path) throws Exception {		
+		logger.debug("createBulkPayment() called");
 		// TODO: Header create
 		List<HttpHeader> header = new ArrayList<HttpHeader>();
 		header.add(new BatchFileVersionHeader("1"));

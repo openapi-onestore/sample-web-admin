@@ -44,23 +44,23 @@ public class BulkJobDaoTest {
 		
 		Assert.assertEquals("1", map.get(0).get("mid"));
 		Assert.assertEquals("AABBCCDD", map.get(0).get("billingToken"));
-		Assert.assertEquals("OA00353582", map.get(0).get("appid"));
 		Assert.assertEquals("0901208001", map.get(0).get("pid"));
 		Assert.assertEquals("Health portion 1", map.get(0).get("pName"));
-		Assert.assertEquals("11125522", map.get(0).get("orderNo"));
-		Assert.assertEquals("500", map.get(0).get("carrierBillingAmt"));
-		Assert.assertEquals("1000", map.get(0).get("tMembershipAmt"));
-		Assert.assertEquals("0", map.get(0).get("creditCardAmt"));
+		Assert.assertEquals("11125521", map.get(0).get("orderNo"));
+		Assert.assertEquals("5000", map.get(0).get("amtRequestPurchase"));
+		Assert.assertEquals("1000", map.get(0).get("amtCarrier"));
+		Assert.assertEquals("4000", map.get(0).get("amtCreditCard"));
+		Assert.assertEquals("0", map.get(0).get("amtTms"));
 		
 		Assert.assertEquals("2", map.get(1).get("mid"));
 		Assert.assertEquals("AABBCCDD", map.get(1).get("billingToken"));
-		Assert.assertEquals("OA00353581", map.get(1).get("appid"));
 		Assert.assertEquals("0901208002", map.get(1).get("pid"));
 		Assert.assertEquals("Health portion 2", map.get(1).get("pName"));
 		Assert.assertEquals("11125522", map.get(1).get("orderNo"));
-		Assert.assertEquals("1000", map.get(1).get("carrierBillingAmt"));
-		Assert.assertEquals("1030", map.get(1).get("tMembershipAmt"));
-		Assert.assertEquals("220", map.get(1).get("creditCardAmt"));
+		Assert.assertEquals("1000", map.get(1).get("amtRequestPurchase"));
+		Assert.assertEquals("1000", map.get(1).get("amtCarrier"));
+		Assert.assertEquals("0", map.get(1).get("amtCreditCard"));
+		Assert.assertEquals("0", map.get(1).get("amtTms"));
 	}
 	
 	@Test
@@ -73,7 +73,5 @@ public class BulkJobDaoTest {
 		
 		Assert.assertEquals(map.size(), 0);
 	}
-	
-	
 	
 }

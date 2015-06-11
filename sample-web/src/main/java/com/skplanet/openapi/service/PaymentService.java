@@ -29,10 +29,10 @@ public class PaymentService {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(PaymentService.class);
-
+	
 	@Value("${bulkjobservice.localsavefolder}")
 	private String localSavingFolder;
-
+	
 	@Autowired
 	private BulkJobDAO bulkJobDAO;
 	
@@ -43,8 +43,8 @@ public class PaymentService {
 	private PayplanetClient payplanetClient;
 	
 	private List<String> columns = Arrays.asList(new String[] { "mid",
-			"billingToken", "appid", "pid", "pName", "orderNo",
-			"carrierBillingAmt", "tMembershipAmt", "creditCardAmt" });
+			"billingToken", "pid", "pName", "orderNo",
+			"amtReqPurchase", "amtCarrier", "amtCreditCard", "amtTms" });
 	
 	public String requestBulkJob(Map<String, String> param) {
 		String result = null;
@@ -95,7 +95,7 @@ public class PaymentService {
 				+ bulkJobs.get(0).get("appid"));
 
 		int processingCount = bulkJobs.size();
-
+		
 		Iterator<String> iterator = columns.iterator();
 		while (iterator.hasNext()) {
 			writer.write(iterator.next());

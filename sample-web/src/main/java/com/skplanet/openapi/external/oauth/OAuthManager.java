@@ -16,9 +16,9 @@ public class OAuthManager implements OAuthInterface {
 	private OAuth oauth = null;
 	private OAuthVerifyResult oauthVerifyResult = null;
 	
-	private String oauthTokenUrl = "http://10.200.226.71:8080/oauth/service/token";
-	private String oauthVerifyUrl = "http://10.200.226.71:8080/oauth/internal/v1/validation";
-	private String oauthVerifyApiId = "GetFilePaymentInfo";
+	private final String oauthTokenUrl = "http://10.200.226.71:8080/oauth/service/token";
+	private final String oauthVerifyUrl = "http://10.200.226.71:8080/oauth/internal/v1/validation";
+	private final String oauthVerifyApiId = "GetFilePaymentInfo";
 	
 	@Override
 	public void setClientInfo(OAuthClientInfo clientInfo) {
@@ -119,7 +119,5 @@ public class OAuthManager implements OAuthInterface {
 			throw new Exception();
 		return oauthVerifyResult;
 	}
-	
-
 
 }

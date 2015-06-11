@@ -1,3 +1,3 @@
-INSERT INTO bulk_job_table VALUES ('1','AABBCCDD','OA00353582','0901208001','Health portion 1','11125522','500','1000','0');
-INSERT INTO bulk_job_table VALUES ('2','AABBCCDD','OA00353581','0901208002','Health portion 2','11125522','1000','1030','220');
-INSERT INTO bulk_job_table VALUES ('3','AABBCCDD','OA00353585','0901208003','Health portion 3','11125522','5000','1100','10');
+INSERT INTO bulk_job_table VALUES ('1','AABBCCDD','0901208001','Health portion 1','11125521','5000','1000','4000', '0');
+INSERT INTO bulk_job_table VALUES ('2','AABBCCDD','0901208002','Health portion 2','11125522','1000','1000','0', '0');
+INSERT INTO bulk_job_table VALUES ('3','AABBCCDD','0901208003','Health portion 3','11125523','23500','20000','3000', '500');

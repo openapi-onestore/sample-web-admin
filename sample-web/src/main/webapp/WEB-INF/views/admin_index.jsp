@@ -90,37 +90,32 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th>Job number</th>
+                <th>Req Status</th>
+                <th>Reason</th>
+                <th>Waiting jobs</th>
+                <th>Job id</th>
                 <th>Upload file</th>
-                <th>Status</th>
                 <th>Upload date</th>
-                <th>Complete date</th>                
               </tr>
             </thead>
             <tbody>
               <tr>
               	<td>1</td>
-                <td>10000</td>
+                <td><button type="button" class="btn btn-sm btn-success">SUCCESS</button></td>
+                <td>0000</td>
+                <td>10</td>
+                <td>TX_20150611_111</td>
                 <td>bulk_job.txt</td>
-                <td><button type="button" class="btn btn-sm btn-primary">Processing</button></td>
-                <td>2015-05-14</td>
                 <td>2015-05-14</td>
               </tr>
               <tr>
-              	<td>2</td>              
-                <td>10002</td>
+              	<td>2</td>
+                <td><button type="button" class="btn btn-sm btn-danger">FAIL</button></td>
+                <td>9000</td>
+                <td>10</td>
+                <td>TX_20150611_111</td>
                 <td>bulk_job.txt</td>
-                <td><button type="button" class="btn btn-sm btn-success">Completed</button></td>
                 <td>2015-05-14</td>
-                <td>2015-05-14</td>
-              </tr>
-              <tr>
-              	<td>3</td>              
-                <td>10011</td>
-                <td>bulk_job.txt</td>
-                <td><button type="button" class="btn btn-sm btn-danger">Error</button></td>
-                <td>2015-05-14</td>
-                <td>not completed</td>
               </tr>
             </tbody>
           </table>
