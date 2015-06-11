@@ -20,9 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.skplanet.openapi.dao.BulkJobDAO;
+import com.skplanet.openapi.external.oauth.OAuthClientInfo;
 import com.skplanet.openapi.request.outbound.PayplanetClient;
 import com.skplanet.openapi.vo.BulkJobInfo;
-import com.skplanet.openapi.vo.ClientInfo;
 
 @Service("paymentService")
 public class PaymentService {
@@ -37,7 +37,7 @@ public class PaymentService {
 	private BulkJobDAO bulkJobDAO;
 	
 	@Autowired
-	private ClientInfo clientInfo;
+	private OAuthClientInfo clientInfo;
 
 	@Autowired
 	private PayplanetClient payplanetClient;

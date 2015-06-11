@@ -1,10 +1,10 @@
-package com.skplanet.openapi.vo;
+package com.skplanet.openapi.external.oauth;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ClientInfo {
+public class OAuthClientInfo {
 	
 	public static final String CLIENT_ID = "client_id";
 	public static final String CLIENT_SECRET = "client_secret";
@@ -43,6 +43,18 @@ public class ClientInfo {
 		this.clientSecret = clientSecret;
 	}
 	
-	
+	public boolean validateClientInfo() {
+		
+		if (getClientId() == null)
+			return false;
+		
+		if (getClientSecret() == null)
+			return false;
+		
+		if (getGrantType() == null)
+			return false;
+		
+		return true;
+	}
 	
 }

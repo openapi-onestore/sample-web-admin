@@ -15,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.skplanet.openapi.external.oauth.OAuthClientInfo;
+import com.skplanet.openapi.external.oauth.OAuth;
+import com.skplanet.openapi.external.oauth.OAuthVerifyResult;
 import com.skplanet.openapi.request.outbound.header.BatchFileVersionHeader;
 import com.skplanet.openapi.request.outbound.header.MerchantIdHeader;
 import com.skplanet.openapi.request.outbound.header.NotiUrlHeader;
@@ -22,9 +25,6 @@ import com.skplanet.openapi.request.outbound.header.ProcessingCountHeader;
 import com.skplanet.openapi.util.HttpClient;
 import com.skplanet.openapi.util.HttpHeader;
 import com.skplanet.openapi.util.HttpRequest;
-import com.skplanet.openapi.vo.ClientInfo;
-import com.skplanet.openapi.vo.OAuth;
-import com.skplanet.openapi.vo.OAuthVerifyResult;
 
 @Component("payplanetClient")
 public class PayplanetClient {
@@ -77,61 +77,5 @@ public class PayplanetClient {
 		
 		return response;
 	}
-	
-	public OAuth createOAuthToken(ClientInfo clientInfo) {		
-		Map<String, String> data = new HashMap<String, String>();
-		data.put(ClientInfo.CLIENT_ID, clientInfo.getClientId());
-		data.put(ClientInfo.CLIENT_SECRET, clientInfo.getClientSecret());
-		data.put(ClientInfo.GRANT_TYPE, clientInfo.getGrantType());
-		
-		String response = null;
-		OAuth oauth = null;
-		
-		try {
-			httpRequest.setCallUrl(oauthUrl);
-			httpRequest.setParamMap(data);
-
-			Future<String> future = jobExecutor.submit(httpRequest);
-			response = future.get();
-			
-			System.out.println("Post response : " + response);
-			if (response != null) {
-				ObjectMapper objectMapper = new ObjectMapper();
-				oauth = objectMapper.readValue(response, OAuth.class);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return oauth;
-	}
-	
-	public OAuthVerifyResult verifyOAuthToken(OAuth oauth) {
-		Map<String, String> verifyData = new HashMap<String, String>();
-		verifyData.put("ipAddress", oauthVerifyIp);
-		verifyData.put("apiId", oauthApiId);
-		verifyData.put("accessToken", oauth.getAccessToken());
-		
-		ObjectMapper objectMapper = new ObjectMapper();
-		OAuthVerifyResult oAuthVerifyResult = null;
-				
-		try {
-			String requestJson = null;
-			requestJson = objectMapper.writeValueAsString(verifyData);
-
-			httpRequest.setCallUrl(oauthVerifyUrl);
-			httpRequest.setParam(requestJson);
-			
-			Future<String> future = jobExecutor.submit(httpRequest);
-			String response = future.get();			
-			
-			if (response != null) {
-				oAuthVerifyResult = objectMapper.readValue(response, OAuthVerifyResult.class);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return oAuthVerifyResult;
-	}
-	
 	
 }

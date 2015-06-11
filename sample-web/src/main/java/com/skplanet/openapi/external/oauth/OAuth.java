@@ -1,4 +1,4 @@
-package com.skplanet.openapi.vo;
+package com.skplanet.openapi.external.oauth;
 
 import org.springframework.stereotype.Component;
 

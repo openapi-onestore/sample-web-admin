@@ -17,12 +17,13 @@ public class HttpRequest implements Callable<String>{
 	private Map<String, String> paramMap = null;
 	List<HttpHeader> header = null;
 	
-	@Autowired
 	private HttpClient httpClient;
 	
 	@Override
 	public String call() throws Exception {
 		String result = null;
+		if (httpClient == null)
+			httpClient = new HttpClient();
 		
 		if (!validation())
 			return null;
