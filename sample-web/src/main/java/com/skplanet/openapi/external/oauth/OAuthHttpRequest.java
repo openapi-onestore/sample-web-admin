@@ -15,14 +15,9 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.AbstractHttpMessage;
 import org.apache.http.util.EntityUtils;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
-import com.skplanet.openapi.util.HttpClient;
 import com.skplanet.openapi.util.HttpHeader;
 
-@Component
-@Scope("prototype")
 public class OAuthHttpRequest implements Callable<String>{
 
 	private String callUrl = null;
@@ -53,6 +48,7 @@ public class OAuthHttpRequest implements Callable<String>{
 			addHeaders(httpPost);
 		
 		HttpEntity httpEntity = null;
+		
 		if (isJsonRequest) {
 			httpEntity = new StringEntity(param, ContentType.APPLICATION_JSON);
 		} else {

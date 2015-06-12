@@ -1,19 +1,16 @@
 package com.skplanet.openapi.test.oauth;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import ch.qos.logback.classic.Logger;
-
-import com.skplanet.openapi.external.oauth.OAuthClientInfo;
 import com.skplanet.openapi.external.oauth.OAuth;
+import com.skplanet.openapi.external.oauth.OAuthClientInfo;
 import com.skplanet.openapi.external.oauth.OAuthManager;
 import com.skplanet.openapi.external.oauth.OAuthVerifyResult;
-import com.skplanet.openapi.request.outbound.PayplanetClient;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -23,8 +20,15 @@ import com.skplanet.openapi.request.outbound.PayplanetClient;
 		})
 public class OAuthManagerTest {
 	
-	@Autowired
 	private OAuthClientInfo oauthClientInfo;
+	
+	@Before
+	public void setUp() {
+		oauthClientInfo = new OAuthClientInfo();
+		oauthClientInfo.setClientId("9z/fmk5hAC7fcXWjbPq4Tlh3dgYmafZBKfrGOpIIYeqlfqVoTfyxgGoe/NU2Ycp7");
+		oauthClientInfo.setClientSecret("wJakRyD02F+c7LGiYseIG5PxRAK14IuT8DBfLFycX48=");
+		oauthClientInfo.setGrantType("client_credentials");
+	}
 	
 	@Test
 	public void getAccessToken() {

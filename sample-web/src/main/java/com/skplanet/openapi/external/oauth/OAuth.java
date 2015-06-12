@@ -1,8 +1,5 @@
 package com.skplanet.openapi.external.oauth;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class OAuth {
 
 	private String accessToken;

@@ -33,6 +33,17 @@ public class BulkJobDaoTest {
 	}
 	
 	@Test
+	public void getBulkJobRequest() {
+		hashMap.clear();
+		hashMap.put("START_NO", "1");
+		hashMap.put("END_NO", "2");
+		
+		List<Map<String,String>> map = bulkJobDAO.selectBulkJobRequest(hashMap);
+		
+		Assert.assertEquals(map.size(), 2);
+	}
+	
+	@Test
 	public void getBulkJobDaoStandard() {	
 		hashMap.clear();
 		hashMap.put("START_NO", "1");

@@ -1,10 +1,5 @@
 package com.skplanet.openapi.external.oauth;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
-@Component
-@Scope("prototype")
 public class OAuthVerifyResult {
 
 	private String status;

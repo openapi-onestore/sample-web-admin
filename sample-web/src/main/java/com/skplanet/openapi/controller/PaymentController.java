@@ -40,6 +40,21 @@ public class PaymentController {
 		
 		return result;
 	}
+
+	@RequestMapping(value = "/request", method = RequestMethod.GET)
+	@ResponseBody
+	public String requestBulkJobReqList() {
+		
+		logger.debug("Request BulkJobRequestList ");
+		HashMap<String, String> hashMap = new HashMap<String, String>();
+		hashMap.put("START_NO", "1");
+		hashMap.put("END_NO", "2");
+		
+		String result = paymentService.requestBulkJob(hashMap);
+		
+		return result;
+	}
+
 	
 	@RequestMapping(value = "/bulkjob", method = RequestMethod.POST)
 	@ResponseBody

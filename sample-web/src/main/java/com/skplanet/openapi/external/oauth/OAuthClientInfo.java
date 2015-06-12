@@ -1,22 +1,14 @@
 package com.skplanet.openapi.external.oauth;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
-@Component
-public class OAuthClientInfo {
+public final class OAuthClientInfo {
 	
 	public static final String CLIENT_ID = "client_id";
 	public static final String CLIENT_SECRET = "client_secret";
 	public static final String GRANT_TYPE = "grant_type";
 	
-	@Value("${oauth.client_id}")
 	private String clientId;
-	
-	@Value("${oauth.client_secret}")
-	private String clientSecret;
-	
-	@Value("${oauth.grant_type}")
+	private String clientSecret;	
 	private String grantType;
 	
 	public String getGrantType() {
