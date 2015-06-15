@@ -22,28 +22,28 @@ public class OAuthHttpRequest implements Callable<String>{
 
 	private String callUrl = null;
 	private String param = null;
-	List<HttpHeader> header = null;
+	private List<HttpHeader> headers = null;
+
 	private final String delemeter = "&";
 	private final String equal = "=";
 		
 	private StatusLine statusLine;
-	private List<HttpHeader> headers;
 	
 	private boolean isJsonRequest = false;
 	
 	@Override
 	public String call() throws Exception {
 		String result = null;
-		
+				
 		if (!validation())
 			return null;
-		
-		if (!isParamEmpty())
+
+		if (isParamEmpty())
 			return null;
-				
+		
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(callUrl);
-		
+
 		if (headers != null)
 			addHeaders(httpPost);
 		
@@ -69,7 +69,7 @@ public class OAuthHttpRequest implements Callable<String>{
 	}
 	
 	public void setHeader(List<HttpHeader> header) {
-		this.header = header;
+		this.headers = header;
 	}
 	
 	public void setParamMap(Map<String, String> paramMap) {		
@@ -83,7 +83,7 @@ public class OAuthHttpRequest implements Callable<String>{
 			if (iterator.hasNext()) {
 				sb.append(delemeter);
 			}
-		}		
+		}
 		this.param = sb.toString();
 	}
 	
@@ -122,6 +122,7 @@ public class OAuthHttpRequest implements Callable<String>{
 	
 	private void addHeaders(AbstractHttpMessage httpMessage) {
 		for (HttpHeader header : headers) {
+			System.out.println("add Headers : " + header.getName() + " value : " + header.getValue());
 			httpMessage.setHeader(header.getName(), header.getValue());
 		}
 	}

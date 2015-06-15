@@ -1,13 +1,11 @@
 package com.skplanet.openapi.external.oauth;
 
-public class OAuth {
+public class OAuthAccessToken {
 
 	private String accessToken;
-	private String refreshToken;
-	private String appId;
 	private String expired;
 	private String tokenType;
-	private String[] scope;
+	private String scope;
 	
 	public String getAccessToken() {
 		return accessToken;
@@ -16,15 +14,7 @@ public class OAuth {
 	public void setAccessToken(String accessToken) {
 		this.accessToken = accessToken;
 	}
-	
-	public String getRefreshToken() {
-		return refreshToken;
-	}
-	
-	public void setRefreshToken(String refreshToken) {
-		this.refreshToken = refreshToken;
-	}
-	
+
 	public String getExpired() {
 		return expired;
 	}
@@ -41,20 +31,12 @@ public class OAuth {
 		this.tokenType = tokenType;
 	}
 	
-	public String[] getScope() {
+	public String getScope() {
 		return scope;
 	}
 	
-	public void setScope(String[] scope) {
+	public void setScope(String scope) {
 		this.scope = scope;
 	}
-
-	public String getAppId() {
-		return appId;
-	}
-
-	public void setAppId(String appId) {
-		this.appId = appId;
-	}
-
+	
 }

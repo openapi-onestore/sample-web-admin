@@ -3,10 +3,10 @@ package com.skplanet.openapi.external.oauth;
 public interface OAuthInterface {
 	
 	void setClientInfo(OAuthClientInfo clientInfo);
-	boolean createOAuthToken() throws Exception;
+	boolean createOAuthAccessToken();
 	boolean updateOAuthToken();
 	boolean deleteOAuthToken();
-	boolean verifyOAuthToken() throws Exception;
-	OAuth getOAuthToken() throws Exception;
-	OAuthVerifyResult getOAuthVerifyResult() throws Exception;	
+	boolean verifyOAuthToken();
+	OAuthAccessToken getOAuthToken() throws OAuthManagingException;
+	OAuthVerifyResult getOAuthVerifyResult() throws OAuthManagingException;	
 }

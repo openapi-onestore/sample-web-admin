@@ -1,23 +1,29 @@
 package com.skplanet.openapi.external.oauth;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import org.apache.commons.codec.binary.Base64;
 import org.codehaus.jackson.map.ObjectMapper;
+
+import com.skplanet.openapi.external.oauth.OAuthManagingException.OAuthManaging;
+import com.skplanet.openapi.util.HttpHeader;
 
 public class OAuthManager implements OAuthInterface {
 
 	private int threadPoolCount = 2;
 	private ExecutorService jobExecutor = Executors.newFixedThreadPool(threadPoolCount);
 	private OAuthClientInfo clientInfo = null;
-	private OAuth oauth = null;
+	private OAuthAccessToken oauth = null;
 	private OAuthVerifyResult oauthVerifyResult = null;
 	
-	private final String oauthTokenUrl = "http://10.200.226.71:8080/oauth/service/token";
-	private final String oauthVerifyUrl = "http://10.200.226.71:8080/oauth/internal/v1/validation";
+	private final String oauthAccessTokenUrl = "http://172.21.60.143/oauth/service/accessToken";
+	private final String oauthVerifyUrl = "http://172.21.60.143/oauth/internal/v1/validation";
 	private final String oauthVerifyApiId = "GetFilePaymentInfo";
 	
 	@Override
@@ -26,7 +32,7 @@ public class OAuthManager implements OAuthInterface {
 	}
 	
 	@Override
-	public boolean createOAuthToken() throws Exception {
+	public boolean createOAuthAccessToken() {
 		
 		if (clientInfo == null)
 			return false;
@@ -35,16 +41,18 @@ public class OAuthManager implements OAuthInterface {
 			return false;
 		
 		Map<String, String> data = new HashMap<String, String>();
-		data.put(OAuthClientInfo.CLIENT_ID, clientInfo.getClientId());
-		data.put(OAuthClientInfo.CLIENT_SECRET, clientInfo.getClientSecret());
 		data.put(OAuthClientInfo.GRANT_TYPE, clientInfo.getGrantType());
 		
 		String response = null;
+		
 		OAuthHttpRequest httpRequest = new OAuthHttpRequest();
+		List<HttpHeader> authHeader = new ArrayList<HttpHeader>();
+		authHeader.add(getOAuthHttpRequestHeader());
 		
 		try {
-			httpRequest.setCallUrl(oauthTokenUrl);
+			httpRequest.setCallUrl(oauthAccessTokenUrl);
 			httpRequest.setParamMap(data);
+			httpRequest.setHeader(authHeader);
 			
 			Future<String> future = jobExecutor.submit(httpRequest);
 			response = future.get();
@@ -52,13 +60,12 @@ public class OAuthManager implements OAuthInterface {
 			System.out.println("Post response : " + response);
 			if (response != null) {
 				ObjectMapper objectMapper = new ObjectMapper();
-				oauth = objectMapper.readValue(response, OAuth.class);
+				oauth = objectMapper.readValue(response, OAuthAccessToken.class);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
-		
 		return true;
 	}
 
@@ -73,14 +80,14 @@ public class OAuthManager implements OAuthInterface {
 	}
 
 	@Override
-	public OAuth getOAuthToken() throws Exception {
+	public OAuthAccessToken getOAuthToken() throws OAuthManagingException {
 		if (oauth == null)
-			throw new Exception();
+			throw new OAuthManagingException(OAuthManaging.OAUTH_OBJECT_NULL, "OAuth object is null");
 		return this.oauth;
 	}
 
 	@Override
-	public boolean verifyOAuthToken() throws Exception {
+	public boolean verifyOAuthToken() {
 		
 		if (oauth == null)
 			return false;
@@ -114,10 +121,22 @@ public class OAuthManager implements OAuthInterface {
 	}
 
 	@Override
-	public OAuthVerifyResult getOAuthVerifyResult() throws Exception {
+	public OAuthVerifyResult getOAuthVerifyResult() throws OAuthManagingException {
 		if (oauthVerifyResult == null)
-			throw new Exception();
+			throw new OAuthManagingException(OAuthManaging.OAUTH_OBJECT_NULL, "OAuth object is null");
 		return oauthVerifyResult;
 	}
 
+	private OAuthHttpRequestHeader getOAuthHttpRequestHeader() {
+		StringBuilder sb = new StringBuilder();		
+		
+		System.out.println(clientInfo.getAuthString());
+		
+		byte[] basicStringBase64 = Base64.encodeBase64(clientInfo.getAuthString().getBytes());
+		sb.append("BASIC ").append(new String(basicStringBase64));
+		OAuthHttpRequestHeader oAuthHttpRequestHeader = new OAuthHttpRequestHeader("Authorization", sb.toString());
+		System.out.println(oAuthHttpRequestHeader.getName() + " " + oAuthHttpRequestHeader.getValue());
+		return oAuthHttpRequestHeader;
+	}
+	
 }

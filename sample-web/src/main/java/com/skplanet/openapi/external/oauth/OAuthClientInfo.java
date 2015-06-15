@@ -11,6 +11,10 @@ public final class OAuthClientInfo {
 	private String clientSecret;	
 	private String grantType;
 	
+	public String getAuthString() {
+		return clientId + ":" + clientSecret;
+	}
+	
 	public String getGrantType() {
 		return grantType;
 	}
