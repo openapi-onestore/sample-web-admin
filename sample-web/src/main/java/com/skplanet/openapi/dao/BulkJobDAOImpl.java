@@ -33,7 +33,7 @@ public class BulkJobDAOImpl extends SqlSessionDaoSupport implements BulkJobDAO {
 		
 		try {
 			result = getSqlSession().selectList("bulkJob.selectBulkJob", param);
-		}catch(Exception e){
+		} catch(Exception e) {
 			logger.error("fail to load bulk job, error message : " + e.getMessage());
 		}
 		
@@ -48,7 +48,7 @@ public class BulkJobDAOImpl extends SqlSessionDaoSupport implements BulkJobDAO {
 		
 		try {
 			result = getSqlSession().selectList("bulkJobRequest.selectBulkJobRequest", param);
-		}catch(Exception e){
+		} catch(Exception e) {
 			logger.error("fail to load bulk job request, error message : " + e.getMessage());
 		}
 		
@@ -56,8 +56,13 @@ public class BulkJobDAOImpl extends SqlSessionDaoSupport implements BulkJobDAO {
 	}
 
 	@Override
-	public void addBulkJobRequest(Map<String, String> param) {
-		
+	public void addBulkJobRequest(Map<String, String> param) throws Exception {
+		try {
+			getSqlSession().insert("bulkJobRequest.insertBulkJobRequest",param);
+		} catch(Exception e) {
+			logger.error("fail to insert bulk job request, error message : " + e.getMessage());
+			throw new Exception();
+		}
 	}
 
 }

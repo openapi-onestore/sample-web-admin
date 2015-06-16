@@ -8,6 +8,6 @@ public interface BulkJobDAO {
 	List<Map<String, String>> selectBulkJob(Map<String, String> param);
 	
 	List<Map<String, String>> selectBulkJobRequest(Map<String, String> param);
-	void addBulkJobRequest(Map<String, String> param);
+	void addBulkJobRequest(Map<String, String> param) throws Exception;
 	
 }

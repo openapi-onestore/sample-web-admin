@@ -38,12 +38,12 @@ public class OpenApiDummyController {
 		}
 		
 		boolean result = fileUploadService.fileUpload(request);
-		
+
 		StringBuilder sb = new StringBuilder();
 		if (result)
-			sb.append("STATUS=SUCCESS&REASON=0000&WAITING_JOBS=0&JOB_ID=20150611");
+			sb.append("status=SUCCESS&reason=0000&waitingJob=0&jobId=201506110001&uploadFile=").append(request.getOriginalFilename()).append("&uploadDate=20150616");
 		else
-			sb.append("STATUS=FAIL&REASON=1000&WAITING_JOBS=0&JOB_ID=20150611");		
+			sb.append("status=FAIL&reason=1000&waitingJob=0&jobId=201506110001&uploadFile=").append(request.getOriginalFilename()).append("&uploadDate=20150616");
 		
 		return sb.toString();
 	}

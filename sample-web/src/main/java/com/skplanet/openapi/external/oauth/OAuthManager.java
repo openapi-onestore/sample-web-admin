@@ -24,7 +24,6 @@ public class OAuthManager implements OAuthInterface {
 	
 	private final String oauthAccessTokenUrl = "http://172.21.60.143/oauth/service/accessToken";
 	private final String oauthVerifyUrl = "http://172.21.60.143/oauth/internal/v1/validation";
-	private final String oauthVerifyApiId = "GetFilePaymentInfo";
 	
 	@Override
 	public void setClientInfo(OAuthClientInfo clientInfo) {
@@ -91,10 +90,10 @@ public class OAuthManager implements OAuthInterface {
 		
 		if (oauth == null)
 			return false;
-				
+		
 		Map<String, String> verifyData = new HashMap<String, String>();
-		verifyData.put("ipAddress", oauthVerifyUrl);
-		verifyData.put("apiId", oauthVerifyApiId);
+		verifyData.put("ipAddress", "10.202.33.51");
+		verifyData.put("apiId", oauth.getScope().split(" ")[0]);
 		verifyData.put("accessToken", oauth.getAccessToken());
 		
 		ObjectMapper objectMapper = new ObjectMapper();

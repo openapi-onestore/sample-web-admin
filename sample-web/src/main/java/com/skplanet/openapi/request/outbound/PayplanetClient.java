@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.skplanet.openapi.dao.BulkJobDAO;
 import com.skplanet.openapi.request.outbound.header.BatchFileVersionHeader;
 import com.skplanet.openapi.request.outbound.header.MerchantIdHeader;
 import com.skplanet.openapi.request.outbound.header.NotiUrlHeader;
@@ -34,15 +35,12 @@ public class PayplanetClient {
 	@Autowired
 	private HttpRequest httpRequest;
 	
+	@Autowired
+	private BulkJobDAO bulkJobDao;
+	
 	@Value("${openapi.verify_url}") private String verifyUrl;
 	@Value("${openapi.notification_url}") private String notificationUrl;
 	@Value("${openapi.bulkjob_url}") private String bulkjobUrl;
-
-	@Value("${oauth.token_url}") private String oauthUrl;
-	@Value("${oauth.token_verify_url}") private String oauthVerifyUrl;
-	
-	@Value("${oauth.token_verify_ip}")private String oauthVerifyIp;
-	@Value("${oauth.token_verify_api_id}")private String oauthApiId;
 	
 //	@Autowired
 //	private OutBoundRequestHandler<Map<String,String>,String> outRequestHandler;
@@ -65,7 +63,7 @@ public class PayplanetClient {
 		header.add(new MerchantIdHeader("skplanet"));
 		header.add(new NotiUrlHeader(notificationUrl));
 		header.add(new ProcessingCountHeader(Integer.toString(processingCount)));
-				
+		
 		httpRequest.setHeader(header);
 		
 		//HttpClient client = new HttpClient(header);
@@ -73,6 +71,11 @@ public class PayplanetClient {
 		String response = httpClient.postChunkedString(bulkjobUrl, path);
 		
 		return response;
+	}
+	
+	public void insertBulkPaymentRequest(Map<String,String> param) throws Exception {
+		logger.debug("insertBulkPaymentRequest() called");
+		bulkJobDao.addBulkJobRequest(param);
 	}
 	
 }

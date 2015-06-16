@@ -2,7 +2,7 @@ package com.skplanet.openapi.vo;
 
 public class BulkJobRequest {
 
-	private String mid;
+	private int mid;
 	private String status;
 	private String reason;
 	private String waitingJob;
@@ -10,10 +10,10 @@ public class BulkJobRequest {
 	private String uploadFile;
 	private String uploadDate;
 	
-	public String getMid() {
+	public int getMid() {
 		return mid;
 	}
-	public void setMid(String mid) {
+	public void setMid(int mid) {
 		this.mid = mid;
 	}
 	public String getStatus() {

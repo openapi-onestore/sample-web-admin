@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -20,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.skplanet.openapi.dao.BulkJobDAO;
-import com.skplanet.openapi.external.oauth.OAuthClientInfo;
 import com.skplanet.openapi.request.outbound.PayplanetClient;
 import com.skplanet.openapi.vo.BulkJobInfo;
 
@@ -78,18 +78,41 @@ public class PaymentService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		
 		return result;
 	}
 
+	public String requestBulkJobRequest(String params) {
+		String result = null;
+		
+		Map<String, String> param = new HashMap<String, String>();
+		
+		String[] temp = params.split("&");
+		
+		for( String temps : temp) {
+			String[] kvp = temps.split("=");
+			param.put(kvp[0],kvp[1]);
+			logger.debug(kvp[0] + " " + kvp[1]);
+		}
+		
+		try {
+			payplanetClient.insertBulkPaymentRequest(param);
+			result = "result=SUCCESS";
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = "result=FAIL&reason=" + e.getMessage();
+		}
+		
+		return result;
+	}
+	
 	private BulkJobInfo makeBulkFile(Map<String, String> param)
 			throws FileNotFoundException, IOException {
 		File tmpFile = new File(getBulkfileFormat());
 		Writer writer = new PrintWriter(tmpFile);
 		
 		List<Map<String, String>> bulkJobs = bulkJobDAO.selectBulkJob(param);
-		logger.debug("bulkjob size : " + bulkJobs.size() + " bulkjob obj "
-				+ bulkJobs.get(0).get("appid"));
+		logger.debug("bulkjob size : " + bulkJobs.size());
 
 		int processingCount = bulkJobs.size();
 		
@@ -107,7 +130,7 @@ public class PaymentService {
 			iterator = columns.iterator();
 			while (iterator.hasNext()) {
 				String wr = bulkJob.get(iterator.next());
-				logger.debug("Writer : " + wr);
+				logger.debug("Writer : " + wr + " Size : " + bulkJob.size());
 				writer.write(wr);
 				if (iterator.hasNext()) {
 					writer.write(",");

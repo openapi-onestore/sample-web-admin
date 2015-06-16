@@ -17,4 +17,9 @@
 		SELECT * FROM BULK_JOB_REQUEST
 		WHERE MID BETWEEN #{START_NO} AND #{END_NO}
 	</select>
+	
+	<insert id="insertBulkJobRequest" parameterType="map">
+		INSERT INTO BULK_JOB_REQUEST VALUES(default, #{status}, #{reason}, #{waitingJob}, #{jobId}, #{uploadFile}, #{uploadDate})
+	</insert>
+	
 </mapper>

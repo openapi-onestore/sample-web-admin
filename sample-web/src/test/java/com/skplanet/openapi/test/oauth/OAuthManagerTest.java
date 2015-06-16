@@ -30,7 +30,6 @@ public class OAuthManagerTest {
 		oauthClientInfo.setGrantType("client_credentials");
 	}
 	
-	@Test
 	public void getAccessToken() {
 		
 		OAuthManager oauthManager = new OAuthManager();
@@ -71,12 +70,12 @@ public class OAuthManagerTest {
 			e.printStackTrace();
 		}
 		
-		Assert.assertEquals("Wed May 20 11:23:54 GMT+09:00 2015", oauthVerifyResult.getExpiredAt());
-		Assert.assertEquals("GooPang", oauthVerifyResult.getMerchantId());
-		Assert.assertEquals(true, oauthVerifyResult.getMessage().startsWith("NA"));
-		Assert.assertEquals("NA", oauthVerifyResult.getReason());
 		Assert.assertEquals("SUCCESS", oauthVerifyResult.getStatus());
-		Assert.assertEquals(3, oauthVerifyResult.getScopes().length);
+		Assert.assertEquals("", oauthVerifyResult.getReason());
+		Assert.assertEquals("JaeWoo", oauthVerifyResult.getMerchantId());
+		Assert.assertEquals(true, oauth.getScope().contains(oauthVerifyResult.getScopes()[0]));
+		System.out.println("Expired At : " + oauthVerifyResult.getExpiredAt() + " Message : " + oauthVerifyResult.getMessage());
+		
 	}
 	
 }

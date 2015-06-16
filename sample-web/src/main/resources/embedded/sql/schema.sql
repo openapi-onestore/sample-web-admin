@@ -12,7 +12,7 @@ CREATE TABLE bulk_job_table (
 );
 
 CREATE TABLE bulk_job_request (
-  `mid` varchar(45) NOT NULL,
+  `mid` bigint NOT NULL,
   `status` varchar(45) DEFAULT NULL,
   `reason` varchar(45) DEFAULT NULL,
   `waiting_jobs` varchar(45) DEFAULT NULL,
@@ -21,3 +21,5 @@ CREATE TABLE bulk_job_request (
   `upload_date` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`mid`)
 );
+
+ALTER TABLE bulk_job_request ALTER COLUMN mid bigint AUTO_INCREMENT;

@@ -64,6 +64,13 @@ public class PaymentController {
 		
 		String result = paymentService.requestBulkJob(request);
 		
+		if (result.contains("SUCCESS")) {
+			// bulkJob file upload success
+			result = paymentService.requestBulkJobRequest(result);
+		} else {
+			result = "bulkJobUpload fail. please upload your file";
+		}
+		
 		return result;
 	}
 
