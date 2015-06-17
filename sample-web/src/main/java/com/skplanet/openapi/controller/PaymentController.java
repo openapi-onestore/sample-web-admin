@@ -2,6 +2,8 @@ package com.skplanet.openapi.controller;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -43,14 +45,10 @@ public class PaymentController {
 
 	@RequestMapping(value = "/request", method = RequestMethod.GET)
 	@ResponseBody
-	public String requestBulkJobReqList() {
+	public List<Map<String, String>> requestBulkJobReqList() {
 		
-		logger.debug("Request BulkJobRequestList ");
-		HashMap<String, String> hashMap = new HashMap<String, String>();
-		hashMap.put("START_NO", "1");
-		hashMap.put("END_NO", "2");
-		
-		String result = paymentService.requestBulkJob(hashMap);
+		logger.debug("Request BulkJobRequestList ");		
+		List<Map<String, String>> result = paymentService.requestBulkJobRequestList();
 		
 		return result;
 	}

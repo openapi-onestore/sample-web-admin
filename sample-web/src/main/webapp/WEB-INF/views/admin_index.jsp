@@ -28,6 +28,54 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript">   
+
+	    (function($){
+	    	count = 0;
+	    	
+	    	bulkJobRequest = function() {
+				$.ajax( {
+					url: "http://localhost:8080/sample-web/openapi/payment/request"
+				}).success( function( data ) {
+					console.log( data );
+					
+					if (count != data.length) {
+						for( var i = 0; i < data.length; i++ ) {
+							var $rowHtml = $( "<tr>" +
+		    						"<td class='mid'></td>"+
+		    						"<td class='statusBtn'><button type = 'button' class='btn btn-sm'></button</td>"+
+		    						"<td class='reason'></td>" +
+		    						"<td class='waitingJob'></td>" +
+		    						"<td class='jobId'></td>" + 
+		    						"<td class='uploadFile'></td>" +
+		    						"<td class='uploadDate'></td>" +
+								"</tr>" );
+							
+							$rowHtml.find( ".mid" ).html( data[ i ].mid );
+							$rowHtml.find( ".statusBtn>button" ).html( data[ i ].status ).addClass( ( data[ i ].status === "SUCCESS" ) ? "btn-success" : "btn-danger" );
+							
+							$rowHtml.find( ".reason" ).html( data[ i ].reason );
+							$rowHtml.find( ".waitingJob" ).html( data[ i ].waitingJob );
+							$rowHtml.find( ".jobId" ).html( data[ i ].jobId );
+							$rowHtml.find( ".uploadFile" ).html( data[ i ].uploadFile );
+							$rowHtml.find( ".uploadDate" ).html( data[ i ].uploadDate );
+	
+							$( "table.table>tbody" ).append( $rowHtml );	
+						}
+					}
+					
+					count = data.length;
+				}).error( function( data ) {
+					console.log( "Ajax Error" );				
+				});
+	    	}					
+
+	    })(jQuery, undefined);
+
+
+    </script>
+    
   </head>
 
   <body>
@@ -84,7 +132,10 @@
 		<br/>
 		<input type="submit" value="upload" />
 	</form>
-    
+    <br/>
+    <button type="button" class="btn btn-sm btn-primary" onclick='bulkJobRequest()'>BulkJob Request update</button>
+    <br/>
+    <br/>
       <div class="page-content" align="center">
          <table class="table table-striped">
             <thead>
@@ -99,24 +150,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-              	<td>1</td>
-                <td><button type="button" class="btn btn-sm btn-success">SUCCESS</button></td>
-                <td>0000</td>
-                <td>10</td>
-                <td>TX_20150611_111</td>
-                <td>bulk_job.txt</td>
-                <td>2015-05-14</td>
-              </tr>
-              <tr>
-              	<td>2</td>
-                <td><button type="button" class="btn btn-sm btn-danger">FAIL</button></td>
-                <td>9000</td>
-                <td>10</td>
-                <td>TX_20150611_111</td>
-                <td>bulk_job.txt</td>
-                <td>2015-05-14</td>
-              </tr>
+
             </tbody>
           </table>
       </div>

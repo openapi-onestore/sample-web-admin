@@ -13,9 +13,8 @@
 		<result property="uploadDate" column="upload_date" />
 	</resultMap>
 
-	<select id="selectBulkJobRequest" parameterType="map" resultMap="bulkJobRequestMap">
+	<select id="selectBulkJobRequest" resultMap="bulkJobRequestMap">
 		SELECT * FROM BULK_JOB_REQUEST
-		WHERE MID BETWEEN #{START_NO} AND #{END_NO}
 	</select>
 	
 	<insert id="insertBulkJobRequest" parameterType="map">

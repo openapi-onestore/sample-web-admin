@@ -78,4 +78,10 @@ public class PayplanetClient {
 		bulkJobDao.addBulkJobRequest(param);
 	}
 	
+	public List<Map<String, String>> selectBulkJobRequest() throws Exception {
+		logger.debug("selectBulkJobRequest(); called");
+		List<Map<String, String>> result = bulkJobDao.selectBulkJobRequest();
+		
+		return result;
+	}
 }

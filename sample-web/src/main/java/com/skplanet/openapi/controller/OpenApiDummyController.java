@@ -38,7 +38,7 @@ public class OpenApiDummyController {
 		}
 		
 		boolean result = fileUploadService.fileUpload(request);
-
+		
 		StringBuilder sb = new StringBuilder();
 		if (result)
 			sb.append("status=SUCCESS&reason=0000&waitingJob=0&jobId=201506110001&uploadFile=").append(request.getOriginalFilename()).append("&uploadDate=20150616");

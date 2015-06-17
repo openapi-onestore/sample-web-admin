@@ -22,8 +22,15 @@ public class OAuthManager implements OAuthInterface {
 	private OAuthAccessToken oauth = null;
 	private OAuthVerifyResult oauthVerifyResult = null;
 	
-	private final String oauthAccessTokenUrl = "http://172.21.60.143/oauth/service/accessToken";
-	private final String oauthVerifyUrl = "http://172.21.60.143/oauth/internal/v1/validation";
+	private final String oauthAccessTokenUrl;
+	private final String oauthVerifyUrl;
+	
+	public OAuthManager() {
+		//TODO:read property and setting
+		
+		oauthAccessTokenUrl = "http://172.21.60.143/oauth/service/accessToken";
+		oauthVerifyUrl = "http://172.21.60.143/oauth/internal/v1/validation";		
+	}
 	
 	@Override
 	public void setClientInfo(OAuthClientInfo clientInfo) {

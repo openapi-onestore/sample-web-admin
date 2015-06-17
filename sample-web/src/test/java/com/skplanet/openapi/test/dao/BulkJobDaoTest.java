@@ -77,22 +77,14 @@ public class BulkJobDaoTest {
 	
 	@Test
 	public void getBulkJobRequest() {
-		hashMap.clear();
-		hashMap.put("START_NO", "1");
-		hashMap.put("END_NO", "2");
-		
-		List<Map<String,String>> map = bulkJobDAO.selectBulkJobRequest(hashMap);
+		List<Map<String,String>> map = bulkJobDAO.selectBulkJobRequest();
 		
 		Assert.assertEquals(2, map.size());
 	}
 	
 	@Test
 	public void insertBulkJobRequest() {
-		hashMap.clear();
-		hashMap.put("START_NO", "1");
-		hashMap.put("END_NO", "2");
-		
-		List<Map<String,String>> map = bulkJobDAO.selectBulkJobRequest(hashMap);
+		List<Map<String,String>> map = bulkJobDAO.selectBulkJobRequest();
 		
 		Assert.assertEquals(map.size(), 2);
 		
@@ -110,11 +102,7 @@ public class BulkJobDaoTest {
 			e.printStackTrace();
 		}
 		
-		hashMap.clear();
-		hashMap.put("START_NO", "1");
-		hashMap.put("END_NO", "3");
-		
-		map = bulkJobDAO.selectBulkJobRequest(hashMap);
+		map = bulkJobDAO.selectBulkJobRequest();
 		
 		Assert.assertEquals(3, map.size());
 	}
