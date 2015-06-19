@@ -23,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.skplanet.openapi.dao.BulkJobDAO;
 import com.skplanet.openapi.request.outbound.PayplanetClient;
 import com.skplanet.openapi.vo.BulkJobInfo;
-import com.skplanet.openapi.vo.BulkJobRequest;
 
 @Service("paymentService")
 public class PaymentService {
