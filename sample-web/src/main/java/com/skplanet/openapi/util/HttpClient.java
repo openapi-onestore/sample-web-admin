@@ -16,6 +16,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
+import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -66,7 +67,7 @@ public class HttpClient {
 	}
 
 	public String post(String url, Map<String, String> data) throws Exception {
-
+		
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(url);
 		addHeaders(httpPost);
@@ -124,11 +125,11 @@ public class HttpClient {
 					.addBinaryBody("file", fis, ContentType.TEXT_PLAIN, "file")
 					.build();
 			
-			// TODO plain/text로 처리 가능한지 확인 필
-			// InputStreamEntity reqEntity = new InputStreamEntity(
-			// new FileInputStream(file), file.length(),
-			// ContentType.MULTIPART_FORM_DATA);
-			// reqEntity.setChunked(true);
+//			 TODO plain/text로 처리 가능한지 확인 필
+//			 InputStreamEntity reqEntity = new InputStreamEntity(
+//			 new FileInputStream(file), file.length(),
+//			 ContentType.MULTIPART_FORM_DATA);
+//			 reqEntity.setChunked(true);
 			
 			httpPost.setEntity(reqEntity);
 			CloseableHttpResponse response = httpclient.execute(httpPost);

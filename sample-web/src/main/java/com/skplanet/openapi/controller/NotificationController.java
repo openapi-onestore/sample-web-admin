@@ -33,6 +33,7 @@ public class NotificationController {
 		String result = null;
 		try {
 			// TODO request param parse
+			logger.debug("Notification received!");
 			result = notificationService.processNoti(data);
 			// TODO 200 OK
 			return result;

@@ -14,9 +14,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.skplanet.openapi.dao.BulkJobDAO;
-import com.skplanet.openapi.request.outbound.header.BatchFileVersionHeader;
+import com.skplanet.openapi.external.oauth.OAuthClientInfo;
+import com.skplanet.openapi.external.oauth.OAuthManager;
+import com.skplanet.openapi.request.outbound.header.AccessTokenHeader;
+import com.skplanet.openapi.request.outbound.header.BulkPayVersionHeader;
 import com.skplanet.openapi.request.outbound.header.MerchantIdHeader;
 import com.skplanet.openapi.request.outbound.header.NotiUrlHeader;
+import com.skplanet.openapi.request.outbound.header.PriorityHeader;
 import com.skplanet.openapi.request.outbound.header.ProcessingCountHeader;
 import com.skplanet.openapi.util.HttpClient;
 import com.skplanet.openapi.util.HttpHeader;
@@ -57,12 +61,28 @@ public class PayplanetClient {
 	
 	public String createBulkPayment(int processingCount, String path) throws Exception {		
 		logger.debug("createBulkPayment() called");
+		
+		OAuthManager oauthManager = new OAuthManager();
+		String accessToken = null;
+		
+		OAuthClientInfo oauthClientInfo = new OAuthClientInfo();		
+		oauthClientInfo.setClientId("84xK38rx9iCrFRJVOynsRA0MT0o3LTs83OqDLEJf5g0=");
+		oauthClientInfo.setClientSecret("GS1qrhoHMJWpmS6QwLNaG5NcFWFqzh5TrmY5476a2nA=");
+		oauthClientInfo.setGrantType("client_credentials");
+		
+		oauthManager.setClientInfo(oauthClientInfo);
+		if (oauthManager.createOAuthAccessToken()) {
+			accessToken = oauthManager.getOAuthToken().getAccessToken();
+		}
+		
 		// TODO: Header create
 		List<HttpHeader> header = new ArrayList<HttpHeader>();
-		header.add(new BatchFileVersionHeader("1"));
+		header.add(new BulkPayVersionHeader("1"));
 		header.add(new MerchantIdHeader("skplanet"));
 		header.add(new NotiUrlHeader(notificationUrl));
+		header.add(new PriorityHeader("Instant"));
 		header.add(new ProcessingCountHeader(Integer.toString(processingCount)));
+		header.add(new AccessTokenHeader(accessToken));
 		
 		httpRequest.setHeader(header);
 		

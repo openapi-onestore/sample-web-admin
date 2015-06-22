@@ -1,7 +1,6 @@
 package com.skplanet.openapi.external.oauth;
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
@@ -16,13 +15,11 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.AbstractHttpMessage;
 import org.apache.http.util.EntityUtils;
 
-import com.skplanet.openapi.util.HttpHeader;
-
 public class OAuthHttpRequest implements Callable<String>{
 
 	private String callUrl = null;
-	private String param = null;
-	private List<HttpHeader> headers = null;
+	private String param = null;	
+	private Map<String, String> headers = null;
 
 	private final String delemeter = "&";
 	private final String equal = "=";
@@ -68,7 +65,7 @@ public class OAuthHttpRequest implements Callable<String>{
 		return result;
 	}
 	
-	public void setHeader(List<HttpHeader> header) {
+	public void setHeader(Map<String, String> header) {
 		this.headers = header;
 	}
 	
@@ -121,9 +118,9 @@ public class OAuthHttpRequest implements Callable<String>{
 	}
 	
 	private void addHeaders(AbstractHttpMessage httpMessage) {
-		for (HttpHeader header : headers) {
-			System.out.println("add Headers : " + header.getName() + " value : " + header.getValue());
-			httpMessage.setHeader(header.getName(), header.getValue());
+		for (String key : headers.keySet()) {
+			System.out.println("add Headers : " + key + " value : " + headers.get(key));
+			httpMessage.setHeader(key, headers.get(key));
 		}
 	}
 }

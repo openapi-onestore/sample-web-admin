@@ -2,9 +2,7 @@ package com.skplanet.openapi.external.oauth;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
@@ -15,7 +13,6 @@ import org.apache.commons.codec.binary.Base64;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.skplanet.openapi.external.oauth.OAuthManagingException.OAuthManaging;
-import com.skplanet.openapi.util.HttpHeader;
 
 public class OAuthManager implements OAuthInterface {
 
@@ -61,13 +58,11 @@ public class OAuthManager implements OAuthInterface {
 		String response = null;
 		
 		OAuthHttpRequest httpRequest = new OAuthHttpRequest();
-		List<HttpHeader> authHeader = new ArrayList<HttpHeader>();
-		authHeader.add(getOAuthHttpRequestHeader());
 		
 		try {
 			httpRequest.setCallUrl(oauthAccessTokenUrl);
 			httpRequest.setParamMap(data);
-			httpRequest.setHeader(authHeader);
+			httpRequest.setHeader(getOAuthHttpRequestHeader());
 			
 			Future<String> future = jobExecutor.submit(httpRequest);
 			response = future.get();
@@ -136,7 +131,7 @@ public class OAuthManager implements OAuthInterface {
 		try {
 			String requestJson = null;
 			requestJson = objectMapper.writeValueAsString(verifyData);
-
+			
 			httpRequest.setCallUrl(oauthVerifyUrl);
 			httpRequest.setParam(requestJson);
 			
@@ -151,6 +146,40 @@ public class OAuthManager implements OAuthInterface {
 			return false;
 		}
 		return true;
+	}
+	
+	private Map<String, String> getOAuthHttpRequestHeader() {
+		StringBuilder sb = new StringBuilder();		
+		System.out.println(clientInfo.getAuthString());
+		
+		byte[] basicStringBase64 = Base64.encodeBase64(clientInfo.getAuthString().getBytes());
+		sb.append("BASIC ").append(new String(basicStringBase64));
+		Map<String, String> headerMap = new HashMap<String, String>();
+		headerMap.put("Authorization", sb.toString());
+		System.out.println("Authorization : " + sb.toString());
+		
+		return headerMap;
+	}
+
+	public void setPropertyFile(String path) throws Exception {
+		this.propertyPath = path;
+		Properties props = new Properties();
+
+		if (propertyPath == null) {
+			throw new OAuthManagingException(OAuthManaging.OAUTH_OBJECT_NULL,"Property path is null");
+		}
+		
+		try {
+			FileInputStream fis = new FileInputStream(propertyPath);
+			props.load(new BufferedInputStream(fis));
+			
+			oauthAccountCreateUrl = props.getProperty("oauth.account_create_url");
+			oauthAccessTokenUrl = props.getProperty("oauth.token_create_url");
+			oauthVerifyUrl = props.getProperty("oauth.token_verify_url");
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new OAuthManagingException(OAuthManaging.UNKNOWN_ERROR, "File creation is incorect!!");
+		}
 	}
 	
 	@Override
@@ -172,36 +201,6 @@ public class OAuthManager implements OAuthInterface {
 		if (oauthAccount == null)
 			throw new OAuthManagingException(OAuthManaging.OAUTH_OBJECT_NULL, "OAuth object is null");
 		return oauthAccount;
-	}
-	
-	private OAuthHttpRequestHeader getOAuthHttpRequestHeader() {
-		StringBuilder sb = new StringBuilder();		
-		System.out.println(clientInfo.getAuthString());
-		
-		byte[] basicStringBase64 = Base64.encodeBase64(clientInfo.getAuthString().getBytes());
-		sb.append("BASIC ").append(new String(basicStringBase64));
-		OAuthHttpRequestHeader oAuthHttpRequestHeader = new OAuthHttpRequestHeader("Authorization", sb.toString());
-		System.out.println(oAuthHttpRequestHeader.getName() + " " + oAuthHttpRequestHeader.getValue());
-		return oAuthHttpRequestHeader;
-	}
-
-	public void setPropertyFile(String path) throws Exception {
-		this.propertyPath = path;
-		Properties props = new Properties();
-
-		if (propertyPath == null)
-			return;
-		
-		try {
-			FileInputStream fis = new FileInputStream(propertyPath);
-			props.load(new BufferedInputStream(fis));
-			
-			oauthAccountCreateUrl = props.getProperty("oauth.account_create_url");
-			oauthAccessTokenUrl = props.getProperty("token_create_url");
-			oauthVerifyUrl = props.getProperty("token_verify_url");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 	
 }

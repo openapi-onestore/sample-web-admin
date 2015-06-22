@@ -11,7 +11,7 @@ public class ProcessingCountHeader implements HttpHeader{
 	}
 	
 	public String getName() {
-		return "processingCount";
+		return "cntTotalTrans";
 	}
 
 	public String getValue() {
