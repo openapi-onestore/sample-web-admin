@@ -1,6 +1,8 @@
 package com.skplanet.openapi.controller;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,6 +66,8 @@ public class PaymentController {
 		
 		if (result.contains("SUCCESS")) {
 			// bulkJob file upload success
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HH:mm");
+			result += "&upload_file=" + request.getOriginalFilename() + "&upload_date=" + sdf.format(Calendar.getInstance().getTime());
 			result = paymentService.requestBulkJobRequest(result);
 		} else {
 			result = "bulkJobUpload fail. please upload your file";

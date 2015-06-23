@@ -95,7 +95,7 @@ public class PaymentService {
 		
 		for( String temps : temp) {
 			String[] kvp = temps.split("=");
-			param.put(kvp[0],kvp[1]);
+			param.put(kvp[0].toLowerCase(),kvp[1]);
 			logger.debug(kvp[0] + " " + kvp[1]);
 		}
 		

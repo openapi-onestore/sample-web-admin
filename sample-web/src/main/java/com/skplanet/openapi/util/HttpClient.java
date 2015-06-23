@@ -121,15 +121,15 @@ public class HttpClient {
 			File file = new File(filePath);
 			
 			FileInputStream fis = new FileInputStream(file);
-			HttpEntity reqEntity = MultipartEntityBuilder.create()
-					.addBinaryBody("file", fis, ContentType.TEXT_PLAIN, "file")
-					.build();
+//			HttpEntity reqEntity = MultipartEntityBuilder.create()
+//					.addBinaryBody("file", fis, ContentType.TEXT_PLAIN, "file")
+//					.build();
 			
 //			 TODO plain/text로 처리 가능한지 확인 필
-//			 InputStreamEntity reqEntity = new InputStreamEntity(
-//			 new FileInputStream(file), file.length(),
-//			 ContentType.MULTIPART_FORM_DATA);
-//			 reqEntity.setChunked(true);
+			 InputStreamEntity reqEntity = new InputStreamEntity(
+			 new FileInputStream(file), file.length(),
+			 ContentType.TEXT_PLAIN);
+			 reqEntity.setChunked(true);
 			
 			httpPost.setEntity(reqEntity);
 			CloseableHttpResponse response = httpclient.execute(httpPost);

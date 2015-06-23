@@ -18,7 +18,7 @@
 	</select>
 	
 	<insert id="insertBulkJobRequest" parameterType="map">
-		INSERT INTO BULK_JOB_REQUEST VALUES(default, #{status}, #{reason}, #{waitingJob}, #{jobId}, #{uploadFile}, #{uploadDate})
+		INSERT INTO BULK_JOB_REQUEST VALUES(default, #{status}, #{reason}, #{waiting_jobs}, #{job_id}, #{upload_file}, #{upload_date})
 	</insert>
 	
 </mapper>
