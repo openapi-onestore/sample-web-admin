@@ -32,23 +32,23 @@ public class PaymentService {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(PaymentService.class);
-	
+
 	@Value("${bulkjobservice.localsavefolder}")
 	private String localSavingFolder;
-	
+
 	@Autowired
 	private BulkJobDAO bulkJobDAO;
 
 	@Autowired
 	private PayplanetClient payplanetClient;
-	
+
 	private List<String> columns = Arrays.asList(new String[] { "mid",
-			"billingToken", "pid", "pName", "orderNo",
-			"amtReqPurchase", "amtCarrier", "amtCreditCard", "amtTms" });
-	
+			"billingToken", "pid", "pName", "orderNo", "amtReqPurchase",
+			"amtCarrier", "amtCreditCard", "amtTms" });
+
 	public String requestBulkJob(Map<String, String> param) {
 		String result = null;
-		 
+
 		try {
 			BulkJobInfo bulkJobInfo = makeBulkFile(param);
 			result = payplanetClient
@@ -61,44 +61,43 @@ public class PaymentService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return result;
 	}
 
 	public String requestBulkJob(MultipartFile multipartFile) {
 		String result = null;
 		File tmpFile = new File(getBulkfileFormat());
-		
+
 		try {
 			multipartFile.transferTo(tmpFile);
 			int processCount = countLines(tmpFile.getAbsolutePath());
 			BulkJobInfo bulkJobInfo = new BulkJobInfo(
 					tmpFile.getAbsolutePath(), processCount);
-			result = payplanetClient
-					.createBulkPayment(bulkJobInfo.getProcessingCount(),
-							bulkJobInfo.getFilePath());
+			result = payplanetClient.createBulkPayment(bulkJobInfo.getProcessingCount(),
+					bulkJobInfo.getFilePath());
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return result;
 	}
 
 	public String requestBulkJobRequest(String params) {
 		String result = null;
-		
+
 		Map<String, String> param = new HashMap<String, String>();
-		
+
 		String[] temp = params.split("&");
-		
-		for( String temps : temp) {
+
+		for (String temps : temp) {
 			String[] kvp = temps.split("=");
-			param.put(kvp[0].toLowerCase(),kvp[1]);
+			param.put(kvp[0].toLowerCase(), kvp[1]);
 			logger.debug(kvp[0] + " " + kvp[1]);
 		}
-		
+
 		try {
 			payplanetClient.insertBulkPaymentRequest(param);
 			result = "result=SUCCESS";
@@ -106,10 +105,10 @@ public class PaymentService {
 			e.printStackTrace();
 			result = "result=FAIL&reason=" + e.getMessage();
 		}
-		
+
 		return result;
 	}
-	
+
 	public List<Map<String, String>> requestBulkJobRequestList() {
 		List<Map<String, String>> result = null;
 		try {
@@ -119,18 +118,17 @@ public class PaymentService {
 		}
 		return result;
 	}
-	
-	
+
 	private BulkJobInfo makeBulkFile(Map<String, String> param)
 			throws FileNotFoundException, IOException {
 		File tmpFile = new File(getBulkfileFormat());
 		Writer writer = new PrintWriter(tmpFile);
-		
+
 		List<Map<String, String>> bulkJobs = bulkJobDAO.selectBulkJob(param);
 		logger.debug("bulkjob size : " + bulkJobs.size());
 
 		int processingCount = bulkJobs.size();
-		
+
 		Iterator<String> iterator = columns.iterator();
 		while (iterator.hasNext()) {
 			writer.write(iterator.next());
@@ -138,9 +136,9 @@ public class PaymentService {
 				writer.write(",");
 			}
 		}
-		
+
 		writer.write('\n');
-		
+
 		for (Map<String, String> bulkJob : bulkJobs) {
 			iterator = columns.iterator();
 			while (iterator.hasNext()) {
@@ -154,34 +152,34 @@ public class PaymentService {
 			writer.write('\n');
 		}
 		writer.close();
-		
+
 		return new BulkJobInfo(tmpFile.getAbsolutePath(), processingCount);
 	}
-	
+
 	private String getBulkfileFormat() {
-		return String.format(Locale.getDefault(),
-				"%s/%s.bulk", localSavingFolder, UUID.randomUUID().toString());
+		return String.format(Locale.getDefault(), "%s/%s.bulk",
+				localSavingFolder, UUID.randomUUID().toString());
 	}
 
 	private int countLines(String filename) throws IOException {
-	    InputStream is = new BufferedInputStream(new FileInputStream(filename));
-	    try {
-	        byte[] c = new byte[1024];
-	        int count = 0;
-	        int readChars = 0;
-	        boolean empty = true;
-	        while ((readChars = is.read(c)) != -1) {
-	            empty = false;
-	            for (int i = 0; i < readChars; ++i) {
-	                if (c[i] == '\n') {
-	                    ++count;
-	                }
-	            }
-	        }
-	        return (count == 0 && !empty) ? 1 : count;
-	    } finally {
-	        is.close();
-	    }
+		InputStream is = new BufferedInputStream(new FileInputStream(filename));
+		try {
+			byte[] c = new byte[1024];
+			int count = 0;
+			int readChars = 0;
+			boolean empty = true;
+			while ((readChars = is.read(c)) != -1) {
+				empty = false;
+				for (int i = 0; i < readChars; ++i) {
+					if (c[i] == '\n') {
+						++count;
+					}
+				}
+			}
+			return (count == 0 && !empty) ? 1 : count;
+		} finally {
+			is.close();
+		}
 	}
-	
+
 }

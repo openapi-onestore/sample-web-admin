@@ -168,9 +168,11 @@ public class OAuthManager implements OAuthInterface {
 		if (propertyPath == null) {
 			throw new OAuthManagingException(OAuthManaging.OAUTH_OBJECT_NULL,"Property path is null");
 		}
+
+		FileInputStream fis = null;
 		
 		try {
-			FileInputStream fis = new FileInputStream(propertyPath);
+			fis = new FileInputStream(propertyPath);
 			props.load(new BufferedInputStream(fis));
 			
 			oauthAccountCreateUrl = props.getProperty("oauth.account_create_url");
@@ -179,7 +181,10 @@ public class OAuthManager implements OAuthInterface {
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new OAuthManagingException(OAuthManaging.UNKNOWN_ERROR, "File creation is incorect!!");
+		} finally {
+			fis.close();
 		}
+		
 	}
 	
 	@Override
