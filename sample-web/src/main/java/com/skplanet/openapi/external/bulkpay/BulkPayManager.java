@@ -32,6 +32,7 @@ public class BulkPayManager implements BulkPayInterface {
 			if (result.equals("fail")) {
 				return "{'result':'fail','reason':'Header or File path is not valid'}";
 			}
+			
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();

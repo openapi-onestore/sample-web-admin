@@ -3,9 +3,6 @@ package com.skplanet.openapi.request.outbound;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +21,6 @@ import com.skplanet.openapi.util.HttpRequest;
 public class PayplanetClient {
 	
 	private static final Logger logger = LoggerFactory.getLogger(PayplanetClient.class);
-	
-	private ExecutorService jobExecutor = Executors.newFixedThreadPool(2);
 	
 	@Autowired
 	private HttpClient httpClient;
@@ -48,12 +43,8 @@ public class PayplanetClient {
 	
 	public String verify(Map<String,String> param) throws Exception {
 		logger.debug("verify() called");
-		httpRequest.setCallUrl(verifyUrl);
-		httpRequest.setParamMap(param);
-		Future<String> future = jobExecutor.submit(httpRequest);
 		
-		String response = future.get();
-		return response;
+		return null;
 	}
 	
 	public String createBulkPayment(int processingCount, String path) throws Exception {		
