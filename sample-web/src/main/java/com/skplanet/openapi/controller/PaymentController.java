@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.skplanet.openapi.service.PaymentService;
 
@@ -57,10 +58,8 @@ public class PaymentController {
 
 	
 	@RequestMapping(value = "/bulkjob", method = RequestMethod.POST)
-	@ResponseBody
 	public String requestBulkJobUploadFromFile(
-			@RequestParam("bulkjob") MultipartFile request,
-			HttpServletRequest servletRequest) {
+			@RequestParam("bulkjob") MultipartFile request) {
 		
 		String result = paymentService.requestBulkJob(request);
 		
@@ -72,10 +71,10 @@ public class PaymentController {
 		} else {
 			result = "bulkJobUpload fail. please upload your file";
 		}
-		
-		return result;
+				
+		return "redirect:../admin/test?uploadResult="+result;
 	}
-
+	
 	@RequestMapping(value = "/result", method = RequestMethod.GET)
 	@ResponseBody
 	public File requestResultFile(String jobid) {

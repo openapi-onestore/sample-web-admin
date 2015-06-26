@@ -49,7 +49,6 @@ public class OAuthManagerTest {
 		}
 		
 		Assert.assertEquals(32, oauth.getAccessToken().length());
-		Assert.assertEquals("43200", oauth.getExpired());
 		Assert.assertEquals("Bearer", oauth.getTokenType());
 		
 		String scope = oauth.getScope();
@@ -119,13 +118,14 @@ public class OAuthManagerTest {
 	}
 	
 	@Test(expected=Exception.class)
-	public void getReadPropertyFail() {
+	public void getReadPropertyFail() throws Exception {
 		
 		OAuthManager oauthManager = new OAuthManager();
 		try {
 			oauthManager.setPropertyFile("D:\1114.properties");
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new Exception();
 		}
 		
 	}

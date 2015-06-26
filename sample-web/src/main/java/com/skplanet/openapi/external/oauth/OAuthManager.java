@@ -29,9 +29,9 @@ public class OAuthManager implements OAuthInterface {
 	private String propertyPath = null;
 	
 	// default setting
-	private String oauthAccountCreateUrl = "http://172.21.60.143/oauth/admin/management/account/creation";
-	private String oauthAccessTokenUrl = "http://172.21.60.143/oauth/service/accessToken";
-	private String oauthVerifyUrl = "http://172.21.60.143/oauth/internal/v1/validation";
+	private String oauthAccountCreateUrl = "http://172.21.60.143:8080/oauth/admin/management/account/creation";
+	private String oauthAccessTokenUrl = "http://172.21.60.143:8080/oauth/service/accessToken";
+	private String oauthVerifyUrl = "http://172.21.60.143:8080/oauth/internal/v1/validation";
 	
 	@Override
 	public void setAccountInfo(OAuthAccountInfo accountInfo) {
@@ -53,7 +53,7 @@ public class OAuthManager implements OAuthInterface {
 			return false;
 		
 		Map<String, String> data = new HashMap<String, String>();
-		data.put(OAuthClientInfo.GRANT_TYPE, clientInfo.getGrantType());
+		data.put(clientInfo.GRANT_TYPE, clientInfo.getGrantType());
 		
 		String response = null;
 		
@@ -121,7 +121,7 @@ public class OAuthManager implements OAuthInterface {
 			return false;
 		
 		Map<String, String> verifyData = new HashMap<String, String>();
-		verifyData.put("ipAddress", "10.202.33.51");
+		verifyData.put("ipAddress", "172.21.60.143");
 		verifyData.put("apiId", oauth.getScope().split(" ")[0]);
 		verifyData.put("accessToken", oauth.getAccessToken());
 		

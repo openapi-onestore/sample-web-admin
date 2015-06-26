@@ -36,7 +36,7 @@
 	    	
 	    	bulkJobRequest = function() {
 				$.ajax( {
-					url: "http://localhost:8080/sample-web/openapi/payment/request"
+					url: "http://172.21.60.143:8181/sample-web/openapi/payment/request"
 				}).success( function( data ) {
 					console.log( data );
 					
@@ -126,7 +126,9 @@
         <button type="button" class="btn btn-lg btn-link">Link</button>
       </p>
 -->
-      
+
+	<h4>File upload status : <%=request.getAttribute("uploadResult") %></h4><br/>
+
     <form action="<c:url value='/openapi/payment/bulkjob'/>" method="post" enctype="multipart/form-data">
 		<input type="file" name="bulkjob" />
 		<br/>

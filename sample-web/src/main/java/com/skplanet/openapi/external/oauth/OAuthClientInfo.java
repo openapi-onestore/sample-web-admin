@@ -3,9 +3,9 @@ package com.skplanet.openapi.external.oauth;
 
 public final class OAuthClientInfo {
 	
-	public static final String CLIENT_ID = "client_id";
-	public static final String CLIENT_SECRET = "client_secret";
-	public static final String GRANT_TYPE = "grant_type";
+	public final String CLIENT_ID = "client_id";
+	public final String CLIENT_SECRET = "client_secret";
+	public final String GRANT_TYPE = "grant_type";
 	
 	private String clientId;
 	private String clientSecret;	

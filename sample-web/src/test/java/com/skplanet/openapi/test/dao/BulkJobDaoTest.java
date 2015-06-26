@@ -7,7 +7,6 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.internal.runners.statements.Fail;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -79,14 +78,14 @@ public class BulkJobDaoTest {
 	public void getBulkJobRequest() {
 		List<Map<String,String>> map = bulkJobDAO.selectBulkJobRequest();
 		
-		Assert.assertEquals(2, map.size());
+		Assert.assertEquals(1, map.size());
 	}
 	
 	@Test
 	public void insertBulkJobRequest() {
 		List<Map<String,String>> map = bulkJobDAO.selectBulkJobRequest();
 		
-		Assert.assertEquals(map.size(), 2);
+		Assert.assertEquals(map.size(), 0);
 		
 		hashMap.clear();
 		hashMap.put("status", "SUCCESS");
@@ -104,7 +103,7 @@ public class BulkJobDaoTest {
 		
 		map = bulkJobDAO.selectBulkJobRequest();
 		
-		Assert.assertEquals(3, map.size());
+		Assert.assertEquals(1, map.size());
 	}
 	
 }

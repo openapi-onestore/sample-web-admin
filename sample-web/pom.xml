@@ -4,7 +4,7 @@
 	<groupId>com.skplanet.openapi</groupId>
 	<artifactId>sample-web</artifactId>
 	<packaging>war</packaging>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0-SNAPSHOT</version>
 	<name>sample-web Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 	
@@ -25,7 +25,6 @@
 		<h2database.version>1.4.186</h2database.version>		
 		
 		<!-- Logging -->
-		<logback.version>1.0.13</logback.version>
 		<slf4j.version>1.7.5</slf4j.version>
 				
 		<!-- Test -->
@@ -83,11 +82,6 @@
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
 			<version>1.9.12</version>
-		</dependency>
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>1.0.9</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -151,5 +145,25 @@
 	</dependencies>
 	<build>
 		<finalName>sample-web</finalName>
+	<plugins>
+		<plugin>
+			<groupId>org.apache.tomcat.maven</groupId>
+			<artifactId>tomcat7-maven-plugin</artifactId>
+			<version>2.2</version>
+			<configuration>
+				<url>http://172.21.60.143:8181/manager/text</url>
+				<username>tomcat</username>
+				<password>1q2w3e</password>
+			</configuration>
+		</plugin>
+		<plugin>
+		    <groupId>org.apache.maven.plugins</groupId>
+		    <artifactId>maven-surefire-plugin</artifactId>
+		    <version>2.12.4</version>
+		    <configuration>
+		        <skipTests>true</skipTests>
+		    </configuration>
+		</plugin>
+	</plugins>		
 	</build>
 </project>

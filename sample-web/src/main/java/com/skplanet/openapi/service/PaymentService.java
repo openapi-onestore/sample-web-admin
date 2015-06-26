@@ -68,7 +68,7 @@ public class PaymentService {
 	public String requestBulkJob(MultipartFile multipartFile) {
 		String result = null;
 		File tmpFile = new File(getBulkfileFormat());
-
+		
 		try {
 			multipartFile.transferTo(tmpFile);
 			int processCount = countLines(tmpFile.getAbsolutePath());
@@ -123,7 +123,7 @@ public class PaymentService {
 			throws FileNotFoundException, IOException {
 		File tmpFile = new File(getBulkfileFormat());
 		Writer writer = new PrintWriter(tmpFile);
-
+		
 		List<Map<String, String>> bulkJobs = bulkJobDAO.selectBulkJob(param);
 		logger.debug("bulkjob size : " + bulkJobs.size());
 
