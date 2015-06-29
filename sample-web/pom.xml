@@ -14,10 +14,10 @@
 		<java.version>1.7</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-				
+		
 		<!-- Web -->
 		<jstl.version>1.2</jstl.version>
-
+		
 		<!-- Spring -->
 		<spring-framework.version>3.2.1.RELEASE</spring-framework.version>
 		
@@ -26,10 +26,10 @@
 		
 		<!-- Logging -->
 		<slf4j.version>1.7.5</slf4j.version>
-				
+		
 		<!-- Test -->
 		<junit.version>4.11</junit.version>
-			
+		
 	</properties>
 	
 	<dependencies>

@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.skplanet.openapi.service.PaymentService;
 
@@ -28,7 +25,7 @@ public class PaymentController {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(PaymentController.class);
-
+	
 	@Autowired
 	private PaymentService paymentService;
 
@@ -56,7 +53,6 @@ public class PaymentController {
 		return result;
 	}
 
-	
 	@RequestMapping(value = "/bulkjob", method = RequestMethod.POST)
 	public String requestBulkJobUploadFromFile(
 			@RequestParam("bulkjob") MultipartFile request) {
@@ -71,7 +67,7 @@ public class PaymentController {
 		} else {
 			result = "bulkJobUpload fail. please upload your file";
 		}
-				
+		
 		return "redirect:../admin/test?uploadResult="+result;
 	}
 	

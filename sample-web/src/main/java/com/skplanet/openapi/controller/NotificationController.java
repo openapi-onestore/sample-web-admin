@@ -28,7 +28,7 @@ public class NotificationController {
 	
 	@RequestMapping(value = "/noti_listener", method = RequestMethod.POST)
 	@ResponseBody
-	public String notiListen(@RequestParam Map<String,String> data) {
+	public String notiListener(@RequestParam Map<String,String> data) {
 		System.out.println(data.toString());
 		String result = null;
 		try {

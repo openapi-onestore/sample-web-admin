@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 
 import com.skplanet.openapi.dao.BulkJobDAO;
 import com.skplanet.openapi.external.bulkpay.BulkPayManager;
+import com.skplanet.openapi.external.notification.NotiManager;
+import com.skplanet.openapi.external.notification.NotiException.Noti;
 import com.skplanet.openapi.external.oauth.OAuthClientInfo;
 import com.skplanet.openapi.external.oauth.OAuthManager;
 import com.skplanet.openapi.util.HttpClient;
@@ -23,16 +25,11 @@ public class PayplanetClient {
 	private static final Logger logger = LoggerFactory.getLogger(PayplanetClient.class);
 	
 	@Autowired
-	private HttpClient httpClient;
-	
-	@Autowired
-	private HttpRequest httpRequest;
-	
-	@Autowired
 	private BulkJobDAO bulkJobDao;
 	
 	private OAuthManager oauthManager = new OAuthManager();
-	private BulkPayManager BulkPayManager = new BulkPayManager();
+	private BulkPayManager bulkPayManager = new BulkPayManager();
+	private NotiManager notiManager = new NotiManager();
 	
 	@Value("${openapi.verify_url}") private String verifyUrl;
 	@Value("${openapi.notification_url}") private String notificationUrl;
@@ -43,6 +40,8 @@ public class PayplanetClient {
 	
 	public String verify(Map<String,String> param) throws Exception {
 		logger.debug("verify() called");
+		
+		
 		
 		return null;
 	}
@@ -63,7 +62,7 @@ public class PayplanetClient {
 		}
 		
 		Map<String,String> paramMap = getBulkPayParamMap(processingCount, path, accessToken);
-		String response = BulkPayManager.createFilePayment(paramMap);
+		String response = bulkPayManager.createFilePayment(paramMap);
 		
 		return response;		
 	}

@@ -22,6 +22,7 @@ public class NotificationService {
 	public String processNoti(Map<String, String> param) {
 		// TODO Notification 처리
 		// TODO 반드시 비동기로 처리되어야함.
+		
 		if (param.containsKey("event")) {
 			try {
 				// TODO 각 Event 타입에 따른 처리 로직을 추상화 할지는 알아서 결정하면 됨.
@@ -57,7 +58,7 @@ public class NotificationService {
 		
 		// TODO OpenAPI 서버에 Verify요청을 한다.
 		String result = requestVerify(param, "bigcharging_notify_verification");
-
+		
 		if (result == null)
 			result = "Fail";
 		
