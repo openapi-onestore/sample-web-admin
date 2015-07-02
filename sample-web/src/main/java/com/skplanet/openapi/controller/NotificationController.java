@@ -36,6 +36,7 @@ public class NotificationController {
 			logger.debug("Notification received!");
 			result = notificationService.processNoti(data);
 			// TODO 200 OK
+			logger.debug("Notification verify : " + result);
 			return result;
 		} catch (Exception e) {
 			// TODO Fail Response

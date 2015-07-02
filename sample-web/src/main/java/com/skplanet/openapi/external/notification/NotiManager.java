@@ -14,6 +14,7 @@ public class NotiManager implements NotiInterface {
 
 	private int threadPoolCount = 1;
 	private ExecutorService jobExecutor = Executors.newFixedThreadPool(threadPoolCount);
+	private String verifyUrl = "http://172.21.60.142/openapi/v1/payment/notification/verify";
 	
 	@Override
 	public NotiReceive receiveNotificationFromServer(String result) throws NotiException {
@@ -38,11 +39,14 @@ public class NotiManager implements NotiInterface {
 		
 		return notiReceive;
 	}
-
+	
 	@Override
 	public String requestNotificationVerification(Map<String, String> params) throws NotiException {
 		
 		NotiHttpRequest notiHttpRequest = new NotiHttpRequest();
+		notiHttpRequest.setParamMap(params);
+		notiHttpRequest.setCallUrl(verifyUrl);
+		
 		Future<String> future = jobExecutor.submit(notiHttpRequest);
 		String result = null;
 		

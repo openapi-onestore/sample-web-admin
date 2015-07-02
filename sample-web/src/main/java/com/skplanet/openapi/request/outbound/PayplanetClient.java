@@ -13,11 +13,8 @@ import org.springframework.stereotype.Component;
 import com.skplanet.openapi.dao.BulkJobDAO;
 import com.skplanet.openapi.external.bulkpay.BulkPayManager;
 import com.skplanet.openapi.external.notification.NotiManager;
-import com.skplanet.openapi.external.notification.NotiException.Noti;
 import com.skplanet.openapi.external.oauth.OAuthClientInfo;
 import com.skplanet.openapi.external.oauth.OAuthManager;
-import com.skplanet.openapi.util.HttpClient;
-import com.skplanet.openapi.util.HttpRequest;
 
 @Component("payplanetClient")
 public class PayplanetClient {
@@ -41,9 +38,9 @@ public class PayplanetClient {
 	public String verify(Map<String,String> param) throws Exception {
 		logger.debug("verify() called");
 		
+		String result = notiManager.requestNotificationVerification(param);
 		
-		
-		return null;
+		return result;
 	}
 	
 	public String createBulkPayment(int processingCount, String path) throws Exception {		

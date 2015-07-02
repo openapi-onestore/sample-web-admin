@@ -21,7 +21,7 @@
         <property name="locations" value="classpath:/properties/dev_config.properties"/>    
         <property name="fileEncoding" value="UTF-8"/>
     </bean>
-
+		
 	<mvc:default-servlet-handler/>
 	<mvc:resources location="/WEB-INF/views/dist/**" mapping="/dist/**"/>
 	<mvc:resources location="/WEB-INF/views/assets/**" mapping="/assets/**"/>
