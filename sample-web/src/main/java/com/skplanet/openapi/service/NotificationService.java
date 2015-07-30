@@ -90,12 +90,20 @@ public class NotificationService {
 		// "listener_type"만 추가한다.
 		Map<String, String> verifyParam = new HashMap<String, String>();
 		verifyParam.putAll(param);
-		verifyParam.put("listener_type", listenerType);
+		verifyParam.put("listenerType", listenerType);
 		
 		// TODO OpenAPI 서버에 Verify요청을 한다.
 		String result = payplanetClient.verify(verifyParam);
 		
 		return result;
+	}
+	
+	public void requestNotificationVerify(Map<String, String> param) throws Exception {		
+		payplanetClient.updateNotificationVerify(param);
+	}
+	
+	public void requestNotificationResult(Map<String, String> param) throws Exception {
+		payplanetClient.insertNotificationResult(param);
 	}
 	
 }

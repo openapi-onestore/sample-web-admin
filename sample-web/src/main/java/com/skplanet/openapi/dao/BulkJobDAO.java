@@ -9,5 +9,6 @@ public interface BulkJobDAO {
 	
 	List<Map<String, String>> selectBulkJobRequest();
 	void addBulkJobRequest(Map<String, String> param) throws Exception;
+	void updateNotifiVerified(Map<String, String> param) throws Exception;
 	
 }

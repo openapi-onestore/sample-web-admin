@@ -90,10 +90,10 @@ public class BulkJobDaoTest {
 		hashMap.clear();
 		hashMap.put("status", "SUCCESS");
 		hashMap.put("reason", "0000");
-		hashMap.put("waitingJob", "10");
-		hashMap.put("jobId", "001234");
-		hashMap.put("uploadFile", "bulkjob.txt");
-		hashMap.put("uploadDate", "20150511");
+		hashMap.put("waiting_jobs", "10");
+		hashMap.put("job_id", "001234");
+		hashMap.put("upload_file", "bulkjob.txt");
+		hashMap.put("upload_date", "20150511");
 		
 		try {
 			bulkJobDAO.addBulkJobRequest(hashMap);
@@ -104,6 +104,8 @@ public class BulkJobDaoTest {
 		map = bulkJobDAO.selectBulkJobRequest();
 		
 		Assert.assertEquals(1, map.size());
+		
+		System.out.println(map);
 	}
 	
 }

@@ -11,6 +11,7 @@
 		<result property="jobId" column="job_id" />
 		<result property="uploadFile" column="upload_file" />
 		<result property="uploadDate" column="upload_date" />
+		<result property="verifyMessage" column="verify_message" />
 	</resultMap>
 
 	<select id="selectBulkJobRequest" resultMap="bulkJobRequestMap">
@@ -18,7 +19,16 @@
 	</select>
 	
 	<insert id="insertBulkJobRequest" parameterType="map">
-		INSERT INTO BULK_JOB_REQUEST VALUES(default, #{status}, #{reason}, #{waiting_jobs}, #{job_id}, #{upload_file}, #{upload_date})
+		INSERT INTO BULK_JOB_REQUEST VALUES(default, #{status}, #{reason}, #{waiting_jobs}, #{job_id}, #{upload_file}, #{upload_date}, 'not yet')
 	</insert>
+	
+	<update id="updateNotificationVerify" parameterType="map">
+		UPDATE 
+			BULK_JOB_REQUEST
+		SET
+			VERIFY_MESSAGE = #{verifyResult}
+		WHERE
+			JOB_ID = #{jobId}
+	</update>
 	
 </mapper>

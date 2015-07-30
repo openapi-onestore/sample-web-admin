@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.skplanet.openapi.service.PaymentService;
 
@@ -52,7 +53,7 @@ public class PaymentController {
 		
 		return result;
 	}
-
+	
 	@RequestMapping(value = "/bulkjob", method = RequestMethod.POST)
 	public String requestBulkJobUploadFromFile(
 			@RequestParam("bulkjob") MultipartFile request) {
@@ -70,8 +71,21 @@ public class PaymentController {
 		
 		return "redirect:../admin/test?uploadResult="+result;
 	}
+
+	/*
+	@RequestMapping(value="/result", method=RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView requestResultPage(@RequestParam(value="jobid",required=false) String jobid) {
+		logger.debug("Result Page jobid : " + jobid);
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("bulkpay_result");
+		modelAndView.addObject("uploadResult", jobid);
+		
+		return modelAndView;
+	}
+	*/
 	
-	@RequestMapping(value = "/result", method = RequestMethod.GET)
+	@RequestMapping(value = "/result", method=RequestMethod.GET)
 	@ResponseBody
 	public File requestResultFile(String jobid) {
 		
@@ -80,15 +94,6 @@ public class PaymentController {
 		
 		
 		return file;
-	}
-	
-	@RequestMapping(value = "/test", method = RequestMethod.GET)
-	@ResponseBody
-	public String requestTest() {
-		
-		logger.debug("Current Thread : " + Thread.currentThread().getName() + " Current Object " + this);
-		
-		return "Current Thread : " + Thread.currentThread().getName() + " Current Object " + this;
 	}
 	
 }

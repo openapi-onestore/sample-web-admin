@@ -50,6 +50,7 @@
 		    						"<td class='jobId'></td>" + 
 		    						"<td class='uploadFile'></td>" +
 		    						"<td class='uploadDate'></td>" +
+		    						"<td class='verifyMessage'></td>" +
 								"</tr>" );
 							
 							$rowHtml.find( ".mid" ).html( data[ i ].mid );
@@ -60,7 +61,8 @@
 							$rowHtml.find( ".jobId" ).html( data[ i ].jobId );
 							$rowHtml.find( ".uploadFile" ).html( data[ i ].uploadFile );
 							$rowHtml.find( ".uploadDate" ).html( data[ i ].uploadDate );
-	
+							$rowHtml.find( ".verifyMessage" ).html( data[ i ].verifyMessage );
+							
 							$( "table.table>tbody" ).append( $rowHtml );	
 						}
 					}
@@ -94,9 +96,7 @@
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">BulkPayment</a></li>
-            <li><a href="#contact">TxNotification</a></li>            
+            <li><a href="#about">About</a></li>           
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -110,10 +110,11 @@
       </div>
     </div>
 -->
+
     <div class="container theme-showcase" role="main">
-    
+	    
       <div class="page-header" align="center">
-        <h1>Bulk payment file upload</h1>
+        <h1>Open API test page</h1>
       </div>
 <!--   
       <p align="center">
@@ -149,6 +150,7 @@
                 <th>Job id</th>
                 <th>Upload file</th>
                 <th>Upload date</th>
+                <th>Received noti</th>
               </tr>
             </thead>
             <tbody>

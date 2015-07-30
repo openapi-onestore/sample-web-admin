@@ -57,10 +57,20 @@ public class BulkJobDAOImpl extends SqlSessionDaoSupport implements BulkJobDAO {
 	@Override
 	public void addBulkJobRequest(Map<String, String> param) throws Exception {
 		try {
-			getSqlSession().insert("bulkJobRequest.insertBulkJobRequest",param);
+			getSqlSession().insert("bulkJobRequest.insertBulkJobRequest", param);
 		} catch(Exception e) {
 			logger.error("fail to insert bulk job request, error message : " + e.getMessage());
 			throw new Exception();
+		}
+	}
+
+	@Override
+	public void updateNotifiVerified(Map<String, String> param) throws Exception {
+		try {
+			getSqlSession().update("bulkJobRequest.updateNotificationVerify", param);
+		} catch(Exception e) {
+			logger.error("fail to insert bulk job request, error message : " + e.getMessage());
+			throw new Exception();			
 		}
 	}
 

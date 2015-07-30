@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.skplanet.openapi.dao.BulkJobDAO;
+import com.skplanet.openapi.dao.NotificationDAO;
 import com.skplanet.openapi.external.bulkpay.BulkPayManager;
 import com.skplanet.openapi.external.notification.NotiManager;
 import com.skplanet.openapi.external.oauth.OAuthClientInfo;
@@ -24,11 +25,14 @@ public class PayplanetClient {
 	@Autowired
 	private BulkJobDAO bulkJobDao;
 	
+	@Autowired
+	private NotificationDAO notificationDAO;
+	
 	private OAuthManager oauthManager = new OAuthManager();
 	private BulkPayManager bulkPayManager = new BulkPayManager();
 	private NotiManager notiManager = new NotiManager();
 	
-	@Value("${openapi.verify_url}") private String verifyUrl;
+	@Value("${openapi.notification_verify_url}") private String verifyUrl;
 	@Value("${openapi.notification_url}") private String notificationUrl;
 	@Value("${openapi.bulkjob_url}") private String bulkjobUrl;
 	
@@ -70,9 +74,19 @@ public class PayplanetClient {
 	}
 	
 	public List<Map<String, String>> selectBulkJobRequest() throws Exception {
-		logger.debug("selectBulkJobRequest(); called");
+		logger.debug("selectBulkJobRequest() called");
 		List<Map<String, String>> result = bulkJobDao.selectBulkJobRequest();
 		return result;
+	}
+	
+	public void insertNotificationResult(Map<String,String> param) throws Exception {
+		logger.debug("insertNotificationResult() called");
+		notificationDAO.addNotificationResult(param);
+	}
+	
+	public void updateNotificationVerify(Map<String,String> param) throws Exception {
+		logger.debug("updateNotificationVerify() called");
+		bulkJobDao.updateNotifiVerified(param);
 	}
 	
 	private Map<String,String> getBulkPayParamMap(int processingCount, String path, String token) {
@@ -82,8 +96,9 @@ public class PayplanetClient {
 		paramMap.put("notiUrl", notificationUrl);
 		paramMap.put("cntTotalTrans", Integer.toString(processingCount));
 		paramMap.put("priority", "Instant");
-		paramMap.put("access_token", token);
+		paramMap.put("accessToken", token);
 		paramMap.put("filePath", path);
 		return paramMap;
 	}
+	
 }
