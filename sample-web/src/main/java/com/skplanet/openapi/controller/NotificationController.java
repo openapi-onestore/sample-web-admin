@@ -2,7 +2,6 @@ package com.skplanet.openapi.controller;
 
 import java.util.Map;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,7 @@ public class NotificationController {
 	
 	@Autowired
 	private InBoundRequestHandler<Map<String, String>> requestHandler;
-		
+	
 	@RequestMapping(value = "/noti_listener", method = RequestMethod.POST)
 	@ResponseBody
 	public String notiListener(@RequestParam Map<String,String> data) {

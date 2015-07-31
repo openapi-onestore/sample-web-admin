@@ -1,6 +1,5 @@
 package com.skplanet.openapi.controller;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -11,14 +10,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.skplanet.openapi.service.PaymentService;
+import com.skplanet.openapi.vo.NotificationResult;
 
 @Controller
 @RequestMapping("/payment")
@@ -71,29 +71,68 @@ public class PaymentController {
 		
 		return "redirect:../admin/test?uploadResult="+result;
 	}
-
-	/*
-	@RequestMapping(value="/result", method=RequestMethod.GET)
-	@ResponseBody
-	public ModelAndView requestResultPage(@RequestParam(value="jobid",required=false) String jobid) {
-		logger.debug("Result Page jobid : " + jobid);
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("bulkpay_result");
-		modelAndView.addObject("uploadResult", jobid);
-		
-		return modelAndView;
-	}
-	*/
 	
-	@RequestMapping(value = "/result", method=RequestMethod.GET)
+	@RequestMapping(value = "/result/{jobid}", method=RequestMethod.GET)
 	@ResponseBody
-	public File requestResultFile(String jobid) {
+	public String requestResultFile(@PathVariable String jobid) {
 		
-		File file = null;
+		String result = null;
 		
+		if (jobid == null) {
+			return "Job ID is null, check your job id";
+		}
 		
+		Map<String, String> hashMap = new HashMap<String, String>();
+		hashMap.put("jobId", jobid);
 		
-		return file;
+		NotificationResult notificationResult = paymentService.requestNotificationResult(hashMap);
+		hashMap.put("verifySign", notificationResult.getVerifySign());
+		
+		System.out.println(hashMap);
+		
+		result = paymentService.requestBulkJobResultFile(hashMap);
+		
+		return result;
 	}
+
+	@RequestMapping(value = "/transaction/{tid}", method=RequestMethod.GET)
+	@ResponseBody
+	public String requestTxidInfo(@PathVariable String tid) {
+		
+		String result = null;
+		
+		if (tid == null) {
+			return "Job ID is null, check your job id";
+		}
+		
+		Map<String, String> hashMap = new HashMap<String, String>();
+		hashMap.put("tid", tid);		
+		
+		result = paymentService.requestTidInformation(hashMap);
+		
+		return result;
+	}
+	
+	@RequestMapping(value = "/refund/{tid}", method=RequestMethod.GET)
+	@ResponseBody
+	public String requestCancelTransaction(@PathVariable String tid) {
+		
+		Map<String, String> hashMap = new HashMap<String, String>();
+		hashMap.put("tid", tid);
+		
+		String tidInfo = paymentService.requestTidInformation(hashMap);
+		String result = null;
+		
+		if (tidInfo.startsWith("result=FAIL")) {
+			return "Tid information request is failure";
+		}
+		
+		
+		
+		//result = paymentService.requestTidInformation(hashMap);
+		
+		
+		return result;
+	}	
 	
 }

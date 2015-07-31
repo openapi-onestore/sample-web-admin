@@ -16,6 +16,7 @@ import com.skplanet.openapi.external.bulkpay.BulkPayManager;
 import com.skplanet.openapi.external.notification.NotiManager;
 import com.skplanet.openapi.external.oauth.OAuthClientInfo;
 import com.skplanet.openapi.external.oauth.OAuthManager;
+import com.skplanet.openapi.vo.NotificationResult;
 
 @Component("payplanetClient")
 public class PayplanetClient {
@@ -89,6 +90,51 @@ public class PayplanetClient {
 		bulkJobDao.updateNotifiVerified(param);
 	}
 	
+	public NotificationResult selectNotificationResult(Map<String,String> param) throws Exception {
+		logger.debug("selectNotificationResult() called");
+		
+		NotificationResult notificationResult = new NotificationResult();
+		List<Map<String, String>> list = notificationDAO.selectNotificationResult(param);
+		
+		if (list.size() <= 0) {
+			throw new Exception();
+		}
+		
+		Map<String, String> tempMap = list.get(0);
+		notificationResult.setJobId(tempMap.get("jobId"));
+		notificationResult.setEvent(tempMap.get("event"));
+		notificationResult.setStatus(tempMap.get("status"));
+		notificationResult.setVerifySign(tempMap.get("verifySign"));
+		notificationResult.setUpdateDate(tempMap.get("updateDate"));
+		notificationResult.setNotifyVersion(tempMap.get("notiVersion"));
+		
+		return notificationResult;
+	}
+	
+	public String getBulkJobResultFile(Map<String, String> param) throws Exception {
+		logger.debug("getBulkJobResultFile() called");		
+		String accessToken = getAccessTokenFromOauthManager();
+		param.put("accessToken", accessToken);
+		
+		return bulkPayManager.getFilePaymentInfo(param);
+	}
+	
+	public String getTidInformation(Map<String, String> param) throws Exception {
+		logger.debug("getTidInformation() called");		
+		String accessToken = getAccessTokenFromOauthManager();
+		param.put("accessToken", accessToken);
+		
+		return bulkPayManager.getPaymentTransactionDetail(param);
+	}
+	
+	public String getRefundInformation(Map<String, String> param) throws Exception {
+		logger.debug("getRefundInformation() called");		
+		String accessToken = getAccessTokenFromOauthManager();
+		param.put("accessToken", accessToken);
+		
+		return bulkPayManager.cancelPaymentTransaction(param);
+	}
+	
 	private Map<String,String> getBulkPayParamMap(int processingCount, String path, String token) {
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("verBulkPay", "1");
@@ -99,6 +145,21 @@ public class PayplanetClient {
 		paramMap.put("accessToken", token);
 		paramMap.put("filePath", path);
 		return paramMap;
+	}
+	
+	private String getAccessTokenFromOauthManager() throws Exception {
+		String accessToken = null;
+		
+		OAuthClientInfo oauthClientInfo = new OAuthClientInfo();
+		oauthClientInfo.setClientId("84xK38rx9iCrFRJVOynsRA0MT0o3LTs83OqDLEJf5g0=");
+		oauthClientInfo.setClientSecret("GS1qrhoHMJWpmS6QwLNaG5NcFWFqzh5TrmY5476a2nA=");
+		oauthClientInfo.setGrantType("client_credentials");
+		
+		oauthManager.setClientInfo(oauthClientInfo);
+		if (oauthManager.createOAuthAccessToken()) {
+			accessToken = oauthManager.getOAuthToken().getAccessToken();
+		}
+		return accessToken;
 	}
 	
 }

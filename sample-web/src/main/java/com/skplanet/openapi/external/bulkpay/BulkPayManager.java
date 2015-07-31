@@ -12,12 +12,13 @@ import com.skplanet.openapi.external.bulkpay.BulkPayException.BulkPay;
 
 public class BulkPayManager implements BulkPayInterface {
 	
-	private int threadPoolCount = 1;
+	private int threadPoolCount = 2;
 	private ExecutorService jobExecutor = Executors.newFixedThreadPool(threadPoolCount);
 	
 	private String propertyPath = null;
-	
 	private String fileJobUrl = "http://172.21.60.141/v1/payment/fileJob";
+	private String resultFileUrl = "http://172.21.60.141/v1/payment/job";
+	private String txidInfoUrl = "http://172.21.60.141/v1/payment/transaction";	
 	
 	@Override
 	public String createFilePayment(Map<String, String> paramMap) {
@@ -42,6 +43,60 @@ public class BulkPayManager implements BulkPayInterface {
 	
 	@Override
 	public String getFilePaymentInfo(Map<String, String> paramMap) {
+		// jobId, verifySign
+		String jobId = paramMap.get("jobId");
+		String verifySign = paramMap.get("verifySign");
+		String accessToken = paramMap.get("accessToken");
+		
+		// authorization
+		paramMap.clear();
+		paramMap.put("accessToken", accessToken);
+
+		String result = null;
+
+		BulkPayResultTransaction bulkPayResultTransaction = new BulkPayResultTransaction(paramMap, jobId, verifySign);
+		bulkPayResultTransaction.setCallUrl(resultFileUrl);
+		Future<String> future = jobExecutor.submit(bulkPayResultTransaction);
+		
+		try {
+			result = future.get();
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = "BulkPayResultTransaction error!";
+		}
+		
+		return result;
+	}
+
+	@Override
+	public String getPaymentTransactionDetail(Map<String, String> paramMap) {
+		String txid = paramMap.get("tid");
+		String accessToken = paramMap.get("accessToken");
+
+		//authorization
+		paramMap.clear();
+		paramMap.put("accessToken", accessToken);
+
+		String result = null;
+		
+		BulkPayTidInfoTransaction bulkPayTidInfoTransaction = new BulkPayTidInfoTransaction(paramMap, txid);
+		bulkPayTidInfoTransaction.setCallUrl(txidInfoUrl);
+		Future<String> future = jobExecutor.submit(bulkPayTidInfoTransaction);
+		
+		try {
+			result = future.get();
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = "BulkPayTxidTransaction Error!";
+		}
+		
+		return result;
+	}
+	
+	@Override
+	public String cancelPaymentTransaction(Map<String, String> paramMap) {
+		
+		
 		return null;
 	}
 	
@@ -67,4 +122,5 @@ public class BulkPayManager implements BulkPayInterface {
 		}
 		
 	}
+
 }

@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.skplanet.openapi.dao.BulkJobDAO;
 import com.skplanet.openapi.request.outbound.PayplanetClient;
 import com.skplanet.openapi.vo.BulkJobInfo;
+import com.skplanet.openapi.vo.NotificationResult;
 
 @Service("paymentService")
 public class PaymentService {
@@ -118,7 +119,55 @@ public class PaymentService {
 		}
 		return result;
 	}
-
+	
+	public NotificationResult requestNotificationResult(Map<String, String> param) {
+		NotificationResult notificationResult = null;
+		
+		try {
+			notificationResult = payplanetClient.selectNotificationResult(param);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return notificationResult;
+		}
+		return notificationResult;
+	}
+	
+	public String requestBulkJobResultFile(Map<String, String> param) {
+		String result = null;
+		
+		try {
+			result = payplanetClient.getBulkJobResultFile(param);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = "result=FAIL&reason="+e.getMessage();
+		}
+		return result;
+	}
+	
+	public String requestTidInformation(Map<String, String> param) {
+		String result = null;
+		
+		try {
+			result = payplanetClient.getTidInformation(param);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = "result=FAIL&reason="+e.getMessage();
+		}
+		return result;
+	}
+	
+	public String requestRefund(Map<String, String> param) {
+		String result = null;
+		
+		try {
+			result = payplanetClient.getRefundInformation(param);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = "result=FAIL&reason="+e.getMessage();
+		}
+		return result;		
+	}
+	
 	private BulkJobInfo makeBulkFile(Map<String, String> param)
 			throws FileNotFoundException, IOException {
 		File tmpFile = new File(getBulkfileFormat());
@@ -181,5 +230,7 @@ public class PaymentService {
 			is.close();
 		}
 	}
+	
+	
 
 }
