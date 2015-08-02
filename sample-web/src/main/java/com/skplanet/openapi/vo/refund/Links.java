@@ -1,34 +1,25 @@
 package com.skplanet.openapi.vo.refund;
 
+
 public class Links {
 
-	private Payer payer;
-	private RefundTransactionRequest refundTransactionRequest;
-	private Links links;
+	private String name;
+	private String url;
 	
-	public Payer getPayer() {
-		return payer;
+	public String getName() {
+		return name;
 	}
 	
-	public void setPayer(Payer payer) {
-		this.payer = payer;
+	public void setName(String name) {
+		this.name = name;
 	}
 	
-	public RefundTransactionRequest getRefundTransactionRequest() {
-		return refundTransactionRequest;
+	public String getUrl() {
+		return url;
 	}
 	
-	public void setRefundTransactionRequest(
-			RefundTransactionRequest refundTransactionRequest) {
-		this.refundTransactionRequest = refundTransactionRequest;
-	}
-	
-	public Links getLinks() {
-		return links;
-	}
-	
-	public void setLinks(Links links) {
-		this.links = links;
+	public void setUrl(String url) {
+		this.url = url;
 	}
 	
 }

@@ -127,10 +127,10 @@ public class PaymentController {
 			return "Tid information request is failure";
 		}
 		
+		hashMap.clear();
+		hashMap.put("tidInfo", tidInfo);
 		
-		
-		//result = paymentService.requestTidInformation(hashMap);
-		
+		result = paymentService.requestRefund(hashMap);
 		
 		return result;
 	}	

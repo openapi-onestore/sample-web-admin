@@ -96,7 +96,6 @@ public class BulkPayManager implements BulkPayInterface {
 	@Override
 	public String cancelPaymentTransaction(Map<String, String> paramMap) {
 		
-		
 		return null;
 	}
 	

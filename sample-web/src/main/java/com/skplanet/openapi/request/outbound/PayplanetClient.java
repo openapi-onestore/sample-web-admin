@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import com.skplanet.openapi.external.notification.NotiManager;
 import com.skplanet.openapi.external.oauth.OAuthClientInfo;
 import com.skplanet.openapi.external.oauth.OAuthManager;
 import com.skplanet.openapi.vo.NotificationResult;
+import com.skplanet.openapi.vo.refund.RefundTransactionRequest;
+import com.skplanet.openapi.vo.transaction.TransactionInfo;
 
 @Component("payplanetClient")
 public class PayplanetClient {
@@ -128,7 +131,10 @@ public class PayplanetClient {
 	}
 	
 	public String getRefundInformation(Map<String, String> param) throws Exception {
-		logger.debug("getRefundInformation() called");		
+		logger.debug("getRefundInformation() called");
+		
+		
+		
 		String accessToken = getAccessTokenFromOauthManager();
 		param.put("accessToken", accessToken);
 		
@@ -162,4 +168,14 @@ public class PayplanetClient {
 		return accessToken;
 	}
 	
+	private RefundTransactionRequest getRefundTransaction(String tid) throws Exception {
+		
+		ObjectMapper ojectMapper = new ObjectMapper();
+		TransactionInfo transactionInfo = ojectMapper.readValue(tid, TransactionInfo.class);
+		
+		
+		
+		
+		return null;
+	}
 }
