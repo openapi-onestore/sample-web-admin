@@ -7,11 +7,11 @@ public class PaymentTransactionInfo {
 	private String message;
 	private String lastestUpdate;
 	private String tid;
-	private String amount;
+	private int amount;
 	private String description;
 	
-	private Goods goods;
-	private PaymentMethods paymentMethods;
+	private Goods[] goods;
+	private PaymentMethods[] paymentMethods;
 	
 	public String getStatus() {
 		return status;
@@ -53,11 +53,11 @@ public class PaymentTransactionInfo {
 		this.tid = tid;
 	}
 	
-	public String getAmount() {
+	public int getAmount() {
 		return amount;
 	}
 	
-	public void setAmount(String amount) {
+	public void setAmount(int amount) {
 		this.amount = amount;
 	}
 	
@@ -69,19 +69,19 @@ public class PaymentTransactionInfo {
 		this.description = description;
 	}
 	
-	public Goods getGoods() {
+	public Goods[] getGoods() {
 		return goods;
 	}
 	
-	public void setGoods(Goods goods) {
+	public void setGoods(Goods[] goods) {
 		this.goods = goods;
 	}
 	
-	public PaymentMethods getPaymentMethod() {
+	public PaymentMethods[] getPaymentMethods() {
 		return paymentMethods;
 	}
 	
-	public void setPaymentMethod(PaymentMethods paymentMethods) {
+	public void setPaymentMethods(PaymentMethods[] paymentMethods) {
 		this.paymentMethods = paymentMethods;
 	}
 

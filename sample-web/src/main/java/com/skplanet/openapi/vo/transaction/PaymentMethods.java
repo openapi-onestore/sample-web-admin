@@ -1,9 +1,9 @@
 package com.skplanet.openapi.vo.transaction;
 
 public class PaymentMethods {
-	
+
 	private String paymentMethod;
-	private String amount;
+	private int amount;
 	
 	public String getPaymentMethod() {
 		return paymentMethod;
@@ -13,11 +13,11 @@ public class PaymentMethods {
 		this.paymentMethod = paymentMethod;
 	}
 	
-	public String getAmount() {
+	public int getAmount() {
 		return amount;
 	}
 	
-	public void setAmount(String amount) {
+	public void setAmount(int amount) {
 		this.amount = amount;
 	}
 	

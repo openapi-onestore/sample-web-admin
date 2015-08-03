@@ -3,52 +3,52 @@ package com.skplanet.openapi.vo.refund;
 import com.skplanet.openapi.vo.transaction.PaymentMethods;
 
 public class RefundTransactionRequest {
-
+	
 	private String tid;
-	private String fulRefund;
-	private String amount;
+	private boolean fullRefund;
+	private int amount;
 	private String note;
 
-	private PaymentMethods paymentMethods;
-
+	private PaymentMethods[] paymentMethods;
+	
 	public String getTid() {
 		return tid;
 	}
-
+	
 	public void setTid(String tid) {
 		this.tid = tid;
 	}
-
-	public String getFulRefund() {
-		return fulRefund;
+	
+	public boolean getFullRefund() {
+		return fullRefund;
 	}
-
-	public void setFulRefund(String fulRefund) {
-		this.fulRefund = fulRefund;
+	
+	public void setFullRefund(boolean fullRefund) {
+		this.fullRefund = fullRefund;
 	}
-
-	public String getAmount() {
+	
+	public int getAmount() {
 		return amount;
 	}
-
-	public void setAmount(String amount) {
+	
+	public void setAmount(int amount) {
 		this.amount = amount;
 	}
-
+	
 	public String getNote() {
 		return note;
 	}
-
+	
 	public void setNote(String note) {
 		this.note = note;
 	}
-
-	public PaymentMethods getPaymentMethods() {
+	
+	public PaymentMethods[] getPaymentMethods() {
 		return paymentMethods;
 	}
-
-	public void setPaymentMethods(PaymentMethods paymentMethods) {
+	
+	public void setPaymentMethods(PaymentMethods[] paymentMethods) {
 		this.paymentMethods = paymentMethods;
 	}
-
+	
 }

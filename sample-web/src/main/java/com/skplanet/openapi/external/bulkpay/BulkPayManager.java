@@ -19,6 +19,7 @@ public class BulkPayManager implements BulkPayInterface {
 	private String fileJobUrl = "http://172.21.60.141/v1/payment/fileJob";
 	private String resultFileUrl = "http://172.21.60.141/v1/payment/job";
 	private String txidInfoUrl = "http://172.21.60.141/v1/payment/transaction";	
+	private String refundUrl = "http://172.21.60.141/v1/payment/refund";
 	
 	@Override
 	public String createFilePayment(Map<String, String> paramMap) {
@@ -73,16 +74,16 @@ public class BulkPayManager implements BulkPayInterface {
 		String txid = paramMap.get("tid");
 		String accessToken = paramMap.get("accessToken");
 
-		//authorization
+		// authorization
 		paramMap.clear();
 		paramMap.put("accessToken", accessToken);
-
-		String result = null;
 		
 		BulkPayTidInfoTransaction bulkPayTidInfoTransaction = new BulkPayTidInfoTransaction(paramMap, txid);
 		bulkPayTidInfoTransaction.setCallUrl(txidInfoUrl);
 		Future<String> future = jobExecutor.submit(bulkPayTidInfoTransaction);
-		
+
+		String result = null;
+
 		try {
 			result = future.get();
 		} catch (Exception e) {
@@ -95,8 +96,27 @@ public class BulkPayManager implements BulkPayInterface {
 	
 	@Override
 	public String cancelPaymentTransaction(Map<String, String> paramMap) {
+		String jsonString = paramMap.get("jsonString");
+		String accessToken = paramMap.get("accessToken");
 		
-		return null;
+		// authorization
+		paramMap.clear();
+		paramMap.put("accessToken", accessToken);
+		
+		BulkPayRefundTransaction bulkPayRefundTransaction = new BulkPayRefundTransaction(paramMap, jsonString);
+		bulkPayRefundTransaction.setCallUrl(refundUrl);
+		Future<String> future = jobExecutor.submit(bulkPayRefundTransaction);
+		
+		String result = null;
+		
+		try {
+			result = future.get();
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = "BulkPayRefundTransaction Error!";
+		}
+		
+		return result;
 	}
 	
 	public void setPropertyFile(String path) throws Exception {

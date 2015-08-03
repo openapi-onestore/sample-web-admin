@@ -3,7 +3,7 @@ package com.skplanet.openapi.vo.transaction;
 public class TransactionInfo {
 
 	private String resultCode;
-	private String resultMessage;
+	private String resultMsg;
 	
 	private Payer payer;
 	private PaymentTransactionInfo paymentTransactionInfo;
@@ -16,12 +16,12 @@ public class TransactionInfo {
 		this.resultCode = resultCode;
 	}
 	
-	public String getResultMessage() {
-		return resultMessage;
+	public String getResultMsg() {
+		return resultMsg;
 	}
-	
-	public void setResultMessage(String resultMessage) {
-		this.resultMessage = resultMessage;
+
+	public void setResultMsg(String resultMsg) {
+		this.resultMsg = resultMsg;
 	}
 	
 	public Payer getPayer() {
