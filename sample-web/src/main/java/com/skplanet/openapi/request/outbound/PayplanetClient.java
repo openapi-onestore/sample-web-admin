@@ -51,7 +51,6 @@ public class PayplanetClient {
 	
 	public String verify(Map<String,String> param) throws Exception {
 		logger.debug("verify() called");
-		
 		String result = notiManager.requestNotificationVerification(param);
 		
 		return result;

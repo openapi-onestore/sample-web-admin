@@ -23,11 +23,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.AbstractHttpMessage;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
-@Component
-@Scope("prototype")
 public class HttpClient {
 
 	private StatusLine statusLine;
@@ -55,7 +51,7 @@ public class HttpClient {
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		HttpGet httpGet = new HttpGet(url);
 		addHeaders(httpGet);
-
+		
 		CloseableHttpResponse response = httpclient.execute(httpGet);
 		try {
 			setStatusLine(response.getStatusLine());
@@ -65,8 +61,6 @@ public class HttpClient {
 		}
 	}
 	
-	
-
 	public String post(String url, Map<String, String> data) throws Exception {
 
 		CloseableHttpClient httpclient = HttpClients.createDefault();

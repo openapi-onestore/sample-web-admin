@@ -43,11 +43,11 @@ public class NotiManager implements NotiInterface {
 	@Override
 	public String requestNotificationVerification(Map<String, String> params) throws NotiException {
 		
-		NotiHttpRequest notiHttpRequest = new NotiHttpRequest();
-		notiHttpRequest.setParamMap(params);
-		notiHttpRequest.setCallUrl(verifyUrl);
+		NotiVerificationTransaction notiVerificationTransaction = new NotiVerificationTransaction();
+		notiVerificationTransaction.setParamMap(params);
+		notiVerificationTransaction.setCallUrl(verifyUrl);
 		
-		Future<String> future = jobExecutor.submit(notiHttpRequest);
+		Future<String> future = jobExecutor.submit(notiVerificationTransaction);
 		String result = null;
 		
 		try {

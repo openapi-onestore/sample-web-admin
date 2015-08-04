@@ -39,9 +39,9 @@ public class NotificationController {
 			// TODO 200 OK
 			logger.debug("Notification verify : " + result);
 			if (result.equals("VERIFIED")) {
-				notificationService.requestNotificationResult(data);
-				
 				data.put("verifyResult", result);
+
+				notificationService.requestNotificationResult(data);				
 				notificationService.requestNotificationVerify(data);
 			} else {
 				// TODO when notification is not verified?

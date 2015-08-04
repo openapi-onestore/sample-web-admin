@@ -132,11 +132,18 @@ public class PaymentService {
 		return notificationResult;
 	}
 	
+	/**
+	 * requestBulkJobResultFile
+	 * @param param map
+	 * @return String
+	 * TODO::get File method
+	 */
 	public String requestBulkJobResultFile(Map<String, String> param) {
 		String result = null;
 		
 		try {
 			result = payplanetClient.getBulkJobResultFile(param);
+			System.out.println(result);
 		} catch (Exception e) {
 			e.printStackTrace();
 			result = "result=FAIL&reason="+e.getMessage();

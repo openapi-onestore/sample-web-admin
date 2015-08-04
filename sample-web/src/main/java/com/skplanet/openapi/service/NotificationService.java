@@ -85,9 +85,9 @@ public class NotificationService {
 		return result;
 	}
 	
-	public String requestVerify(Map<String, String> param, String listenerType) throws Exception {
+	private String requestVerify(Map<String, String> param, String listenerType) throws Exception {
 		// TODO 응답 Params를 지정한다. 대부분 Notification 메시지를 그대로 사용하며, 추가적으로
-		// "listener_type"만 추가한다.
+		// "listenerType"만 추가한다.
 		Map<String, String> verifyParam = new HashMap<String, String>();
 		verifyParam.putAll(param);
 		verifyParam.put("listenerType", listenerType);

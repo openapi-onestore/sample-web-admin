@@ -69,7 +69,7 @@ public class PaymentController {
 			result = "bulkJobUpload fail. please upload your file";
 		}
 		
-		return "redirect:../admin/test?uploadResult="+result;
+		return "redirect:../admin/main?uploadResult="+result;
 	}
 	
 	@RequestMapping(value = "/result/{jobid}", method=RequestMethod.GET)
@@ -91,6 +91,11 @@ public class PaymentController {
 		System.out.println(hashMap);
 		
 		result = paymentService.requestBulkJobResultFile(hashMap);
+		
+		String[] resultRow = result.split("\n");
+		if (resultRow.length >= 100) {
+			result = "Row number is higher than 100. Please file download interface!";
+		}
 		
 		return result;
 	}

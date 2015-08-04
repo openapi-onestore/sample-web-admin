@@ -15,6 +15,7 @@ public class BulkPayManager implements BulkPayInterface {
 	private int threadPoolCount = 2;
 	private ExecutorService jobExecutor = Executors.newFixedThreadPool(threadPoolCount);
 	
+	// Property values
 	private String propertyPath = null;
 	private String fileJobUrl = "http://172.21.60.141/v1/payment/fileJob";
 	private String resultFileUrl = "http://172.21.60.141/v1/payment/job";
@@ -122,11 +123,11 @@ public class BulkPayManager implements BulkPayInterface {
 	public void setPropertyFile(String path) throws Exception {
 		this.propertyPath = path;
 		Properties props = new Properties();
-
+		
 		if (propertyPath == null) {
 			throw new BulkPayException(BulkPay.BULK_PROPERTY_SETTING_ERROR,"Property path is null");
 		}
-
+		
 		FileInputStream fis = null;
 		
 		try {

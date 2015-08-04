@@ -15,7 +15,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.AbstractHttpMessage;
 import org.apache.http.util.EntityUtils;
 
-public class NotiHttpRequest implements Callable<String>{
+public class NotiVerificationTransaction implements Callable<String>{
 
 	private String callUrl = null;
 	private String param = null;	
