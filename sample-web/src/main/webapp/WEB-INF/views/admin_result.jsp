@@ -30,38 +30,51 @@
     <![endif]-->
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
     <script type="text/javascript">   
-
+	var count = 1;
+	
 	    (function($){
 	    	count = 0;
 	    	
 	    	bulkJobRequest = function() {
 				$.ajax( {
-					url: "http://172.21.60.143:8181/sample-web/openapi/payment/request"
+					url: "http://172.21.60.143:8181/sample-web/openapi/payment/result/${jobId}"
 				}).success( function( data ) {
 					console.log( data );
+					var original = data.split('\n');
+					data = original[0];
 					
 					if (count != data.length) {
 						for( var i = 0; i < data.length; i++ ) {
 							var $rowHtml = $( "<tr>" +
-		    						"<td class='mid'></td>"+
-		    						"<td class='statusBtn'><button type = 'button' class='btn btn-sm'></button</td>"+
-		    						"<td class='reason'></td>" +
-		    						"<td class='waitingJob'></td>" +
-		    						"<td class='jobId'></td>" + 
-		    						"<td class='uploadFile'></td>" +
-		    						"<td class='uploadDate'></td>" +
-		    						"<td class='verifyMessage'></td>" +
+		    						"<td class='count'></td>"+
+		    						"<td class='version'><button type = 'button' class='btn btn-sm'></button</td>"+
+		    						"<td class='mid'></td>" +
+		    						"<td class='mdn'></td>" +
+		    						"<td class='cdCarrier'></td>" + 
+		    						"<td class='appId'></td>" +
+		    						"<td class='productId'></td>" +
+		    						"<td class='nmProduct'></td>" +
+		    						"<td class='amtReqPurchase'></td>" +
+		    						"<td class='amtCarrier'></td>" +
+		    						"<td class='amtCreditCard'></td>" +
+		    						"<td class='amtTms'></td>" +
+		    						"<td class='resultCode'></td>" +
+		    						"<td class='txId'></td>" +
 								"</tr>" );
-							
+							$rowHtml.find( ".count" ).html( count++ );
+							$rowHtml.find( ".version" ).html( data[ i ].version );
 							$rowHtml.find( ".mid" ).html( data[ i ].mid );
-							$rowHtml.find( ".statusBtn>button" ).html( data[ i ].status ).addClass( ( data[ i ].status === "SUCCESS" ) ? "btn-success" : "btn-danger" );
-							
-							$rowHtml.find( ".reason" ).html( data[ i ].reason );
-							$rowHtml.find( ".waitingJob" ).html( data[ i ].waitingJob );
-							$rowHtml.find( ".jobId" ).html( data[ i ].jobId );
-							$rowHtml.find( ".uploadFile" ).html( data[ i ].uploadFile );
-							$rowHtml.find( ".uploadDate" ).html( data[ i ].uploadDate );
-							$rowHtml.find( ".verifyMessage" ).html( data[ i ].verifyMessage );
+							$rowHtml.find( ".mdn" ).html( data[ i ].mdn );
+							$rowHtml.find( ".cdCarrier" ).html( data[ i ].cdCarrier );
+							$rowHtml.find( ".appId" ).html( data[ i ].appId );
+							$rowHtml.find( ".productId" ).html( data[ i ].productId );
+							$rowHtml.find( ".nmProduct" ).html( data[ i ].nmProduct );
+							$rowHtml.find( ".amtReqPurchase" ).html( data[ i ].amtReqPurchase );
+							$rowHtml.find( ".amtCarrier" ).html( data[ i ].amtCarrier );
+							$rowHtml.find( ".amtCreditCard" ).html( data[ i ].amtCarrier );
+							$rowHtml.find( ".amtTms" ).html( data[ i ].amtCarrier );
+							$rowHtml.find( ".resultCode" ).html( data[ i ].amtCarrier );
+							$rowHtml.find( ".txId" ).html( data[ i ].amtCarrier );
 							
 							$( "table.table>tbody" ).append( $rowHtml );	
 						}

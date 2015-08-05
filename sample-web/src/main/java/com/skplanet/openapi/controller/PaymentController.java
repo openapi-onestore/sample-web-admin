@@ -99,7 +99,7 @@ public class PaymentController {
 		
 		return result;
 	}
-
+	
 	@RequestMapping(value = "/transaction/{tid}", method=RequestMethod.GET)
 	@ResponseBody
 	public String requestTxidInfo(@PathVariable String tid) {

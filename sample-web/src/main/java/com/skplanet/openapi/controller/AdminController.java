@@ -44,9 +44,7 @@ public class AdminController {
 			return modelAndView;
 		}
 		
-		
-		
-		modelAndView.addObject("uploadResult", jobId);
+		modelAndView.addObject("jobId", jobId);
 		
 		return modelAndView;
 	}
@@ -63,9 +61,7 @@ public class AdminController {
 			return modelAndView;
 		}
 		
-		
-		
-		modelAndView.addObject("uploadResult", jobId);
+		modelAndView.addObject("jobId", jobId);
 		
 		return modelAndView;
 	}

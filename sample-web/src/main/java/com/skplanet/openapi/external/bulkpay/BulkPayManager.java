@@ -15,7 +15,7 @@ public class BulkPayManager implements BulkPayInterface {
 	private int threadPoolCount = 2;
 	private ExecutorService jobExecutor = Executors.newFixedThreadPool(threadPoolCount);
 	
-	// Property values
+	// Property values, uri is default setting
 	private String propertyPath = null;
 	private String fileJobUrl = "http://172.21.60.141/v1/payment/fileJob";
 	private String resultFileUrl = "http://172.21.60.141/v1/payment/job";
@@ -84,7 +84,7 @@ public class BulkPayManager implements BulkPayInterface {
 		Future<String> future = jobExecutor.submit(bulkPayTidInfoTransaction);
 
 		String result = null;
-
+		
 		try {
 			result = future.get();
 		} catch (Exception e) {
@@ -133,7 +133,12 @@ public class BulkPayManager implements BulkPayInterface {
 		try {
 			fis = new FileInputStream(propertyPath);
 			props.load(new BufferedInputStream(fis));
+			
 			fileJobUrl = props.getProperty("openapi.bulkjob_url");
+			resultFileUrl = props.getProperty("openapi.result_file_url");
+			txidInfoUrl = props.getProperty("openapi.txid_info_url");	
+			refundUrl = props.getProperty("openapi.refund_url");
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new BulkPayException(BulkPay.BULK_PROPERTY_SETTING_ERROR, "File creation is incorect!!");

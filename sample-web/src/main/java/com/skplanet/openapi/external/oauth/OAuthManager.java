@@ -28,7 +28,7 @@ public class OAuthManager implements OAuthInterface {
 	
 	private String propertyPath = null;
 	
-	// default setting
+	// url default setting
 	private String oauthAccountCreateUrl = "http://172.21.60.143:8080/oauth/admin/management/account/creation";
 	private String oauthAccessTokenUrl = "http://172.21.60.143:8080/oauth/service/accessToken";
 	private String oauthVerifyUrl = "http://172.21.60.143:8080/oauth/internal/v1/validation";
@@ -111,7 +111,7 @@ public class OAuthManager implements OAuthInterface {
 			return false;
 		} 
 		
-		return false;
+		return true;
 	}
 
 	@Override
@@ -184,7 +184,6 @@ public class OAuthManager implements OAuthInterface {
 		} finally {
 			fis.close();
 		}
-		
 	}
 	
 	@Override
