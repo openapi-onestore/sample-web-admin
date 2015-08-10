@@ -40,7 +40,8 @@ public class NotificationController {
 			logger.debug("Notification verify : " + result);
 			if (result.equals("VERIFIED")) {
 				data.put("verifyResult", result);
-
+				System.out.println("noti received : " + data);
+				
 				notificationService.requestNotificationResult(data);				
 				notificationService.requestNotificationVerify(data);
 			} else {

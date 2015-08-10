@@ -12,7 +12,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 	
-    <title>Starter Template for Bootstrap</title>
+    <title>Open api admin</title>
 
     <!-- Bootstrap core CSS -->
     <link href="<c:url value='/openapi/dist/css/bootstrap.min.css' />" rel="stylesheet">
@@ -23,13 +23,35 @@
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
     <script src="<c:url value='/openapi/assets/js/ie-emulation-modes-warning.js' />"></script>
-
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    
+    <script type="text/javascript">   
+
+	    (function($){
+	    	count = 0;
+	    	
+	    	bulkJobRefundRequest = function() {
+				$.ajax( {
+					url: "http://172.21.60.143:8181/sample-web/openapi/payment/refund/${tid}"
+				}).success( function( data ) {
+					console.log( data );
+					
+					$( ".panel-body" ).html( data );
+										
+				}).error( function( data ) {
+					console.log( "Ajax Error" );				
+				});
+	    	}					
+
+	    })(jQuery, undefined);
+
+
+    </script>    
   </head>
 
   <body>
@@ -153,6 +175,21 @@
 		<div class="input-group" style="width: 300px; left: 350px;">
 			<span class="input-group-addon" id="sizing-addon2" style="width: 100px">amount</span>
 			<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" value="1000">		  		  
+		</div>
+		
+		<br/>
+		
+		<button type="button" class="btn btn-lg btn-default" onclick="bulkJobRefundRequest()">Refund request</button>
+		
+		<br/><br/>
+		
+		<div class="panel panel-default">
+		  <div class="panel-heading">
+		    <h3 class="panel-title">Refund request result from Onestore open api server</h3>
+		  </div>
+		  <div class="panel-body">
+		    ...
+		  </div>
 		</div>
 		
 	</div>

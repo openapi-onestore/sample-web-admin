@@ -12,7 +12,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Starter Template for Bootstrap</title>
+    <title>Open api admin</title>
 
     <!-- Bootstrap core CSS -->
     <link href="<c:url value='/openapi/dist/css/bootstrap.min.css' />" rel="stylesheet">
@@ -46,7 +46,7 @@
 						var original = data.split('\n');
 						console.log( original );
 						
-						for( var i = 0; i < original.length; i++) {
+						for( var i = 0; i < original.length-1; i++) {
 							data = original[i].split(',');
 							console.log( data );
 							
@@ -82,12 +82,13 @@
 							$rowHtml.find( ".amtCarrier" ).html( data[10] );
 							$rowHtml.find( ".amtCreditCard" ).html( data[11] );
 							$rowHtml.find( ".amtTms" ).html( data[12] );
-							$rowHtml.find( ".tid" ).html( data[13] );
+							//( data[ i ].status === "SUCCESS" ) ? "btn-success" : "btn-danger" 
+							$rowHtml.find( ".tid" ).html( ( data[13] == "None" ) ? "<a href=http://172.21.60.143:8181/sample-web/openapi/admin/transaction/"+data[13]+">"+data[13]+"</a>" : "None");
 							$rowHtml.find( ".ymTrans" ).html( data[14] );							
 							$rowHtml.find( ".resultCode" ).html( data[15] );
 							$rowHtml.find( ".resultMsg" ).html( data[16] );
 							
-							$( "table.table>tbody" ).append( $rowHtml );	
+							$( "table.table>tbody" ).append( $rowHtml );
 						}						
 					}
 										
