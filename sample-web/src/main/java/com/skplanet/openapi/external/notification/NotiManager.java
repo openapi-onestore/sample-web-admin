@@ -8,6 +8,7 @@ import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.ThreadFactory;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -18,7 +19,14 @@ import com.skplanet.openapi.external.oauth.OAuthManagingException.OAuthManaging;
 public class NotiManager implements NotiInterface {
 
 	private int threadPoolCount = 1;
-	private ExecutorService jobExecutor = Executors.newFixedThreadPool(threadPoolCount);
+	private ExecutorService jobExecutor = Executors.newFixedThreadPool(threadPoolCount, new ThreadFactory() {
+		@Override
+		public Thread newThread(Runnable r) {
+			Thread t = Executors.defaultThreadFactory().newThread(r);
+			t.setDaemon(true);
+			return t;
+		}
+	});
 
 	private String propertyPath = null;
 	private String verifyUrl = "http://172.21.60.142/openapi/v1/payment/notification/verify";
@@ -88,6 +96,6 @@ public class NotiManager implements NotiInterface {
 		} finally {
 			fis.close();
 		}
-	}	
+	}
 	
 }

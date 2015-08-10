@@ -3,6 +3,7 @@
 
 <html lang="en">
   <head>
+  <%@ page isELIgnored="false" %>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -30,57 +31,66 @@
     <![endif]-->
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
     <script type="text/javascript">   
-	var count = 1;
-	
+
 	    (function($){
 	    	count = 0;
 	    	
-	    	bulkJobRequest = function() {
+	    	bulkJobResultRequest = function() {
 				$.ajax( {
-					url: "http://172.21.60.143:8181/sample-web/openapi/payment/result/${jobId}"
+					url: "http://172.21.60.143:8181/sample-web/openapi/payment/result/${jobid}"
 				}).success( function( data ) {
 					console.log( data );
-					var original = data.split('\n');
-					data = original[0];
-					
-					if (count != data.length) {
-						for( var i = 0; i < data.length; i++ ) {
+					if (data.length <= 20) {
+						console.log( 'data length is not vaild' );
+					} else {
+						var original = data.split('\n');
+						console.log( original );
+						
+						for( var i = 0; i < original.length; i++) {
+							data = original[i].split(',');
+							console.log( data );
+							
 							var $rowHtml = $( "<tr>" +
 		    						"<td class='count'></td>"+
-		    						"<td class='version'><button type = 'button' class='btn btn-sm'></button</td>"+
-		    						"<td class='mid'></td>" +
-		    						"<td class='mdn'></td>" +
+		    						"<td class='cmId'></td>" +
+		    						"<td class='bid'></td>" +
 		    						"<td class='cdCarrier'></td>" + 
 		    						"<td class='appId'></td>" +
+		    						"<td class='nudTid'></td>" +		    						
 		    						"<td class='productId'></td>" +
 		    						"<td class='nmProduct'></td>" +
+		    						"<td class='noBranchOrder'></td>" +
 		    						"<td class='amtReqPurchase'></td>" +
 		    						"<td class='amtCarrier'></td>" +
 		    						"<td class='amtCreditCard'></td>" +
 		    						"<td class='amtTms'></td>" +
+		    						"<td class='tid'></td>" +
+		    						"<td class='ymTrans'></td>" +
 		    						"<td class='resultCode'></td>" +
-		    						"<td class='txId'></td>" +
+		    						"<td class='resultMsg'></td>" +
 								"</tr>" );
-							$rowHtml.find( ".count" ).html( count++ );
-							$rowHtml.find( ".version" ).html( data[ i ].version );
-							$rowHtml.find( ".mid" ).html( data[ i ].mid );
-							$rowHtml.find( ".mdn" ).html( data[ i ].mdn );
-							$rowHtml.find( ".cdCarrier" ).html( data[ i ].cdCarrier );
-							$rowHtml.find( ".appId" ).html( data[ i ].appId );
-							$rowHtml.find( ".productId" ).html( data[ i ].productId );
-							$rowHtml.find( ".nmProduct" ).html( data[ i ].nmProduct );
-							$rowHtml.find( ".amtReqPurchase" ).html( data[ i ].amtReqPurchase );
-							$rowHtml.find( ".amtCarrier" ).html( data[ i ].amtCarrier );
-							$rowHtml.find( ".amtCreditCard" ).html( data[ i ].amtCarrier );
-							$rowHtml.find( ".amtTms" ).html( data[ i ].amtCarrier );
-							$rowHtml.find( ".resultCode" ).html( data[ i ].amtCarrier );
-							$rowHtml.find( ".txId" ).html( data[ i ].amtCarrier );
+							$rowHtml.find( ".count" ).html( data[0] );
+							$rowHtml.find( ".cmId" ).html( data[1] );
+							$rowHtml.find( ".bid" ).html( data[2] );
+							$rowHtml.find( ".cdCarrier" ).html( data[3] );
+							$rowHtml.find( ".appId" ).html( data[4] );
+							$rowHtml.find( ".nudTid" ).html( data[5] );							
+							$rowHtml.find( ".productId" ).html( data[6] );
+							$rowHtml.find( ".nmProduct" ).html( data[7] );
+							$rowHtml.find( ".noBranchOrder" ).html( data[8] );							
+							$rowHtml.find( ".amtReqPurchase" ).html( data[9] );
+							$rowHtml.find( ".amtCarrier" ).html( data[10] );
+							$rowHtml.find( ".amtCreditCard" ).html( data[11] );
+							$rowHtml.find( ".amtTms" ).html( data[12] );
+							$rowHtml.find( ".tid" ).html( data[13] );
+							$rowHtml.find( ".ymTrans" ).html( data[14] );							
+							$rowHtml.find( ".resultCode" ).html( data[15] );
+							$rowHtml.find( ".resultMsg" ).html( data[16] );
 							
 							$( "table.table>tbody" ).append( $rowHtml );	
-						}
+						}						
 					}
-					
-					count = data.length;
+										
 				}).error( function( data ) {
 					console.log( "Ajax Error" );				
 				});
@@ -93,7 +103,7 @@
     
   </head>
 
-  <body>
+  <body onload="bulkJobResultRequest()">
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
@@ -124,8 +134,8 @@
     </div>
 -->
 
-    <div class="container theme-showcase" role="main">
-	    
+    <div class="container theme-showcase" role="main" style="width: 1600px;">
+	
       <div class="page-header" align="center">
         <h1>Open API test page - payment result</h1>
       </div>
@@ -140,28 +150,29 @@
         <button type="button" class="btn btn-lg btn-link">Link</button>
       </p>
 -->
-
-    <button type="button" class="btn btn-sm btn-primary" onclick='bulkJobRequest()'>BulkJob Request update</button>
+	
     <br/>
-    <br/>
-      <div class="page-content" align="center">
+      <div class="page-content" align="center" style="width: 1000px;">
          <table class="table table-striped">
             <thead>
               <tr>
                 <th>#</th>
                 <th>version</th>
-                <th>mid</th>
                 <th>mdn</th>
                 <th>cdCarrier</th>
                 <th>appId</th>
+                <th>nudTid</th>
                 <th>productId</th>
                 <th>nmProduct</th>
+                <th>noBranchOrder</th>                
                 <th>amtReqPurchase</th>
                 <th>amtCarrier</th>
                 <th>amtCreditCard</th>
                 <th>amtTms</th>
+                <th>tid</th>
+                <th>ymTrans</th>                   
                 <th>resultCode</th>
-                <th>txId</th>
+                <th>resultMsg</th>
               </tr>
             </thead>
             <tbody>
@@ -169,7 +180,7 @@
             </tbody>
           </table>
       </div>
-
+	
 	</div>
     <!-- Bootstrap core JavaScript
     ================================================== -->

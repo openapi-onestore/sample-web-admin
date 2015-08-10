@@ -44,10 +44,10 @@
 						for( var i = 0; i < data.length; i++ ) {
 							var $rowHtml = $( "<tr>" +
 		    						"<td class='mid'></td>"+
-		    						"<td class='statusBtn'><button type = 'button' class='btn btn-sm'></button</td>"+
+		    						"<td class='statusBtn'><button type = 'button' class='btn btn-sm'></button></td>"+
 		    						"<td class='reason'></td>" +
 		    						"<td class='waitingJob'></td>" +
-		    						"<td class='jobId'></td>" + 
+		    						"<td><a class='jobId'><button type = 'button' class='btn btn-sm btn-link'/></a></td>" + 
 		    						"<td class='uploadFile'></td>" +
 		    						"<td class='uploadDate'></td>" +
 		    						"<td class='verifyMessage'></td>" +
@@ -58,7 +58,8 @@
 							
 							$rowHtml.find( ".reason" ).html( data[ i ].reason );
 							$rowHtml.find( ".waitingJob" ).html( data[ i ].waitingJob );
-							$rowHtml.find( ".jobId" ).html( data[ i ].jobId );
+							$rowHtml.find( ".jobId" ).html(data[ i ].jobId);
+							$rowHtml.find( ".jobId" ).attr( "href", "http://172.21.60.143:8181/sample-web/openapi/admin/result/" + data[ i ].jobId );
 							$rowHtml.find( ".uploadFile" ).html( data[ i ].uploadFile );
 							$rowHtml.find( ".uploadDate" ).html( data[ i ].uploadDate );
 							$rowHtml.find( ".verifyMessage" ).html( data[ i ].verifyMessage );

@@ -8,6 +8,7 @@ import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.ThreadFactory;
 
 import org.apache.commons.codec.binary.Base64;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -17,7 +18,14 @@ import com.skplanet.openapi.external.oauth.OAuthManagingException.OAuthManaging;
 public class OAuthManager implements OAuthInterface {
 
 	private int threadPoolCount = 1;
-	private ExecutorService jobExecutor = Executors.newFixedThreadPool(threadPoolCount);
+	private ExecutorService jobExecutor = Executors.newFixedThreadPool(threadPoolCount, new ThreadFactory() {
+		@Override
+		public Thread newThread(Runnable r) {
+			Thread t = Executors.defaultThreadFactory().newThread(r);
+			t.setDaemon(true);
+			return t;
+		}
+	});
 	
 	private OAuthAccountInfo accountInfo = null;
 	private OAuthClientInfo clientInfo = null;

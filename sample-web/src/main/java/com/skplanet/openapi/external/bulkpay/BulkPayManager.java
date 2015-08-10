@@ -7,66 +7,75 @@ import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.ThreadFactory;
 
 import com.skplanet.openapi.external.bulkpay.BulkPayException.BulkPay;
 
 public class BulkPayManager implements BulkPayInterface {
-	
+
 	private int threadPoolCount = 2;
-	private ExecutorService jobExecutor = Executors.newFixedThreadPool(threadPoolCount);
+	private ExecutorService jobExecutor = Executors.newFixedThreadPool(threadPoolCount, new ThreadFactory() {
+		@Override
+		public Thread newThread(Runnable r) {
+			Thread t = Executors.defaultThreadFactory().newThread(r);
+			t.setDaemon(true);
+			return t;
+		}
+	});
 	
 	// Property values, uri is default setting
 	private String propertyPath = null;
 	private String fileJobUrl = "http://172.21.60.141/v1/payment/fileJob";
 	private String resultFileUrl = "http://172.21.60.141/v1/payment/job";
-	private String txidInfoUrl = "http://172.21.60.141/v1/payment/transaction";	
+	private String txidInfoUrl = "http://172.21.60.141/v1/payment/transaction";
 	private String refundUrl = "http://172.21.60.141/v1/payment/refund";
-	
+
 	@Override
 	public String createFilePayment(Map<String, String> paramMap) {
 		
 		BulkPayTransaction bulkPayTransaction = new BulkPayTransaction(paramMap);
 		bulkPayTransaction.setCallUrl(fileJobUrl);
 		Future<String> future = jobExecutor.submit(bulkPayTransaction);
-		
+
 		try {
 			String result = future.get();
-			
+
 			if (result.equals("fail")) {
 				return "{'result':'fail','reason':'Header or File path is not valid'}";
 			}
-			
+
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "{'result':'fail','reason':'Transaction job execute failed'}";
 		}
 	}
-	
+
 	@Override
 	public String getFilePaymentInfo(Map<String, String> paramMap) {
 		// jobId, verifySign
 		String jobId = paramMap.get("jobId");
 		String verifySign = paramMap.get("verifySign");
 		String accessToken = paramMap.get("accessToken");
-		
+
 		// authorization
 		paramMap.clear();
 		paramMap.put("accessToken", accessToken);
 
 		String result = null;
 
-		BulkPayResultTransaction bulkPayResultTransaction = new BulkPayResultTransaction(paramMap, jobId, verifySign);
+		BulkPayResultTransaction bulkPayResultTransaction = new BulkPayResultTransaction(
+				paramMap, jobId, verifySign);
 		bulkPayResultTransaction.setCallUrl(resultFileUrl);
 		Future<String> future = jobExecutor.submit(bulkPayResultTransaction);
-		
+
 		try {
 			result = future.get();
 		} catch (Exception e) {
 			e.printStackTrace();
 			result = "BulkPayResultTransaction error!";
 		}
-		
+
 		return result;
 	}
 
@@ -78,74 +87,78 @@ public class BulkPayManager implements BulkPayInterface {
 		// authorization
 		paramMap.clear();
 		paramMap.put("accessToken", accessToken);
-		
-		BulkPayTidInfoTransaction bulkPayTidInfoTransaction = new BulkPayTidInfoTransaction(paramMap, txid);
+
+		BulkPayTidInfoTransaction bulkPayTidInfoTransaction = new BulkPayTidInfoTransaction(
+				paramMap, txid);
 		bulkPayTidInfoTransaction.setCallUrl(txidInfoUrl);
 		Future<String> future = jobExecutor.submit(bulkPayTidInfoTransaction);
 
 		String result = null;
-		
+
 		try {
 			result = future.get();
 		} catch (Exception e) {
 			e.printStackTrace();
 			result = "BulkPayTxidTransaction Error!";
 		}
-		
+
 		return result;
 	}
-	
+
 	@Override
 	public String cancelPaymentTransaction(Map<String, String> paramMap) {
 		String jsonString = paramMap.get("jsonString");
 		String accessToken = paramMap.get("accessToken");
-		
+
 		// authorization
 		paramMap.clear();
 		paramMap.put("accessToken", accessToken);
-		
-		BulkPayRefundTransaction bulkPayRefundTransaction = new BulkPayRefundTransaction(paramMap, jsonString);
+
+		BulkPayRefundTransaction bulkPayRefundTransaction = new BulkPayRefundTransaction(
+				paramMap, jsonString);
 		bulkPayRefundTransaction.setCallUrl(refundUrl);
 		Future<String> future = jobExecutor.submit(bulkPayRefundTransaction);
-		
+
 		String result = null;
-		
+
 		try {
 			result = future.get();
 		} catch (Exception e) {
 			e.printStackTrace();
 			result = "BulkPayRefundTransaction Error!";
 		}
-		
+
 		return result;
 	}
-	
+
 	public void setPropertyFile(String path) throws Exception {
 		this.propertyPath = path;
 		Properties props = new Properties();
-		
+
 		if (propertyPath == null) {
-			throw new BulkPayException(BulkPay.BULK_PROPERTY_SETTING_ERROR,"Property path is null");
+			throw new BulkPayException(BulkPay.BULK_PROPERTY_SETTING_ERROR,
+					"Property path is null");
 		}
-		
+
 		FileInputStream fis = null;
-		
+
 		try {
 			fis = new FileInputStream(propertyPath);
 			props.load(new BufferedInputStream(fis));
-			
+
 			fileJobUrl = props.getProperty("openapi.bulkjob_url");
 			resultFileUrl = props.getProperty("openapi.result_file_url");
-			txidInfoUrl = props.getProperty("openapi.txid_info_url");	
+			txidInfoUrl = props.getProperty("openapi.txid_info_url");
 			refundUrl = props.getProperty("openapi.refund_url");
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new BulkPayException(BulkPay.BULK_PROPERTY_SETTING_ERROR, "File creation is incorect!!");
+			throw new BulkPayException(BulkPay.BULK_PROPERTY_SETTING_ERROR,
+					"File creation is incorect!!");
 		} finally {
 			fis.close();
 		}
-		
+
 	}
 
 }

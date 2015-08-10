@@ -16,6 +16,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ import com.skplanet.openapi.dao.BulkJobDAO;
 import com.skplanet.openapi.request.outbound.PayplanetClient;
 import com.skplanet.openapi.vo.BulkJobInfo;
 import com.skplanet.openapi.vo.NotificationResult;
+import com.skplanet.openapi.vo.transaction.PaymentTransactionInfo;
+import com.skplanet.openapi.vo.transaction.TransactionInfo;
 
 @Service("paymentService")
 public class PaymentService {
@@ -161,6 +164,20 @@ public class PaymentService {
 			result = "result=FAIL&reason="+e.getMessage();
 		}
 		return result;
+	}
+	
+	public TransactionInfo requestTidInformationObject(Map<String, String> param) {
+		TransactionInfo transactionInfo = null;
+		
+		try {
+			String result = payplanetClient.getTidInformation(param);
+			ObjectMapper objectMapper = new ObjectMapper();
+			transactionInfo = objectMapper.readValue(result, TransactionInfo.class);			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return transactionInfo;
+		}
+		return transactionInfo;
 	}
 	
 	public String requestRefund(Map<String, String> param) {

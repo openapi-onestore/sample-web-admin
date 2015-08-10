@@ -42,9 +42,8 @@ public class PayplanetClient {
 	private BulkPayManager bulkPayManager = new BulkPayManager();
 	private NotiManager notiManager = new NotiManager();
 	
-	@Value("${openapi.notification_verify_url}") private String verifyUrl;
+	@Value("${notification.verify_url}") private String verifyUrl;
 	@Value("${openapi.notification_url}") private String notificationUrl;
-	@Value("${openapi.bulkjob_url}") private String bulkjobUrl;
 	
 //	@Autowired
 //	private OutBoundRequestHandler<Map<String,String>,String> outRequestHandler;
