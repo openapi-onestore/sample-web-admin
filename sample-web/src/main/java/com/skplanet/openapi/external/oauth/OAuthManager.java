@@ -20,8 +20,9 @@ public class OAuthManager implements OAuthInterface {
 	private int threadPoolCount = 1;
 	private ExecutorService jobExecutor = Executors.newFixedThreadPool(threadPoolCount, new ThreadFactory() {
 		@Override
-		public Thread newThread(Runnable r) {
-			Thread t = Executors.defaultThreadFactory().newThread(r);
+		public Thread newThread(Runnable runnable) {
+			Thread t = Executors.defaultThreadFactory().newThread(runnable);
+			t.setName("oauthManager");
 			t.setDaemon(true);
 			return t;
 		}

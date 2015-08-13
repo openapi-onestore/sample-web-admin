@@ -16,8 +16,9 @@ public class BulkPayManager implements BulkPayInterface {
 	private int threadPoolCount = 2;
 	private ExecutorService jobExecutor = Executors.newFixedThreadPool(threadPoolCount, new ThreadFactory() {
 		@Override
-		public Thread newThread(Runnable r) {
-			Thread t = Executors.defaultThreadFactory().newThread(r);
+		public Thread newThread(Runnable runnable) {
+			Thread t = Executors.defaultThreadFactory().newThread(runnable);
+			t.setName("bulkPayManager");
 			t.setDaemon(true);
 			return t;
 		}
@@ -32,10 +33,12 @@ public class BulkPayManager implements BulkPayInterface {
 
 	@Override
 	public String createFilePayment(Map<String, String> paramMap) {
+				
+		BulkPayPostTransaction bulkPayPostTransaction = new BulkPayPostTransaction(paramMap);
+		bulkPayPostTransaction.setCallUrl(fileJobUrl);
+		bulkPayPostTransaction.setChunked(true);
 		
-		BulkPayTransaction bulkPayTransaction = new BulkPayTransaction(paramMap);
-		bulkPayTransaction.setCallUrl(fileJobUrl);
-		Future<String> future = jobExecutor.submit(bulkPayTransaction);
+		Future<String> future = jobExecutor.submit(bulkPayPostTransaction);
 
 		try {
 			String result = future.get();
@@ -63,12 +66,12 @@ public class BulkPayManager implements BulkPayInterface {
 		paramMap.put("accessToken", accessToken);
 
 		String result = null;
-
-		BulkPayResultTransaction bulkPayResultTransaction = new BulkPayResultTransaction(
-				paramMap, jobId, verifySign);
-		bulkPayResultTransaction.setCallUrl(resultFileUrl);
-		Future<String> future = jobExecutor.submit(bulkPayResultTransaction);
-
+		
+		BulkPayGetTransaction bulkPayGetTransaction = new BulkPayGetTransaction(paramMap);
+		bulkPayGetTransaction.setCallUrl(resultFileUrl.concat("/"+jobId+"?signCode="+verifySign));
+		
+		Future<String> future = jobExecutor.submit(bulkPayGetTransaction);
+		
 		try {
 			result = future.get();
 		} catch (Exception e) {
@@ -88,11 +91,11 @@ public class BulkPayManager implements BulkPayInterface {
 		paramMap.clear();
 		paramMap.put("accessToken", accessToken);
 
-		BulkPayTidInfoTransaction bulkPayTidInfoTransaction = new BulkPayTidInfoTransaction(
-				paramMap, txid);
-		bulkPayTidInfoTransaction.setCallUrl(txidInfoUrl);
-		Future<String> future = jobExecutor.submit(bulkPayTidInfoTransaction);
-
+		BulkPayGetTransaction bulkPayGetTransaction = new BulkPayGetTransaction(paramMap);
+		bulkPayGetTransaction.setCallUrl(txidInfoUrl.concat("/"+txid));
+		
+		Future<String> future = jobExecutor.submit(bulkPayGetTransaction);
+		
 		String result = null;
 
 		try {
@@ -109,25 +112,26 @@ public class BulkPayManager implements BulkPayInterface {
 	public String cancelPaymentTransaction(Map<String, String> paramMap) {
 		String jsonString = paramMap.get("jsonString");
 		String accessToken = paramMap.get("accessToken");
-
+		
 		// authorization
 		paramMap.clear();
 		paramMap.put("accessToken", accessToken);
-
-		BulkPayRefundTransaction bulkPayRefundTransaction = new BulkPayRefundTransaction(
-				paramMap, jsonString);
-		bulkPayRefundTransaction.setCallUrl(refundUrl);
-		Future<String> future = jobExecutor.submit(bulkPayRefundTransaction);
-
+		
+		BulkPayPostTransaction bulkPayPostTransaction = new BulkPayPostTransaction(paramMap);
+		bulkPayPostTransaction.setCallUrl(refundUrl);
+		bulkPayPostTransaction.setJsonBody(jsonString);
+		
+		Future<String> future = jobExecutor.submit(bulkPayPostTransaction);
+		
 		String result = null;
-
+		
 		try {
 			result = future.get();
 		} catch (Exception e) {
 			e.printStackTrace();
 			result = "BulkPayRefundTransaction Error!";
 		}
-
+		
 		return result;
 	}
 

@@ -21,8 +21,9 @@ public class NotiManager implements NotiInterface {
 	private int threadPoolCount = 1;
 	private ExecutorService jobExecutor = Executors.newFixedThreadPool(threadPoolCount, new ThreadFactory() {
 		@Override
-		public Thread newThread(Runnable r) {
-			Thread t = Executors.defaultThreadFactory().newThread(r);
+		public Thread newThread(Runnable runnable) {
+			Thread t = Executors.defaultThreadFactory().newThread(runnable);
+			t.setName("notiManager");
 			t.setDaemon(true);
 			return t;
 		}
