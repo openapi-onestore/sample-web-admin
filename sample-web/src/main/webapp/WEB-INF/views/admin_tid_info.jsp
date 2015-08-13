@@ -42,7 +42,7 @@
 					console.log( data );
 					
 					$( ".panel-body" ).html( data );
-										
+				
 				}).error( function( data ) {
 					console.log( "Ajax Error" );				
 				});
@@ -159,22 +159,22 @@
 		<div class="input-group" style="width: 400px; left: 250px;">
 			<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" value="Goods" style="width: 100px">		  
 			<span class="input-group-addon" id="sizing-addon2" style="width: 100px">appId</span>
-			<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" value="OA00353582">		  		  
+			<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" value="">		  		  
 		</div>
 		<div class="input-group" style="width: 300px; left: 350px;">
 			<span class="input-group-addon" id="sizing-addon2" style="width: 100px">product id</span>
-			<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" value="0901208001">		  		  
+			<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" value="">		  		  
 		</div>
 		
 		<!-- payment method -->
 		<div class="input-group" style="width: 400px; left: 250px;">
 			<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" value="Methods" style="width: 100px">		  
 			<span class="input-group-addon" id="sizing-addon2" style="width: 100px">Payment Method</span>
-			<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" value="11">		  		  
+			<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" value="">		  		  
 		</div>
 		<div class="input-group" style="width: 300px; left: 350px;">
 			<span class="input-group-addon" id="sizing-addon2" style="width: 100px">amount</span>
-			<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" value="1000">		  		  
+			<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" value="">		  		  
 		</div>
 		
 		<br/>
