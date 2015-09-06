@@ -41,7 +41,7 @@ public class PaymentService {
 
 	@Autowired
 	private BulkJobDAO bulkJobDAO;
-
+	
 	@Autowired
 	private PayplanetClient payplanetClient;
 

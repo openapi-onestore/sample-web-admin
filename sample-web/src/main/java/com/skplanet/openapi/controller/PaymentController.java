@@ -29,21 +29,7 @@ public class PaymentController {
 	
 	@Autowired
 	private PaymentService paymentService;
-
-	@RequestMapping(value = "/bulkjob", method = RequestMethod.GET)
-	@ResponseBody
-	public String requestBulkJobUploadFromDB(String start_no, String end_no) {
-		
-		logger.debug("Request param : " + start_no + " " + end_no);
-		HashMap<String, String> hashMap = new HashMap<String, String>();
-		hashMap.put("START_NO", start_no);
-		hashMap.put("END_NO", end_no);
-		
-		String result = paymentService.requestBulkJob(hashMap);
-		
-		return result;
-	}
-
+	
 	@RequestMapping(value = "/request", method = RequestMethod.GET)
 	@ResponseBody
 	public List<Map<String, String>> requestBulkJobReqList() {

@@ -6,6 +6,8 @@ public class NotiException extends Exception {
 	private static final long serialVersionUID = 1L;
 	
 	public enum Noti {
+		NOTI_PROPERTY_SETTING_ERROR,
+		NOTI_JOB_EXECUTE_FAIL_ERROR,
 		PARAMETER_PARSING_ERROR,
 		UNKNOWN_ERROR;
 		

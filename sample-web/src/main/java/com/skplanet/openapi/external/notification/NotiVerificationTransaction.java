@@ -30,17 +30,20 @@ public class NotiVerificationTransaction implements Callable<String>{
 	public String call() throws Exception {
 		String result = null;
 				
-		if (!validation())
+		if (!validation()) {
 			return null;
+		}
 		
-		if (isParamEmpty())
+		if (isParamEmpty()) {
 			return null;
+		}
 		
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(callUrl);
 
-		if (headers != null)
+		if (headers != null) {
 			addHeaders(httpPost);
+		}
 		
 		HttpEntity httpEntity = null;
 		httpEntity = new StringEntity(param, ContentType.APPLICATION_FORM_URLENCODED);			

@@ -6,6 +6,8 @@ public class BulkPayException extends Exception {
 	
 	public enum BulkPay {
 		BULK_PROPERTY_SETTING_ERROR,
+		BULK_PAY_JOB_EXECUTE_ERROR,
+		BULK_PAY_FILE_NOT_FOUND_ERROR,
 		UNKNOWN_ERROR;
 		
 		private String msg;

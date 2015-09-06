@@ -13,8 +13,6 @@ import java.util.concurrent.ThreadFactory;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.skplanet.openapi.external.notification.NotiException.Noti;
-import com.skplanet.openapi.external.oauth.OAuthManagingException;
-import com.skplanet.openapi.external.oauth.OAuthManagingException.OAuthManaging;
 
 public class NotiManager implements NotiInterface {
 
@@ -22,13 +20,13 @@ public class NotiManager implements NotiInterface {
 	private ExecutorService jobExecutor = Executors.newFixedThreadPool(threadPoolCount, new ThreadFactory() {
 		@Override
 		public Thread newThread(Runnable runnable) {
-			Thread t = Executors.defaultThreadFactory().newThread(runnable);
-			t.setName("notiManager");
-			t.setDaemon(true);
-			return t;
+			Thread notiManagerThread = Executors.defaultThreadFactory().newThread(runnable);
+			notiManagerThread.setName("notiManager");
+			notiManagerThread.setDaemon(true);
+			return notiManagerThread;
 		}
 	});
-
+	
 	private String propertyPath = null;
 	private String verifyUrl = "http://172.21.60.142/openapi/v1/payment/notification/verify";
 	
@@ -43,11 +41,11 @@ public class NotiManager implements NotiInterface {
 			paramMap.put(temp[0], temp[1]);
 		}
 		
-		ObjectMapper om = new ObjectMapper();
+		ObjectMapper objectMapper = new ObjectMapper();
 		NotiReceive notiReceive = null;
 		
 		try {
-			notiReceive = om.readValue(om.writeValueAsString(paramMap),NotiReceive.class);
+			notiReceive = objectMapper.readValue(objectMapper.writeValueAsString(paramMap),NotiReceive.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new NotiException(Noti.PARAMETER_PARSING_ERROR, "Json Parsing Error");
@@ -70,8 +68,8 @@ public class NotiManager implements NotiInterface {
 			result = future.get();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new NotiException(Noti.UNKNOWN_ERROR, "future execute error");
-		} 
+			throw new NotiException(Noti.NOTI_JOB_EXECUTE_FAIL_ERROR, "NotificationVerification reuqest execute error");
+		}
 		
 		return result;
 	}
@@ -81,9 +79,9 @@ public class NotiManager implements NotiInterface {
 		Properties props = new Properties();
 
 		if (propertyPath == null) {
-			throw new OAuthManagingException(OAuthManaging.OAUTH_OBJECT_NULL,"Property path is null");
+			throw new NotiException(Noti.NOTI_PROPERTY_SETTING_ERROR,"Property path is null");
 		}
-
+		
 		FileInputStream fis = null;
 		
 		try {
@@ -93,10 +91,17 @@ public class NotiManager implements NotiInterface {
 			verifyUrl = props.getProperty("notification.verify_url");
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new OAuthManagingException(OAuthManaging.UNKNOWN_ERROR, "File creation is incorect!!");
+			throw new NotiException(Noti.NOTI_PROPERTY_SETTING_ERROR, "File creation is incorect!!");
 		} finally {
 			fis.close();
 		}
+	}
+	
+	public void setExecutorService(ExecutorService service) {
+		if (jobExecutor != null) {
+			this.jobExecutor.shutdown();			
+		}
+		this.jobExecutor = service;
 	}
 	
 }

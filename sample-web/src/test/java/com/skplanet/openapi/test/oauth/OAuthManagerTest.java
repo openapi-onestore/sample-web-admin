@@ -68,7 +68,7 @@ public class OAuthManagerTest {
 		try {
 			Assert.assertEquals(true, oauthManager.createOAuthAccessToken());
 			oauth = oauthManager.getOAuthToken();
-			Assert.assertEquals(true, oauthManager.verifyOAuthToken());
+			Assert.assertEquals(true, oauthManager.verifyOAuthToken("172.21.60.143"));
 			oauthVerifyResult = oauthManager.getOAuthVerifyResult();
 		} catch (Exception e) {
 			e.printStackTrace();

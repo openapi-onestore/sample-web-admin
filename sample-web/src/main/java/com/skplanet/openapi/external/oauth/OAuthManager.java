@@ -21,10 +21,10 @@ public class OAuthManager implements OAuthInterface {
 	private ExecutorService jobExecutor = Executors.newFixedThreadPool(threadPoolCount, new ThreadFactory() {
 		@Override
 		public Thread newThread(Runnable runnable) {
-			Thread t = Executors.defaultThreadFactory().newThread(runnable);
-			t.setName("oauthManager");
-			t.setDaemon(true);
-			return t;
+			Thread oauthManagerThread = Executors.defaultThreadFactory().newThread(runnable);
+			oauthManagerThread.setName("oauthManager");
+			oauthManagerThread.setDaemon(true);
+			return oauthManagerThread;
 		}
 	});
 	
@@ -91,11 +91,13 @@ public class OAuthManager implements OAuthInterface {
 	@Override
 	public boolean createOAuthAccount() {
 		
-		if (accountInfo == null) 
+		if (accountInfo == null) {
 			return false;
+		}
 		
-		if (!accountInfo.validateAccountInfo()) 
+		if (!accountInfo.validateAccountInfo()) {
 			return false;
+		}
 		
 		String response = null;
 		OAuthHttpRequest httpRequest = new OAuthHttpRequest();
@@ -124,7 +126,7 @@ public class OAuthManager implements OAuthInterface {
 	}
 
 	@Override
-	public boolean verifyOAuthToken() {
+	public boolean verifyOAuthToken(String ipAddress) {
 		
 		if (oauth == null)
 			return false;
@@ -156,6 +158,27 @@ public class OAuthManager implements OAuthInterface {
 		}
 		return true;
 	}
+		
+	@Override
+	public OAuthAccessToken getOAuthToken() throws OAuthManagingException {
+		if (oauth == null)
+			throw new OAuthManagingException(OAuthManaging.OAUTH_OBJECT_NULL, "OAuth object is null");
+		return this.oauth;
+	}
+	
+	@Override
+	public OAuthVerifyResult getOAuthVerifyResult() throws OAuthManagingException {
+		if (oauthVerifyResult == null)
+			throw new OAuthManagingException(OAuthManaging.OAUTH_OBJECT_NULL, "OAuth object is null");
+		return oauthVerifyResult;
+	}
+	
+	@Override
+	public OAuthAccount getOAuthAccount() throws OAuthManagingException {
+		if (oauthAccount == null)
+			throw new OAuthManagingException(OAuthManaging.OAUTH_OBJECT_NULL, "OAuth object is null");
+		return oauthAccount;
+	}
 	
 	private Map<String, String> getOAuthHttpRequestHeader() {
 		StringBuilder sb = new StringBuilder();		
@@ -168,8 +191,8 @@ public class OAuthManager implements OAuthInterface {
 		System.out.println("Authorization : " + sb.toString());
 		
 		return headerMap;
-	}
-
+	}	
+	
 	public void setPropertyFile(String path) throws Exception {
 		this.propertyPath = path;
 		Properties props = new Properties();
@@ -195,25 +218,11 @@ public class OAuthManager implements OAuthInterface {
 		}
 	}
 	
-	@Override
-	public OAuthAccessToken getOAuthToken() throws OAuthManagingException {
-		if (oauth == null)
-			throw new OAuthManagingException(OAuthManaging.OAUTH_OBJECT_NULL, "OAuth object is null");
-		return this.oauth;
-	}
-
-	@Override
-	public OAuthVerifyResult getOAuthVerifyResult() throws OAuthManagingException {
-		if (oauthVerifyResult == null)
-			throw new OAuthManagingException(OAuthManaging.OAUTH_OBJECT_NULL, "OAuth object is null");
-		return oauthVerifyResult;
-	}
-	
-	@Override
-	public OAuthAccount getOAuthAccount() throws OAuthManagingException {
-		if (oauthAccount == null)
-			throw new OAuthManagingException(OAuthManaging.OAUTH_OBJECT_NULL, "OAuth object is null");
-		return oauthAccount;
+	public void setExecutorService(ExecutorService service) {
+		if (jobExecutor != null) {
+			this.jobExecutor.shutdown();			
+		}
+		this.jobExecutor = service;
 	}
 	
 }

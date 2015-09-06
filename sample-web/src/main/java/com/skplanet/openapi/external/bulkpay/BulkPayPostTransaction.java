@@ -38,7 +38,7 @@ public class BulkPayPostTransaction implements Callable<String> {
 		this.callUrl = callingUrl;
 		System.out.println("BulkPayGetTransaction" + this.callUrl);
 	}
-
+	
 	public void setChunked(boolean isChunked) {
 		this.isChunked = isChunked;
 	}
@@ -46,7 +46,5 @@ public class BulkPayPostTransaction implements Callable<String> {
 	public void setJsonBody(String jsonBody) {
 		this.jsonBody = jsonBody;
 	}
-
-	
 	
 }

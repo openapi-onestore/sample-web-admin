@@ -103,7 +103,7 @@ public class BulkPayHttpClient {
 		
 		if (headers == null) {
 			return "fail";
-		} 
+		}
 		
 		filePath = headers.get("filePath");
 		
