@@ -44,7 +44,7 @@ public class OpenApiManager {
 		paramMap.put("listenerType", listenerType);
 		try {
 			String result = notiManager.requestNotificationVerification(paramMap);
-			notiListener.onResponse(result);
+			notiListener.onResponse(result, null);
 		} catch (NotiException e) {
 			e.printStackTrace();
 			notiListener.onError(e.getMessage());
