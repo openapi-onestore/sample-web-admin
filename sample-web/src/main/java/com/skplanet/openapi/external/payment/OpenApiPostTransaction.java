@@ -4,10 +4,13 @@ import java.io.File;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+import com.skplanet.openapi.vo.payment.FilePaymentHeader;
+
 public class OpenApiPostTransaction implements Callable<String> {
 
 	private OpenApiHttpClient httpClient;
 	private Map<String, String> paramMap;
+	private FilePaymentHeader filePaymentHeader;
 	private File paymentFile;
 	private String callUrl;
 	private String jsonBody = null;
@@ -47,6 +50,14 @@ public class OpenApiPostTransaction implements Callable<String> {
 	
 	public void setChunked(boolean isChunked) {
 		this.isChunked = isChunked;
+	}
+	
+	public void setFilePaymentHeader(FilePaymentHeader filePaymentHeader) {
+		this.filePaymentHeader = filePaymentHeader;
+	}
+	
+	public void setParamMap(Map<String, String> paramMap) {
+		this.paramMap = paramMap;
 	}
 	
 }

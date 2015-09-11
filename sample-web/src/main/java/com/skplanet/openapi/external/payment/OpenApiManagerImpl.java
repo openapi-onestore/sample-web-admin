@@ -14,6 +14,7 @@ import java.util.concurrent.ThreadFactory;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.skplanet.openapi.external.payment.OpenApiException.OpenApi;
+import com.skplanet.openapi.vo.payment.FilePaymentHeader;
 import com.skplanet.openapi.vo.payment.FilePaymentResult;
 import com.skplanet.openapi.vo.payment.TransactionDetail;
 import com.skplanet.openapi.vo.refund.CancelRequest;
@@ -44,13 +45,23 @@ public class OpenApiManagerImpl implements OpenApiManager{
 	private String refundUrl = "http://172.21.60.141/v1/payment/refund";
 	
 	@Override
-	public FilePaymentResult createFilePayment(File file) throws OpenApiException {
-
+	public FilePaymentResult createFilePayment(FilePaymentHeader filePaymentHeader, File file, String accessToken) throws OpenApiException {
+		
 		if (file == null || !file.canRead()) {
 			throw new OpenApiException(OpenApi.OPENAPI_FILE_NOT_FOUND_ERROR, "{'reason':'File not found.'}");
 		}
 		
+		Map<String, String> headerMap = new HashMap<String, String>();
+		headerMap.put("verBulkPay", filePaymentHeader.getVerBulkPay());
+		headerMap.put("bid", filePaymentHeader.getBid());
+		headerMap.put("notiUrl", filePaymentHeader.getNotiUrl());
+		headerMap.put("postbackUrl", filePaymentHeader.getPostbackUrl());
+		headerMap.put("cntTotalTrans", filePaymentHeader.getCntTotalTrans());
+		headerMap.put("priority", filePaymentHeader.getPrioity());
+		headerMap.put("Authorization", "Bearer " + accessToken);
+		
 		OpenApiPostTransaction openApiPostTransaction = new OpenApiPostTransaction(file);
+		openApiPostTransaction.setParamMap(headerMap);
 		openApiPostTransaction.setCallUrl(fileJobUrl);
 		openApiPostTransaction.setChunked(true);
 		
@@ -62,8 +73,8 @@ public class OpenApiManagerImpl implements OpenApiManager{
 			return filePaymentResult;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new OpenApiException(OpenApi.OPENAPI_JOB_EXECUTE_ERROR, "{'reason':'Transaction job execute failed.'}");
-		}		
+			throw new OpenApiException(OpenApi.OPENAPI_JOB_EXECUTE_ERROR, e.getMessage());
+		}
 		
 	}
 	

@@ -35,17 +35,17 @@ public class Main {
 	}
 	
 	public static FilePaymentResult createFilePayment() {
-//		String accessToken = getAccessToken();	//TODO to be 
+//		String accessToken = getAccessToken();	//TODO interface is changed by jwkim
 		String accessToken = "AAA";
 		
 		OpenApiManager openApi = new OpenApiManagerImpl();
 		File file = new File("....");
 		FilePaymentResult filePaymentResult = null;
-		try {
-			filePaymentResult = openApi.createFilePayment(file);
-		} catch (OpenApiException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			filePaymentResult = openApi.createFilePayment(file);
+//		} catch (OpenApiException e) {
+//			e.printStackTrace();
+//		}
 		return filePaymentResult;
 	}
 	

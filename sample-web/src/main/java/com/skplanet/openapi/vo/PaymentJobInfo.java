@@ -1,10 +1,10 @@
 package com.skplanet.openapi.vo;
 
-public class BulkJobInfo {
+public class PaymentJobInfo {
 	String filePath;
 	int processingCount;
 
-	public BulkJobInfo(String filePath, int processingCount) {
+	public PaymentJobInfo(String filePath, int processingCount) {
 		super();
 		this.filePath = filePath;
 		this.processingCount = processingCount;

@@ -22,6 +22,7 @@ import com.skplanet.openapi.external.oauth.OAuthClientInfo;
 import com.skplanet.openapi.external.oauth.OAuthManagerImpl;
 import com.skplanet.openapi.external.payment.OpenApiManagerImpl;
 import com.skplanet.openapi.vo.NotificationResult;
+import com.skplanet.openapi.vo.payment.FilePaymentHeader;
 import com.skplanet.openapi.vo.payment.FilePaymentResult;
 import com.skplanet.openapi.vo.payment.Payer;
 import com.skplanet.openapi.vo.payment.PaymentMethods;
@@ -61,7 +62,7 @@ public class PayplanetClient {
 		return result;
 	}
 	
-	public String createBulkPayment(int processingCount, String path) throws Exception {		
+	public String createBulkPayment(int processingCount, File requestFile) throws Exception {		
 		logger.debug("createBulkPayment() called");
 		
 		String accessToken = null;
@@ -73,9 +74,8 @@ public class PayplanetClient {
 		oauthManager.setClientInfo(oauthClientInfo);
 		accessToken = oauthManager.createAccessToken().getAccessToken();
 		
-		Map<String,String> paramMap = getBulkPayParamMap(processingCount, path, accessToken);
-		FilePaymentResult filePaymentResult = openApiManager.createFilePayment(new File(path));
-				
+		FilePaymentResult filePaymentResult = openApiManager.createFilePayment(getFilepaymentHeader(processingCount), requestFile, accessToken);
+		
 		return objectMapper.writeValueAsString(filePaymentResult);
 	}
 	
@@ -163,16 +163,14 @@ public class PayplanetClient {
 		//return openApiManager.cancelPaymentTransaction(param);
 	}
 	
-	private Map<String,String> getBulkPayParamMap(int processingCount, String path, String token) {
-		Map<String, String> paramMap = new HashMap<String, String>();
-		paramMap.put("verBulkPay", "1");
-		paramMap.put("bid", "skplanet");
-		paramMap.put("notiUrl", notificationUrl);
-		paramMap.put("cntTotalTrans", Integer.toString(processingCount));
-		paramMap.put("priority", "Instant");
-		paramMap.put("accessToken", token);
-		paramMap.put("filePath", path);
-		return paramMap;
+	private FilePaymentHeader getFilepaymentHeader(int processingCount) {
+		FilePaymentHeader filePaymentHeader = new FilePaymentHeader();
+		filePaymentHeader.setVerBulkPay("1");
+		filePaymentHeader.setBid("skplanet");
+		filePaymentHeader.setNotiUrl(notificationUrl);
+		filePaymentHeader.setCntTotalTrans(Integer.toString(processingCount));
+		filePaymentHeader.setPrioity("Instant");
+		return filePaymentHeader;
 	}
 	
 	private String getAccessTokenFromOauthManager() throws Exception {

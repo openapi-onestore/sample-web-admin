@@ -26,7 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.skplanet.openapi.dao.BulkJobDAO;
 import com.skplanet.openapi.request.outbound.PayplanetClient;
-import com.skplanet.openapi.vo.BulkJobInfo;
+import com.skplanet.openapi.vo.PaymentJobInfo;
 import com.skplanet.openapi.vo.NotificationResult;
 import com.skplanet.openapi.vo.payment.TransactionDetail;
 
@@ -49,25 +49,6 @@ public class PaymentService {
 			"billingToken", "pid", "pName", "orderNo", "amtReqPurchase",
 			"amtCarrier", "amtCreditCard", "amtTms" });
 
-	public String requestBulkJob(Map<String, String> param) {
-		String result = null;
-
-		try {
-			BulkJobInfo bulkJobInfo = makeBulkFile(param);
-			result = payplanetClient
-					.createBulkPayment(bulkJobInfo.getProcessingCount(),
-							bulkJobInfo.getFilePath());
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return result;
-	}
-
 	public String requestBulkJob(MultipartFile multipartFile) {
 		String result = null;
 		File tmpFile = new File(getBulkfileFormat());
@@ -75,10 +56,8 @@ public class PaymentService {
 		try {
 			multipartFile.transferTo(tmpFile);
 			int processCount = countLines(tmpFile.getAbsolutePath());
-			BulkJobInfo bulkJobInfo = new BulkJobInfo(
-					tmpFile.getAbsolutePath(), processCount);
-			result = payplanetClient.createBulkPayment(bulkJobInfo.getProcessingCount(),
-					bulkJobInfo.getFilePath());
+			PaymentJobInfo paymentJobInfo = new PaymentJobInfo(tmpFile.getAbsolutePath(), processCount);
+			result = payplanetClient.createBulkPayment(paymentJobInfo.getProcessingCount(), tmpFile);
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
@@ -195,7 +174,7 @@ public class PaymentService {
 		return result;		
 	}
 	
-	private BulkJobInfo makeBulkFile(Map<String, String> param)
+	private PaymentJobInfo makeBulkFile(Map<String, String> param)
 			throws FileNotFoundException, IOException {
 		File tmpFile = new File(getBulkfileFormat());
 		Writer writer = new PrintWriter(tmpFile);
@@ -229,7 +208,7 @@ public class PaymentService {
 		}
 		writer.close();
 
-		return new BulkJobInfo(tmpFile.getAbsolutePath(), processingCount);
+		return new PaymentJobInfo(tmpFile.getAbsolutePath(), processingCount);
 	}
 
 	private String getBulkfileFormat() {
