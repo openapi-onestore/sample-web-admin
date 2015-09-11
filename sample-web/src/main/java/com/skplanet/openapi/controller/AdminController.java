@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.skplanet.openapi.service.PaymentService;
-import com.skplanet.openapi.vo.transaction.TransactionInfo;
+import com.skplanet.openapi.vo.payment.TransactionDetail;
 
 
 @Controller
@@ -86,22 +86,20 @@ public class AdminController {
 		Map<String, String> param = new HashMap<String, String>();
 		param.put("tid", tid);
 		
-		TransactionInfo transactionInfo = paymentService.requestTidInformationObject(param);
+		TransactionDetail transactionDetail = paymentService.requestTidInformationObject(param);
 		
-		if (transactionInfo != null) {
-			modelAndView.addObject("resultCode", transactionInfo.getResultCode());
-			modelAndView.addObject("resultMsg", transactionInfo.getResultMsg());
-			modelAndView.addObject("mdn", transactionInfo.getPayer().getMdn());
-			modelAndView.addObject("carrier", transactionInfo.getPayer().getCarrier());
-			modelAndView.addObject("status", transactionInfo.getPaymentTransactionInfo().getStatus());
-			modelAndView.addObject("reason", transactionInfo.getPaymentTransactionInfo().getReason());
-			modelAndView.addObject("message", transactionInfo.getPaymentTransactionInfo().getMessage());
-			modelAndView.addObject("latestUpdate", transactionInfo.getPaymentTransactionInfo().getLastestUpdate());
-			modelAndView.addObject("tid", transactionInfo.getPaymentTransactionInfo().getTid());
-			modelAndView.addObject("amount", transactionInfo.getPaymentTransactionInfo().getAmount());
-			modelAndView.addObject("description", transactionInfo.getPaymentTransactionInfo().getDescription());
-			modelAndView.addObject("goods",transactionInfo.getPaymentTransactionInfo().getGoods());
-			modelAndView.addObject("paymentMethods",transactionInfo.getPaymentTransactionInfo().getPaymentMethods());
+		if (transactionDetail != null) {
+			modelAndView.addObject("resultCode", transactionDetail.getResultCode());
+			modelAndView.addObject("resultMsg", transactionDetail.getResultMsg());
+			modelAndView.addObject("status", transactionDetail.getPaymentTransactionInfo().getStatus());
+			modelAndView.addObject("reason", transactionDetail.getPaymentTransactionInfo().getReason());
+			modelAndView.addObject("message", transactionDetail.getPaymentTransactionInfo().getMessage());
+			modelAndView.addObject("latestUpdate", transactionDetail.getPaymentTransactionInfo().getLastestUpdate());
+			modelAndView.addObject("tid", transactionDetail.getPaymentTransactionInfo().getTid());
+			modelAndView.addObject("amount", transactionDetail.getPaymentTransactionInfo().getAmount());
+			modelAndView.addObject("description", transactionDetail.getPaymentTransactionInfo().getDescription());
+			modelAndView.addObject("goods",transactionDetail.getPaymentTransactionInfo().getGoods());
+			modelAndView.addObject("paymentMethods",transactionDetail.getPaymentTransactionInfo().getPaymentMethods());
 		}
 		
 		return modelAndView;

@@ -1,5 +1,8 @@
 package com.skplanet.openapi.request.outbound;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,18 +17,19 @@ import org.springframework.stereotype.Component;
 
 import com.skplanet.openapi.dao.BulkJobDAO;
 import com.skplanet.openapi.dao.NotificationDAO;
-import com.skplanet.openapi.external.bulkpay.BulkPayManager;
+import com.skplanet.openapi.external.bulkpay.OpenApiManagerImpl;
 import com.skplanet.openapi.external.notification.NotiManager;
 import com.skplanet.openapi.external.oauth.OAuthClientInfo;
 import com.skplanet.openapi.external.oauth.OAuthManager;
 import com.skplanet.openapi.vo.NotificationResult;
-import com.skplanet.openapi.vo.refund.BulkJobRefund;
+import com.skplanet.openapi.vo.payment.FilePaymentResult;
+import com.skplanet.openapi.vo.payment.Payer;
+import com.skplanet.openapi.vo.payment.PaymentMethods;
+import com.skplanet.openapi.vo.payment.PaymentTransactionInfo;
+import com.skplanet.openapi.vo.payment.TransactionDetail;
+import com.skplanet.openapi.vo.refund.CancelRequest;
 import com.skplanet.openapi.vo.refund.Links;
 import com.skplanet.openapi.vo.refund.RefundTransactionRequest;
-import com.skplanet.openapi.vo.transaction.Payer;
-import com.skplanet.openapi.vo.transaction.PaymentMethods;
-import com.skplanet.openapi.vo.transaction.PaymentTransactionInfo;
-import com.skplanet.openapi.vo.transaction.TransactionInfo;
 
 @Component("payplanetClient")
 public class PayplanetClient {
@@ -39,8 +43,10 @@ public class PayplanetClient {
 	private NotificationDAO notificationDAO;
 	
 	private OAuthManager oauthManager = new OAuthManager();
-	private BulkPayManager bulkPayManager = new BulkPayManager();
+	private OpenApiManagerImpl openApiManager = new OpenApiManagerImpl();
 	private NotiManager notiManager = new NotiManager();
+	
+	private ObjectMapper objectMapper = new ObjectMapper();
 	
 	@Value("${notification.verify_url}") private String verifyUrl;
 	@Value("${openapi.notification_url}") private String notificationUrl;
@@ -68,9 +74,9 @@ public class PayplanetClient {
 		accessToken = oauthManager.createAccessToken().getAccessToken();
 		
 		Map<String,String> paramMap = getBulkPayParamMap(processingCount, path, accessToken);
-		String response = bulkPayManager.createFilePayment(paramMap);
-		
-		return response;
+		FilePaymentResult filePaymentResult = openApiManager.createFilePayment(new File(path));
+				
+		return objectMapper.writeValueAsString(filePaymentResult);
 	}
 	
 	public void insertBulkPaymentRequest(Map<String,String> param) throws Exception {
@@ -118,26 +124,43 @@ public class PayplanetClient {
 	public String getBulkJobResultFile(Map<String, String> param) throws Exception {
 		logger.debug("getBulkJobResultFile() called");		
 		String accessToken = getAccessTokenFromOauthManager();
-		param.put("accessToken", accessToken);
+		String jobId = param.get("jobId");
+		String verifySign = param.get("verifySign");
 		
-		return bulkPayManager.getFilePaymentInfo(param);
+		File resultFile = openApiManager.getFilePaymentJobStatus(jobId, verifySign, accessToken);
+		
+		BufferedReader bufferedReader = new BufferedReader(new FileReader(resultFile));
+		StringBuffer stringBuffer = new StringBuffer();
+		String temp = null;
+		
+		while((temp = bufferedReader.readLine()) != null) {
+			stringBuffer.append(temp);
+		}
+		
+		bufferedReader.close();
+		
+		return stringBuffer.toString();
 	}
 	
 	public String getTidInformation(Map<String, String> param) throws Exception {
 		logger.debug("getTidInformation() called");		
 		String accessToken = getAccessTokenFromOauthManager();
-		param.put("accessToken", accessToken);
+		String tid = param.get("tid");
 		
-		return bulkPayManager.getPaymentTransactionDetail(param);
+		TransactionDetail transactionDetail = openApiManager.getPaymentTransactionDetail(tid, accessToken);
+		
+		return objectMapper.writeValueAsString(transactionDetail);
 	}
 	
 	public String getRefundInformation(Map<String, String> param) throws Exception {
 		logger.debug("getRefundInformation() called");		
 		String accessToken = getAccessTokenFromOauthManager();
-		param.put("accessToken", accessToken);
-		param.put("jsonString", getRefundTransactionJsonString(param.get("tid")));
+		String jsonString = param.get("jsonString");
+		String tid = param.get("tid");
 		
-		return bulkPayManager.cancelPaymentTransaction(param);
+		param.put("jsonString", getRefundTransactionJsonString(param.get("tid")));
+		return null;
+		//return openApiManager.cancelPaymentTransaction(param);
 	}
 	
 	private Map<String,String> getBulkPayParamMap(int processingCount, String path, String token) {
@@ -172,12 +195,12 @@ public class PayplanetClient {
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		TransactionInfo transactionInfo = objectMapper.readValue(tid, TransactionInfo.class);
-		System.out.println(objectMapper.writeValueAsString(transactionInfo));
+		TransactionDetail transactionDetail = objectMapper.readValue(tid, TransactionDetail.class);
+		System.out.println(objectMapper.writeValueAsString(transactionDetail));
 		
 		// for refund request body Payer, RefundTransactionRequest, Links
-		PaymentTransactionInfo paymentTransactionInfo = transactionInfo.getPaymentTransactionInfo();
-		Payer payer = transactionInfo.getPayer();
+		PaymentTransactionInfo paymentTransactionInfo = transactionDetail.getPaymentTransactionInfo();
+		Payer payer = transactionDetail.getPayer();
 		PaymentMethods[] paymentMethods = paymentTransactionInfo.getPaymentMethods();
 		
 		// for making BulkJobRefund
@@ -194,12 +217,12 @@ public class PayplanetClient {
 		links.setName("refundurl");
 		links.setUrl("http://");
 		
-		BulkJobRefund bulkJobRefund = new BulkJobRefund();
-		bulkJobRefund.setPayer(transactionInfo.getPayer());
-		bulkJobRefund.setRefundTransactionRequest(refundTransactionRequest);
-		bulkJobRefund.setLinks(links);
-		System.out.println(objectMapper.writeValueAsString(bulkJobRefund));
+		CancelRequest cancelRequest = new CancelRequest();
+		cancelRequest.setPayer(transactionDetail.getPayer());
+		cancelRequest.setRefundTransactionRequest(refundTransactionRequest);
+		cancelRequest.setLinks(links);
+		System.out.println(objectMapper.writeValueAsString(cancelRequest));
 		
-		return objectMapper.writeValueAsString(bulkJobRefund);
+		return objectMapper.writeValueAsString(cancelRequest);
 	}
 }

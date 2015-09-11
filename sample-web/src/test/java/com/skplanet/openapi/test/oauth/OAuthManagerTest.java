@@ -1,11 +1,15 @@
 package com.skplanet.openapi.test.oauth;
 
+import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.skplanet.openapi.external.oauth.OAuthAccessToken;
 import com.skplanet.openapi.external.oauth.OAuthClientInfo;
+import com.skplanet.openapi.external.oauth.OAuthManager;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -25,27 +29,26 @@ public class OAuthManagerTest {
 		oauthClientInfo.setGrantType("client_credentials");
 	}
 	
-//	@Test
-//	public void getAccessToken() {
-//		
-//		OAuthManager oauthManager = new OAuthManager();
-//		oauthManager.setClientInfo(oauthClientInfo);
-//		OAuthAccessToken oauth = null;
-//		
-//		try {
-//			Assert.assertEquals(true, oauthManager.createOAuthAccessToken());
-//			oauth = oauthManager.getOAuthToken();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		
-//		Assert.assertEquals(32, oauth.getAccessToken().length());
-//		Assert.assertEquals("Bearer", oauth.getTokenType());
-//		
-//		String scope = oauth.getScope();
-//		Assert.assertEquals(true, scope.contains("GetTxInfo"));
-//		Assert.assertEquals(true, scope.contains("GetTxInfoV2"));
-//	}
+	@Test
+	public void getAccessToken() {
+		
+		OAuthManager oauthManager = new OAuthManager();
+		oauthManager.setClientInfo(oauthClientInfo);
+		OAuthAccessToken oauth = null;
+		
+		try {
+			oauth = oauthManager.createAccessToken();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		Assert.assertEquals(32, oauth.getAccessToken().length());
+		Assert.assertEquals("Bearer", oauth.getTokenType());
+		
+		String scope = oauth.getScope();
+		Assert.assertEquals(true, scope.contains("GetTxInfo"));
+		Assert.assertEquals(true, scope.contains("GetTxInfoV2"));
+	}
 	
 //	@Test
 //	public void getAccessTokenValidation() {

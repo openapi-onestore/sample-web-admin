@@ -28,7 +28,7 @@ import com.skplanet.openapi.dao.BulkJobDAO;
 import com.skplanet.openapi.request.outbound.PayplanetClient;
 import com.skplanet.openapi.vo.BulkJobInfo;
 import com.skplanet.openapi.vo.NotificationResult;
-import com.skplanet.openapi.vo.transaction.TransactionInfo;
+import com.skplanet.openapi.vo.payment.TransactionDetail;
 
 @Service("paymentService")
 public class PaymentService {
@@ -165,22 +165,22 @@ public class PaymentService {
 		return result;
 	}
 	
-	public TransactionInfo requestTidInformationObject(Map<String, String> param) {
-		TransactionInfo transactionInfo = null;
+	public TransactionDetail requestTidInformationObject(Map<String, String> param) {
+		TransactionDetail transactionDetail = null;
 		
 		try {
 			String result = payplanetClient.getTidInformation(param);
 			if (result.length() >= 20) {
 				ObjectMapper objectMapper = new ObjectMapper();
-				transactionInfo = objectMapper.readValue(result, TransactionInfo.class);
+				transactionDetail = objectMapper.readValue(result, TransactionDetail.class);
 			} else {
-				transactionInfo = null;
+				transactionDetail = null;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return transactionInfo;
+			return transactionDetail;
 		}
-		return transactionInfo;
+		return transactionDetail;
 	}
 	
 	public String requestRefund(Map<String, String> param) {

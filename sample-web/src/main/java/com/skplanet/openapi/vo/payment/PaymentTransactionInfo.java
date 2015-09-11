@@ -1,4 +1,4 @@
-package com.skplanet.openapi.vo.transaction;
+package com.skplanet.openapi.vo.payment;
 
 public class PaymentTransactionInfo {
 	

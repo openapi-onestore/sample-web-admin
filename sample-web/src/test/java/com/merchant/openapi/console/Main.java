@@ -2,12 +2,14 @@ package com.merchant.openapi.console;
 
 import java.io.File;
 
+import com.skplanet.openapi.external.bulkpay.OpenApiException;
 import com.skplanet.openapi.external.bulkpay.OpenApiManager;
 import com.skplanet.openapi.external.bulkpay.OpenApiManagerImpl;
 import com.skplanet.openapi.external.oauth.OAuthAccessToken;
 import com.skplanet.openapi.external.oauth.OAuthClientInfo;
 import com.skplanet.openapi.external.oauth.OAuthManager;
 import com.skplanet.openapi.external.oauth.OAuthManagingException;
+import com.skplanet.openapi.vo.payment.FilePaymentResult;
 
 public class Main { 
 	
@@ -32,14 +34,19 @@ public class Main {
 		return accessToken.getAccessToken();
 	}
 	
-	public static void createFilePayment() {
+	public static FilePaymentResult createFilePayment() {
 //		String accessToken = getAccessToken();	//TODO to be 
 		String accessToken = "AAA";
 		
 		OpenApiManager openApi = new OpenApiManagerImpl();
 		File file = new File("....");
-		Object filePaymentJob = openApi.createFilePayment(file);
-		;
+		FilePaymentResult filePaymentResult = null;
+		try {
+			filePaymentResult = openApi.createFilePayment(file);
+		} catch (OpenApiException e) {
+			e.printStackTrace();
+		}
+		return filePaymentResult;
 	}
 	
 	public static void getFileTxDetails() {

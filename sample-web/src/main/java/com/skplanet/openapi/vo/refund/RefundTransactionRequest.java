@@ -1,6 +1,6 @@
 package com.skplanet.openapi.vo.refund;
 
-import com.skplanet.openapi.vo.transaction.PaymentMethods;
+import com.skplanet.openapi.vo.payment.PaymentMethods;
 
 public class RefundTransactionRequest {
 	

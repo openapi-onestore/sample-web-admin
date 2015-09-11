@@ -1,30 +1,36 @@
 package com.skplanet.openapi.external.bulkpay;
 
+import java.io.File;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-public class BulkPayPostTransaction implements Callable<String> {
+public class OpenApiPostTransaction implements Callable<String> {
 
-	private BulkPayHttpClient httpClient;
+	private OpenApiHttpClient httpClient;
 	private Map<String, String> paramMap;
+	private File paymentFile;
 	private String callUrl;
 	private String jsonBody = null;
 	private boolean isChunked = false;
 	
-	public BulkPayPostTransaction(Map<String, String> header) {
-		this.paramMap = header;
+	public OpenApiPostTransaction(File paymentFile) {
+		this.paymentFile = paymentFile;
+	}
+	
+	public OpenApiPostTransaction(String body) {
+		this.jsonBody = body;
 	}
 	
 	@Override
 	public String call() throws Exception {
 		
-		httpClient = new BulkPayHttpClient();
+		httpClient = new OpenApiHttpClient();
 		httpClient.setHeaders(paramMap);
 		
 		String result = null;
 		
 		if (isChunked) {
-			result = httpClient.postChunkedString(callUrl);
+			result = httpClient.postChunkedString(callUrl, this.paymentFile);
 		}
 		
 		if (jsonBody != null) {
@@ -41,10 +47,6 @@ public class BulkPayPostTransaction implements Callable<String> {
 	
 	public void setChunked(boolean isChunked) {
 		this.isChunked = isChunked;
-	}
-	
-	public void setJsonBody(String jsonBody) {
-		this.jsonBody = jsonBody;
 	}
 	
 }

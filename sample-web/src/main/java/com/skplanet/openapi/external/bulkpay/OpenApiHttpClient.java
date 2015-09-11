@@ -1,7 +1,13 @@
 package com.skplanet.openapi.external.bulkpay;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -23,7 +29,9 @@ import org.apache.http.message.AbstractHttpMessage;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-public class BulkPayHttpClient {
+import com.skplanet.openapi.external.bulkpay.OpenApiException.OpenApi;
+
+public class OpenApiHttpClient {
 	private StatusLine statusLine;
 	private Map<String, String> headers = null;
 
@@ -49,6 +57,37 @@ public class BulkPayHttpClient {
 		} finally {
 			response.close();
 		}
+	}
+	
+	public File getFile(String url, String fileWritePath) throws Exception {
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+		HttpGet httpGet = new HttpGet(url);
+		addHeaders(httpGet);
+		
+		File file = null;
+		CloseableHttpResponse response = httpclient.execute(httpGet);		
+		
+		try {
+			setStatusLine(response.getStatusLine());
+			HttpEntity httpEntity = response.getEntity();
+			
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpEntity.getContent(), Charset.forName("UTF-8")));
+			file = new File(fileWritePath);
+			FileWriter fileWriter = new FileWriter(file);
+			
+			String buffer = null;
+			while( (buffer=bufferedReader.readLine()) != null) {
+				fileWriter.append(buffer);
+				fileWriter.flush();
+			}
+			fileWriter.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			new OpenApiException(OpenApi.OPENAPI_JOB_EXECUTE_ERROR, e.getMessage());
+		} finally {
+			response.close();
+		}
+		return file;
 	}
 	
 	public String post(String url, Map<String, String> data) throws Exception {
@@ -95,22 +134,12 @@ public class BulkPayHttpClient {
 
 	}
 
-	public String postChunkedString(String uri)
+	public String postChunkedString(String uri, File sendFile)
 			throws Exception {
 		System.out.println("Post Chunked String");
-		
-		String filePath = null;
-		
-		if (headers == null) {
+				
+		if (sendFile == null || !sendFile.canRead()) {
 			return "fail";
-		}
-		
-		filePath = headers.get("filePath");
-		
-		if (filePath == null) {
-			return "fail";
-		} else {
-			headers.remove("filePath");
 		}
 		
 		setStatusLine(null);
@@ -119,12 +148,9 @@ public class BulkPayHttpClient {
 		try {
 			HttpPost httpPost = new HttpPost(uri);
 			addHeaders(httpPost);
-			File file = new File(filePath);
-
+			
 			// TODO plain/text로 처리 가능한지 확인 필
-			InputStreamEntity reqEntity = new InputStreamEntity(
-					new FileInputStream(file), file.length(),
-					ContentType.TEXT_PLAIN);
+			InputStreamEntity reqEntity = new InputStreamEntity(new FileInputStream(sendFile), sendFile.length(), ContentType.TEXT_PLAIN);
 			reqEntity.setChunked(true);
 			
 			httpPost.setEntity(reqEntity);

@@ -1,8 +1,8 @@
 package com.skplanet.openapi.vo.refund;
 
-import com.skplanet.openapi.vo.transaction.Payer;
+import com.skplanet.openapi.vo.payment.Payer;
 
-public class BulkJobRefund {
+public class CancelRequest {
 
 	private Payer payer;
 	private RefundTransactionRequest refundTransactionRequest;

@@ -3,29 +3,30 @@ package com.skplanet.openapi.external.bulkpay;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-public class BulkPayGetTransaction implements Callable<String> {
-
-	private BulkPayHttpClient httpClient;
+public class OpenApiGetTransaction implements Callable<String>{
+	
+	private OpenApiHttpClient httpClient;
 	private Map<String, String> paramMap;
 	private String callUrl;
 	
-	public BulkPayGetTransaction(Map<String, String> header) {
+	public OpenApiGetTransaction(Map<String, String> header) {
 		this.paramMap = header;
 	}
 	
 	@Override
 	public String call() throws Exception {
 		
-		httpClient = new BulkPayHttpClient();
+		httpClient = new OpenApiHttpClient();
 		httpClient.setHeaders(paramMap);
-		String result = httpClient.get(callUrl);
 		
+		String result = httpClient.get(callUrl);
+				
 		return result;
 	}
 	
 	public void setCallUrl(String callingUrl) {
 		this.callUrl = callingUrl;
-		System.out.println("BulkPayGetTransaction" + this.callUrl);
+		System.out.println("OpenApiGetTransaction" + this.callUrl);
 	}
-	
+		
 }

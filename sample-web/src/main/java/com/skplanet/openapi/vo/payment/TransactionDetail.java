@@ -1,6 +1,6 @@
-package com.skplanet.openapi.vo.transaction;
+package com.skplanet.openapi.vo.payment;
 
-public class TransactionInfo {
+public class TransactionDetail {
 
 	private String resultCode;
 	private String resultMsg;
