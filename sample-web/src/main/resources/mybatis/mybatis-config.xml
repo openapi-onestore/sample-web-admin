@@ -22,7 +22,7 @@
 	
 	<typeAliases>
 		<typeAlias type="com.skplanet.openapi.vo.BulkJob" alias="bulkJob"/>
-		<typeAlias type="com.skplanet.openapi.vo.BulkJobInfo" alias="bulkJobInfo"/>
+		<typeAlias type="com.skplanet.openapi.vo.PaymentJobInfo" alias="paymentJobInfo"/>
 		<typeAlias type="com.skplanet.openapi.vo.BulkJobRequest" alias="bulkJobRequest"/>
 		<typeAlias type="com.skplanet.openapi.vo.NotificationResult" alias="notificationResult"/>
 	</typeAliases>

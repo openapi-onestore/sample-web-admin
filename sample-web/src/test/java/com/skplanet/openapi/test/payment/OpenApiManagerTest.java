@@ -1,7 +1,11 @@
 package com.skplanet.openapi.test.payment;
 
 import java.io.File;
+import java.io.IOException;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -68,8 +72,18 @@ public class OpenApiManagerTest {
 			e.printStackTrace();
 		}
 		
+		ObjectMapper objectMapper = new ObjectMapper();
+		
 		Assert.assertNotNull(filePaymentResult);
-		System.out.println(filePaymentResult);
+		try {
+			System.out.println(objectMapper.writeValueAsString(filePaymentResult));
+		} catch (JsonGenerationException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 	}
 	

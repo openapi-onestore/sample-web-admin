@@ -66,7 +66,7 @@ public class OpenApiManagerImpl implements OpenApiManager{
 		openApiPostTransaction.setChunked(true);
 		
 		Future<String> future = jobExecutor.submit(openApiPostTransaction);
-
+		
 		try {
 			String result = future.get();
 			FilePaymentResult filePaymentResult = objectMapper.readValue(result, FilePaymentResult.class);
