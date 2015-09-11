@@ -1,4 +1,4 @@
-package com.skplanet.openapi.external.oauth;
+package com.skplanet.openapi.admin.oauth;
 
 public class OAuthVerifyResult {
 

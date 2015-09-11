@@ -28,38 +28,35 @@ public class OAuthManager implements OAuthInterface {
 		}
 	});
 	
-	private OAuthAccountInfo accountInfo = null;
 	private OAuthClientInfo clientInfo = null;
-	
-	private OAuthAccount oauthAccount = null;
 	private OAuthAccessToken oauth = null;
-	private OAuthVerifyResult oauthVerifyResult = null;
 	
 	private String propertyPath = null;
 	
 	// url default setting
-	private String oauthAccountCreateUrl = "http://172.21.60.143:8080/oauth/admin/management/account/creation";
 	private String oauthAccessTokenUrl = "http://172.21.60.143:8080/oauth/service/accessToken";
-	private String oauthVerifyUrl = "http://172.21.60.143:8080/oauth/internal/v1/validation";
 	
-	@Override
-	public void setAccountInfo(OAuthAccountInfo accountInfo) {
-		this.accountInfo = accountInfo;
+	public OAuthManager() {
+		
+	}
+	
+	public OAuthManager(String clientId, String clientSecret) {
+		OAuthClientInfo oauthClientInfo = new OAuthClientInfo();
+		oauthClientInfo.setClientId(clientId);
+		oauthClientInfo.setClientSecret(clientSecret);
+		this.clientInfo = oauthClientInfo;
 	}
 	
 	@Override
-	public void setClientInfo(OAuthClientInfo clientInfo) {
-		this.clientInfo = clientInfo;
-	}
-	
-	@Override
-	public boolean createOAuthAccessToken() {
+	public OAuthAccessToken createAccessToken() throws OAuthManagingException {
 		
-		if (clientInfo == null)
-			return false;
-		
-		if (!clientInfo.validateClientInfo())
-			return false;
+		if (clientInfo == null) {
+			throw new OAuthManagingException(OAuthManaging.OAUTH_OBJECT_NULL, "Client info is null!!");
+		}
+
+		if (!clientInfo.validateClientInfo()) {
+			throw new OAuthManagingException(OAuthManaging.INVALID_PARAMETER, "Client info is invalid!!");
+		}
 		
 		Map<String, String> data = new HashMap<String, String>();
 		data.put(clientInfo.GRANT_TYPE, clientInfo.getGrantType());
@@ -83,101 +80,15 @@ public class OAuthManager implements OAuthInterface {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public boolean createOAuthAccount() {
-		
-		if (accountInfo == null) {
-			return false;
+			throw new OAuthManagingException(OAuthManaging.OAUTH_HTTP_REQUEST_FAIL, "OAUTH http request is failure!!");
 		}
 		
-		if (!accountInfo.validateAccountInfo()) {
-			return false;
-		}
-		
-		String response = null;
-		OAuthHttpRequest httpRequest = new OAuthHttpRequest();
-		ObjectMapper objectMapper = new ObjectMapper();
-		
-		try {
-			String accountJsonString = objectMapper.writeValueAsString(accountInfo);
-			httpRequest.setCallUrl(oauthAccountCreateUrl);
-			httpRequest.setParam(accountJsonString);
-			
-			Future<String> future = jobExecutor.submit(httpRequest);
-			response = future.get();
-			
-			System.out.println("Post response : " + response);
-			if (response != null) {
-				objectMapper = new ObjectMapper();
-				oauthAccount = objectMapper.readValue(response, OAuthAccount.class);
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		} 
-		
-		return true;
-	}
-
-	@Override
-	public boolean verifyOAuthToken(String ipAddress) {
-		
-		if (oauth == null)
-			return false;
-		
-		Map<String, String> verifyData = new HashMap<String, String>();
-		verifyData.put("ipAddress", "172.21.60.143");
-		verifyData.put("apiId", oauth.getScope().split(" ")[0]);
-		verifyData.put("accessToken", oauth.getAccessToken());
-		
-		ObjectMapper objectMapper = new ObjectMapper();
-		OAuthHttpRequest httpRequest = new OAuthHttpRequest();
-		
-		try {
-			String requestJson = null;
-			requestJson = objectMapper.writeValueAsString(verifyData);
-			
-			httpRequest.setCallUrl(oauthVerifyUrl);
-			httpRequest.setParam(requestJson);
-			
-			Future<String> future = jobExecutor.submit(httpRequest);
-			String response = future.get();			
-			
-			if (response != null) {
-				oauthVerifyResult = objectMapper.readValue(response, OAuthVerifyResult.class);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
-		
-	@Override
-	public OAuthAccessToken getOAuthToken() throws OAuthManagingException {
-		if (oauth == null)
-			throw new OAuthManagingException(OAuthManaging.OAUTH_OBJECT_NULL, "OAuth object is null");
-		return this.oauth;
-	}
+		return oauth;
+	}	
 	
 	@Override
-	public OAuthVerifyResult getOAuthVerifyResult() throws OAuthManagingException {
-		if (oauthVerifyResult == null)
-			throw new OAuthManagingException(OAuthManaging.OAUTH_OBJECT_NULL, "OAuth object is null");
-		return oauthVerifyResult;
-	}
-	
-	@Override
-	public OAuthAccount getOAuthAccount() throws OAuthManagingException {
-		if (oauthAccount == null)
-			throw new OAuthManagingException(OAuthManaging.OAUTH_OBJECT_NULL, "OAuth object is null");
-		return oauthAccount;
+	public void setClientInfo(OAuthClientInfo clientInfo) {
+		this.clientInfo = clientInfo;
 	}
 	
 	private Map<String, String> getOAuthHttpRequestHeader() {
@@ -207,9 +118,7 @@ public class OAuthManager implements OAuthInterface {
 			fis = new FileInputStream(propertyPath);
 			props.load(new BufferedInputStream(fis));
 			
-			oauthAccountCreateUrl = props.getProperty("oauth.account_create_url");
 			oauthAccessTokenUrl = props.getProperty("oauth.token_create_url");
-			oauthVerifyUrl = props.getProperty("oauth.token_verify_url");
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new OAuthManagingException(OAuthManaging.UNKNOWN_ERROR, "File creation is incorect!!");

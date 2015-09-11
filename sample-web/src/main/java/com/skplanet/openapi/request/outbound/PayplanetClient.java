@@ -64,16 +64,13 @@ public class PayplanetClient {
 		oauthClientInfo.setClientId("84xK38rx9iCrFRJVOynsRA0MT0o3LTs83OqDLEJf5g0=");
 		oauthClientInfo.setClientSecret("GS1qrhoHMJWpmS6QwLNaG5NcFWFqzh5TrmY5476a2nA=");
 		oauthClientInfo.setGrantType("client_credentials");
-		
 		oauthManager.setClientInfo(oauthClientInfo);
-		if (oauthManager.createOAuthAccessToken()) {
-			accessToken = oauthManager.getOAuthToken().getAccessToken();
-		}
+		accessToken = oauthManager.createAccessToken().getAccessToken();
 		
 		Map<String,String> paramMap = getBulkPayParamMap(processingCount, path, accessToken);
 		String response = bulkPayManager.createFilePayment(paramMap);
 		
-		return response;		
+		return response;
 	}
 	
 	public void insertBulkPaymentRequest(Map<String,String> param) throws Exception {
@@ -164,9 +161,8 @@ public class PayplanetClient {
 		oauthClientInfo.setGrantType("client_credentials");
 		
 		oauthManager.setClientInfo(oauthClientInfo);
-		if (oauthManager.createOAuthAccessToken()) {
-			accessToken = oauthManager.getOAuthToken().getAccessToken();
-		}
+		accessToken = oauthManager.createAccessToken().getAccessToken();
+		
 		return accessToken;
 	}
 	

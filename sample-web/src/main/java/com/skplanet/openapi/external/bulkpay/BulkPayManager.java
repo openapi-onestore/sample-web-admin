@@ -25,14 +25,14 @@ public class BulkPayManager implements BulkPayInterface {
 					return bulkPayThread;
 				}
 			});
-
+	
 	// Property values, uri is default setting
 	private String propertyPath = null;
 	private String fileJobUrl = "http://172.21.60.141/v1/payment/fileJob";
 	private String resultFileUrl = "http://172.21.60.141/v1/payment/job";
 	private String txidInfoUrl = "http://172.21.60.141/v1/payment/transaction";
 	private String refundUrl = "http://172.21.60.141/v1/payment/refund";
-
+	
 	@Override
 	public String createFilePayment(Map<String, String> paramMap)
 			throws BulkPayException {
@@ -136,7 +136,7 @@ public class BulkPayManager implements BulkPayInterface {
 		BulkPayPostTransaction bulkPayPostTransaction = new BulkPayPostTransaction(paramMap);
 		bulkPayPostTransaction.setCallUrl(refundUrl);
 		bulkPayPostTransaction.setJsonBody(jsonString);
-
+		
 		Future<String> future = jobExecutor.submit(bulkPayPostTransaction);
 
 		String result = null;

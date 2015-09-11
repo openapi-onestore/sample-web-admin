@@ -56,13 +56,14 @@ public class OpenApiManager {
 	 */
 	public void getOAuthAccessToken() {
 		try {
-			OAuthAccessToken accessToken = oauthManager.getOAuthToken();
+			OAuthAccessToken accessToken = oauthManager.createAccessToken();
 			oauthListener.onResponse(accessToken);
 		} catch (OAuthManagingException e) {
 			e.printStackTrace();
 			oauthListener.onError(e.getMessage());
 		}
 	}
+	
 	
 	
 	
