@@ -9,7 +9,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.skplanet.openapi.external.oauth.OAuthAccessToken;
 import com.skplanet.openapi.external.oauth.OAuthClientInfo;
-import com.skplanet.openapi.external.oauth.OAuthManager;
+import com.skplanet.openapi.external.oauth.OAuthManagerImpl;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -32,7 +32,7 @@ public class OAuthManagerTest {
 	@Test
 	public void getAccessToken() {
 		
-		OAuthManager oauthManager = new OAuthManager();
+		OAuthManagerImpl oauthManager = new OAuthManagerImpl();
 		oauthManager.setClientInfo(oauthClientInfo);
 		OAuthAccessToken oauth = null;
 		

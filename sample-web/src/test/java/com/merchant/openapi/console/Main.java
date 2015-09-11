@@ -2,13 +2,13 @@ package com.merchant.openapi.console;
 
 import java.io.File;
 
-import com.skplanet.openapi.external.bulkpay.OpenApiException;
-import com.skplanet.openapi.external.bulkpay.OpenApiManager;
-import com.skplanet.openapi.external.bulkpay.OpenApiManagerImpl;
 import com.skplanet.openapi.external.oauth.OAuthAccessToken;
 import com.skplanet.openapi.external.oauth.OAuthClientInfo;
-import com.skplanet.openapi.external.oauth.OAuthManager;
+import com.skplanet.openapi.external.oauth.OAuthManagerImpl;
 import com.skplanet.openapi.external.oauth.OAuthManagingException;
+import com.skplanet.openapi.external.payment.OpenApiException;
+import com.skplanet.openapi.external.payment.OpenApiManager;
+import com.skplanet.openapi.external.payment.OpenApiManagerImpl;
 import com.skplanet.openapi.vo.payment.FilePaymentResult;
 
 public class Main { 
@@ -23,7 +23,7 @@ public class Main {
 	}
 	
 	public static String getAccessToken() {
-		OAuthManager oauthManager = new OAuthManager(oauthClientInfo.getClientId(), oauthClientInfo.getClientSecret());
+		OAuthManagerImpl oauthManager = new OAuthManagerImpl(oauthClientInfo.getClientId(), oauthClientInfo.getClientSecret());
 		OAuthAccessToken accessToken = null;
 		try {
 			accessToken = oauthManager.createAccessToken();

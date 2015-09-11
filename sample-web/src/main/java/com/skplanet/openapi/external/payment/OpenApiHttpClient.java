@@ -1,12 +1,10 @@
-package com.skplanet.openapi.external.bulkpay;
+package com.skplanet.openapi.external.payment;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -29,7 +27,7 @@ import org.apache.http.message.AbstractHttpMessage;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-import com.skplanet.openapi.external.bulkpay.OpenApiException.OpenApi;
+import com.skplanet.openapi.external.payment.OpenApiException.OpenApi;
 
 public class OpenApiHttpClient {
 	private StatusLine statusLine;

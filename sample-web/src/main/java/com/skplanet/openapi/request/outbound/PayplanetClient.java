@@ -17,10 +17,10 @@ import org.springframework.stereotype.Component;
 
 import com.skplanet.openapi.dao.BulkJobDAO;
 import com.skplanet.openapi.dao.NotificationDAO;
-import com.skplanet.openapi.external.bulkpay.OpenApiManagerImpl;
-import com.skplanet.openapi.external.notification.NotiManager;
+import com.skplanet.openapi.external.notification.NotiManagerImpl;
 import com.skplanet.openapi.external.oauth.OAuthClientInfo;
-import com.skplanet.openapi.external.oauth.OAuthManager;
+import com.skplanet.openapi.external.oauth.OAuthManagerImpl;
+import com.skplanet.openapi.external.payment.OpenApiManagerImpl;
 import com.skplanet.openapi.vo.NotificationResult;
 import com.skplanet.openapi.vo.payment.FilePaymentResult;
 import com.skplanet.openapi.vo.payment.Payer;
@@ -42,9 +42,9 @@ public class PayplanetClient {
 	@Autowired
 	private NotificationDAO notificationDAO;
 	
-	private OAuthManager oauthManager = new OAuthManager();
+	private OAuthManagerImpl oauthManager = new OAuthManagerImpl();
 	private OpenApiManagerImpl openApiManager = new OpenApiManagerImpl();
-	private NotiManager notiManager = new NotiManager();
+	private NotiManagerImpl notiManagerImpl = new NotiManagerImpl();
 	
 	private ObjectMapper objectMapper = new ObjectMapper();
 	
@@ -56,7 +56,7 @@ public class PayplanetClient {
 	
 	public String verify(Map<String,String> param) throws Exception {
 		logger.debug("verify() called");
-		String result = notiManager.requestNotificationVerification(param);
+		String result = notiManagerImpl.requestNotificationVerification(param);
 		
 		return result;
 	}

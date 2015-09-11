@@ -1,10 +1,10 @@
-package com.skplanet.openapi.external.bulkpay;
+package com.skplanet.openapi.external.payment;
 
 import java.io.File;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-import com.skplanet.openapi.external.bulkpay.OpenApiException.OpenApi;
+import com.skplanet.openapi.external.payment.OpenApiException.OpenApi;
 
 public class OpenApiGetFileTransaction implements Callable<File> {
 

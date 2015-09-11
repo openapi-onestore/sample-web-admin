@@ -1,4 +1,4 @@
-package com.skplanet.openapi.external.bulkpay;
+package com.skplanet.openapi.external.payment;
 
 
 public class OpenApiException extends Exception {

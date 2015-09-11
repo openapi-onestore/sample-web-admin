@@ -1,4 +1,4 @@
-package com.skplanet.openapi.external.bulkpay;
+package com.skplanet.openapi.external.payment;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadFactory;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
-import com.skplanet.openapi.external.bulkpay.OpenApiException.OpenApi;
+import com.skplanet.openapi.external.payment.OpenApiException.OpenApi;
 import com.skplanet.openapi.vo.payment.FilePaymentResult;
 import com.skplanet.openapi.vo.payment.TransactionDetail;
 import com.skplanet.openapi.vo.refund.CancelRequest;
@@ -37,7 +37,7 @@ public class OpenApiManagerImpl implements OpenApiManager{
 	
 	// Property values, uri is default setting
 	private String propertyPath = null;
-	private String fileWritePath = "";
+	private String fileWritePath = "D:/samplefolder/bulkfile";
 	private String fileJobUrl = "http://172.21.60.141/v1/payment/fileJob";
 	private String resultFileUrl = "http://172.21.60.141/v1/payment/job";
 	private String txidInfoUrl = "http://172.21.60.141/v1/payment/transaction";
@@ -78,6 +78,7 @@ public class OpenApiManagerImpl implements OpenApiManager{
 		
 		OpenApiGetFileTransaction openApiGetFileTransaction = new OpenApiGetFileTransaction(paramMap);
 		openApiGetFileTransaction.setCallUrl(resultFileUrl.concat("/" + jobId + "?signCode=" + verifySign));
+		openApiGetFileTransaction.setFileWritePath(fileWritePath);
 
 		Future<File> future = jobExecutor.submit(openApiGetFileTransaction);
 		
@@ -85,7 +86,7 @@ public class OpenApiManagerImpl implements OpenApiManager{
 			resultFile = future.get();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new OpenApiException(OpenApi.OPENAPI_JOB_EXECUTE_ERROR,"{'reason':'Transaction job execute failed'}");
+			throw new OpenApiException(OpenApi.OPENAPI_JOB_EXECUTE_ERROR, e.getMessage());
 		}
 		
 		return resultFile;
@@ -111,8 +112,7 @@ public class OpenApiManagerImpl implements OpenApiManager{
 			transactionDetail = objectMapper.readValue(result, TransactionDetail.class);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new OpenApiException(OpenApi.OPENAPI_JOB_EXECUTE_ERROR,
-					"{'reason':'Transaction job execute failed'}");
+			throw new OpenApiException(OpenApi.OPENAPI_JOB_EXECUTE_ERROR, e.getMessage());
 		}
 		
 		return transactionDetail;
@@ -148,8 +148,7 @@ public class OpenApiManagerImpl implements OpenApiManager{
 		Properties props = new Properties();
 		
 		if (propertyPath == null) {
-			throw new OpenApiException(OpenApi.OPENAPI_PROPERTY_SETTING_ERROR,
-					"Property path is null");
+			throw new OpenApiException(OpenApi.OPENAPI_PROPERTY_SETTING_ERROR, "Property path is null");
 		}
 		
 		FileInputStream fis = null;
@@ -165,8 +164,7 @@ public class OpenApiManagerImpl implements OpenApiManager{
 			refundUrl = props.getProperty("openapi.refund_url");
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new OpenApiException(OpenApi.OPENAPI_PROPERTY_SETTING_ERROR,
-					"File creation is incorect!!");
+			throw new OpenApiException(OpenApi.OPENAPI_PROPERTY_SETTING_ERROR, "File creation is incorect!!");
 		} finally {
 			fis.close();
 		}
