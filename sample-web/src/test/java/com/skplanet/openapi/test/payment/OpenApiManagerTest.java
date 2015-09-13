@@ -22,6 +22,12 @@ import com.skplanet.openapi.external.payment.OpenApiManager;
 import com.skplanet.openapi.external.payment.OpenApiManagerImpl;
 import com.skplanet.openapi.vo.payment.FilePaymentHeader;
 import com.skplanet.openapi.vo.payment.FilePaymentResult;
+import com.skplanet.openapi.vo.payment.Payer;
+import com.skplanet.openapi.vo.payment.PaymentMethods;
+import com.skplanet.openapi.vo.payment.TransactionDetail;
+import com.skplanet.openapi.vo.refund.CancelRequest;
+import com.skplanet.openapi.vo.refund.CancelResponse;
+import com.skplanet.openapi.vo.refund.RefundTransactionRequest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"file:src/main/webapp/WEB-INF/web.xml",
@@ -30,12 +36,15 @@ import com.skplanet.openapi.vo.payment.FilePaymentResult;
 		})
 public class OpenApiManagerTest {
 
+	private ObjectMapper objectMapper;
 	private OAuthManager oauthManager;
 	private OAuthClientInfo oauthClientInfo;
 	private String accessToken;
 	
 	@Before
 	public void setUp() {
+		objectMapper = new ObjectMapper();
+		
 		oauthClientInfo = new OAuthClientInfo();
 		oauthClientInfo.setClientId("84xK38rx9iCrFRJVOynsRA0MT0o3LTs83OqDLEJf5g0=");
 		oauthClientInfo.setClientSecret("GS1qrhoHMJWpmS6QwLNaG5NcFWFqzh5TrmY5476a2nA=");
@@ -84,8 +93,76 @@ public class OpenApiManagerTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@Test
+	public void getResultFileFromPaymentTest() {
+		
+		OpenApiManager openApiManager = new OpenApiManagerImpl();
+		
+		File file = null;
+		
+		try {
+			file = openApiManager.getFilePaymentJobStatus("69", "ABCD", accessToken);
+		} catch (OpenApiException e) {
+			e.printStackTrace();
+		}
+		
+		Assert.assertNotNull(file);
+		
+		
 		
 	}
+	
+	@Test
+	public void getTransactionDetailTest() {
+		OpenApiManager openApiManager = new OpenApiManagerImpl();
+		TransactionDetail transactionDetail = null;
+		
+		try {
+			transactionDetail = openApiManager.getPaymentTransactionDetail("TSTORE0004_20150731175443017804817193658", accessToken);
+			System.out.println(objectMapper.writeValueAsString(transactionDetail));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		Assert.assertNotNull(transactionDetail);
+	}
+	
+	
+	public void cancelPaymentTransactionTest() {
+		OpenApiManager openApiManager = new OpenApiManagerImpl();
+		
+		Payer payer = new Payer();
+		payer.setAuthkey("AUTHKEY");
+		
+		PaymentMethods paymentMethods = new PaymentMethods();
+		paymentMethods.setAmount(1000);
+		paymentMethods.setPaymentMethod("11");
+		
+		RefundTransactionRequest refundTransactionRequest = new RefundTransactionRequest();
+		refundTransactionRequest.setAmount(1000);
+		refundTransactionRequest.setFullRefund(true);
+		refundTransactionRequest.setNote("member want to get a refund");
+		refundTransactionRequest.setTid("TSTORE0004_20150731175443017804817193658");
+		
+		CancelRequest cancelRequest = new CancelRequest();
+		cancelRequest.setPayer(payer);
+		cancelRequest.setRefundTransactionRequest(refundTransactionRequest);
+		
+		CancelResponse cancelResponse = null;
+		
+		try {
+			cancelResponse = openApiManager.cancelPaymentTransaction(cancelRequest, accessToken);
+			System.out.println(objectMapper.writeValueAsString(cancelResponse));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		Assert.assertNotNull(cancelResponse);
+	}
+	
+	
 	
 	
 }

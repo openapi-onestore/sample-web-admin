@@ -58,7 +58,10 @@ public class OpenApiManagerImpl implements OpenApiManager{
 		headerMap.put("postbackUrl", filePaymentHeader.getPostbackUrl());
 		headerMap.put("cntTotalTrans", filePaymentHeader.getCntTotalTrans());
 		headerMap.put("priority", filePaymentHeader.getPrioity());
-		headerMap.put("Authorization", "Bearer " + accessToken);
+//		headerMap.put("Authorization", "Bearer " + accessToken);
+		headerMap.put("accessToken", accessToken);
+		
+		System.out.println(headerMap);
 		
 		OpenApiPostTransaction openApiPostTransaction = new OpenApiPostTransaction(file);
 		openApiPostTransaction.setParamMap(headerMap);

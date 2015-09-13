@@ -6,10 +6,14 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -39,6 +43,7 @@ public class OpenApiHttpClient {
 
 	private void addHeaders(AbstractHttpMessage httpMessage) {
 		for (String key : headers.keySet()) {
+			System.out.println(key + " --- " + headers.get(key));
 			httpMessage.setHeader(key, headers.get(key));
 		}
 	}
@@ -61,8 +66,9 @@ public class OpenApiHttpClient {
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		HttpGet httpGet = new HttpGet(url);
 		addHeaders(httpGet);
-		
-		File file = null;
+
+		String path = fileWritePath + "/" + getFileName();
+		File resultFile = new File(path);
 		CloseableHttpResponse response = httpclient.execute(httpGet);		
 		
 		try {
@@ -70,8 +76,7 @@ public class OpenApiHttpClient {
 			HttpEntity httpEntity = response.getEntity();
 			
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpEntity.getContent(), Charset.forName("UTF-8")));
-			file = new File(fileWritePath);
-			FileWriter fileWriter = new FileWriter(file);
+			FileWriter fileWriter = new FileWriter(resultFile);
 			
 			String buffer = null;
 			while( (buffer=bufferedReader.readLine()) != null) {
@@ -85,7 +90,7 @@ public class OpenApiHttpClient {
 		} finally {
 			response.close();
 		}
-		return file;
+		return resultFile;
 	}
 	
 	public String post(String url, Map<String, String> data) throws Exception {
@@ -164,10 +169,6 @@ public class OpenApiHttpClient {
 		}
 	}
 
-	private void setStatusLine(StatusLine statusLine) {
-		this.statusLine = statusLine;
-	}
-
 	public String getStatus() {
 		if (statusLine != null) {
 			return statusLine.toString();
@@ -175,4 +176,17 @@ public class OpenApiHttpClient {
 			return null;
 		}
 	}
+	
+	private void setStatusLine(StatusLine statusLine) {
+		this.statusLine = statusLine;
+	}
+
+	private String getFileName() {
+		SimpleDateFormat formatter = new SimpleDateFormat ( "yyyyMMdd-HHmmss", Locale.KOREA );
+		Date currentTime = new Date ( );
+		String dTime = formatter.format ( currentTime );
+		
+		return dTime + UUID.randomUUID().toString();
+	}
+	
 }
