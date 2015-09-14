@@ -72,6 +72,7 @@ public class OpenApiManagerImpl implements OpenApiManager{
 		
 		try {
 			String result = future.get();
+			System.out.println("Create file payment : " + result);
 			FilePaymentResult filePaymentResult = objectMapper.readValue(result, FilePaymentResult.class);
 			return filePaymentResult;
 		} catch (Exception e) {

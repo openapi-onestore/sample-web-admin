@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.skplanet.openapi.service.PaymentService;
 import com.skplanet.openapi.vo.NotificationResult;
+import com.skplanet.openapi.vo.payment.FilePaymentResult;
 
 @Controller
 @RequestMapping("/payment")
@@ -32,10 +33,10 @@ public class PaymentController {
 	
 	@RequestMapping(value = "/request", method = RequestMethod.GET)
 	@ResponseBody
-	public List<Map<String, String>> requestBulkJobReqList() {
+	public List<Map<String, String>> requestFilePaymentReqList() {
 		
-		logger.debug("Request BulkJobRequestList ");		
-		List<Map<String, String>> result = paymentService.requestBulkJobRequestList();
+		logger.debug("Request FilePaymentRequestList ");		
+		List<Map<String, String>> result = paymentService.requestFilePaymentRequestList();
 		
 		return result;
 	}
@@ -44,15 +45,16 @@ public class PaymentController {
 	public String requestBulkJobUploadFromFile(
 			@RequestParam("bulkjob") MultipartFile request) {
 		
-		String result = paymentService.requestBulkJob(request);
+		FilePaymentResult filePaymentResult = paymentService.requestFilePayment(request);
+		String result = null;
 		
-		if (result.contains("SUCCESS")) {
+		if (filePaymentResult.getResultCode().equals("0000")) {
 			// bulkJob file upload success
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HH:mm");
-			result += "&upload_file=" + request.getOriginalFilename() + "&upload_date=" + sdf.format(Calendar.getInstance().getTime());
-			result = paymentService.requestBulkJobRequest(result);
+			result += "upload_file=" + request.getOriginalFilename() + "&upload_date=" + sdf.format(Calendar.getInstance().getTime());
+			result = paymentService.requestFilePaymentRequest(filePaymentResult, result);
 		} else {
-			result = "bulkJobUpload fail. please upload your file";
+			result = "File payment request failure. code : " + filePaymentResult.getResultCode() + " reason : " + filePaymentResult.getResultMsg();
 		}
 		
 		return "redirect:../admin/main?uploadResult="+result;
@@ -76,7 +78,7 @@ public class PaymentController {
 		
 		System.out.println(hashMap);
 		
-		result = paymentService.requestBulkJobResultFile(hashMap);
+		result = paymentService.requestFilePaymentResultFile(hashMap);
 		
 		String[] resultRow = result.split("\n");
 		if (resultRow.length >= 100) {

@@ -13,9 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class BulkJobDAOImpl extends SqlSessionDaoSupport implements BulkJobDAO {
+public class FilePaymentDAOImpl extends SqlSessionDaoSupport implements FilePaymentDAO {
 
-	private static final Logger logger = LoggerFactory.getLogger(BulkJobDAOImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(FilePaymentDAOImpl.class);
 	
 	@Resource(name="sqlSessionFactory")
 	public void setSuperSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
@@ -27,39 +27,40 @@ public class BulkJobDAOImpl extends SqlSessionDaoSupport implements BulkJobDAO {
 		super.setSqlSessionTemplate(sqlSessionTemplate);
 	}
 	
-	public List<Map<String, String>> selectBulkJob(Map<String, String> param) {
+	public List<Map<String, String>> selectFilePayment(Map<String, String> param) {
 		
 		List<Map<String,String>> result = null;
 		
 		try {
-			result = getSqlSession().selectList("bulkJob.selectBulkJob", param);
+			result = getSqlSession().selectList("filePayment.selectFilePayment", param);
 		} catch(Exception e) {
-			logger.error("fail to load bulk job, error message : " + e.getMessage());
+			logger.error("fail to load file payment, error message : " + e.getMessage());
 		}
 		
 		return result;
 	}
 
 	@Override
-	public List<Map<String, String>> selectBulkJobRequest() {
+	public List<Map<String, String>> selectFilePaymentRequest() {
 		
 		List<Map<String,String>> result = null;
 		
 		try {
-			result = getSqlSession().selectList("bulkJobRequest.selectBulkJobRequest");
+			result = getSqlSession().selectList("filePaymentRequest.selectFilePaymentRequest");
+			System.out.println(result);
 		} catch(Exception e) {
-			logger.error("fail to load bulk job request, error message : " + e.getMessage());
+			logger.error("fail to load file payment request, error message : " + e.getMessage());
 		}
 		
 		return result;
 	}
 
 	@Override
-	public void addBulkJobRequest(Map<String, String> param) throws Exception {
+	public void insertFilePaymentRequest(Map<String, String> param) throws Exception {
 		try {
-			getSqlSession().insert("bulkJobRequest.insertBulkJobRequest", param);
+			getSqlSession().insert("filePaymentRequest.insertFilePaymentRequest", param);
 		} catch(Exception e) {
-			logger.error("fail to insert bulk job request, error message : " + e.getMessage());
+			logger.error("fail to insert file payment request, error message : " + e.getMessage());
 			throw new Exception();
 		}
 	}
@@ -67,9 +68,9 @@ public class BulkJobDAOImpl extends SqlSessionDaoSupport implements BulkJobDAO {
 	@Override
 	public void updateNotifiVerified(Map<String, String> param) throws Exception {
 		try {
-			getSqlSession().update("bulkJobRequest.updateNotificationVerify", param);
+			getSqlSession().update("filePaymentRequest.updateNotificationVerify", param);
 		} catch(Exception e) {
-			logger.error("fail to insert bulk job request, error message : " + e.getMessage());
+			logger.error("fail to insert file payment request, error message : " + e.getMessage());
 			throw new Exception();			
 		}
 	}

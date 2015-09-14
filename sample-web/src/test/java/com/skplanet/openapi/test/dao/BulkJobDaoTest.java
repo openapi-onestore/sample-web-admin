@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.skplanet.openapi.dao.BulkJobDAO;
+import com.skplanet.openapi.dao.FilePaymentDAO;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -23,7 +23,7 @@ import com.skplanet.openapi.dao.BulkJobDAO;
 public class BulkJobDaoTest {
 	
 	@Autowired
-	private BulkJobDAO bulkJobDAO;
+	private FilePaymentDAO filePaymentDAO;
 	
 	private Map<String, String> hashMap;
 	
@@ -38,7 +38,7 @@ public class BulkJobDaoTest {
 		hashMap.put("START_NO", "1");
 		hashMap.put("END_NO", "2");
 		
-		List<Map<String,String>> map = bulkJobDAO.selectBulkJob(hashMap);
+		List<Map<String,String>> map = filePaymentDAO.selectFilePayment(hashMap);
 		
 		Assert.assertEquals(map.size(), 2);
 		
@@ -69,21 +69,21 @@ public class BulkJobDaoTest {
 		hashMap.put("START_NO", "4");
 		hashMap.put("END_NO", "5");
 		
-		List<Map<String,String>> map = bulkJobDAO.selectBulkJob(hashMap);
+		List<Map<String,String>> map = filePaymentDAO.selectFilePayment(hashMap);
 		
 		Assert.assertEquals(map.size(), 0);
 	}
 	
 	@Test
 	public void getBulkJobRequest() {
-		List<Map<String,String>> map = bulkJobDAO.selectBulkJobRequest();
+		List<Map<String,String>> map = filePaymentDAO.selectFilePaymentRequest();
 		
 		Assert.assertEquals(1, map.size());
 	}
 	
 	@Test
 	public void insertBulkJobRequest() {
-		List<Map<String,String>> map = bulkJobDAO.selectBulkJobRequest();
+		List<Map<String,String>> map = filePaymentDAO.selectFilePaymentRequest();
 		
 		Assert.assertEquals(map.size(), 0);
 		
@@ -96,12 +96,12 @@ public class BulkJobDaoTest {
 		hashMap.put("upload_date", "20150511");
 		
 		try {
-			bulkJobDAO.addBulkJobRequest(hashMap);
+			filePaymentDAO.insertFilePaymentRequest(hashMap);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		map = bulkJobDAO.selectBulkJobRequest();
+		map = filePaymentDAO.selectFilePaymentRequest();
 		
 		Assert.assertEquals(1, map.size());
 		

@@ -1,6 +1,6 @@
 package com.skplanet.openapi.vo;
 
-public class BulkJob {
+public class FilePayment {
 
 	private String mid;
 	private String billingToken;

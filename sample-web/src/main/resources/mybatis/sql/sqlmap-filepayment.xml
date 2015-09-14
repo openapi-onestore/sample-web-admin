@@ -2,8 +2,8 @@
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="bulkJob">
-	<resultMap id="bulkJobMap" type="map">
+<mapper namespace="filePayment">
+	<resultMap id="filePaymentMap" type="map">
 		<result property="mid" column="mid" />
 		<result property="billingToken" column="billing_token" />
 		<result property="pid" column="product_id" />
@@ -15,8 +15,8 @@
 		<result property="amtTms" column="amt_tms" />
 	</resultMap>
 
-	<select id="selectBulkJob" parameterType="map" resultMap="bulkJobMap">
-		SELECT * FROM BULK_JOB_TABLE
+	<select id="selectFilePayment" parameterType="map" resultMap="filePaymentMap">
+		SELECT * FROM FILE_PAYMENT_TABLE
 		WHERE MID BETWEEN #{START_NO} AND #{END_NO}
 	</select>
 </mapper>

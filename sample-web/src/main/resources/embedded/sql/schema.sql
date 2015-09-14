@@ -1,4 +1,4 @@
-CREATE TABLE bulk_job_table (
+CREATE TABLE file_payment_table (
   `mid` varchar(45) NOT NULL,
   `billing_token` varchar(45) DEFAULT NULL,
   `product_id` varchar(45) DEFAULT NULL,
@@ -11,10 +11,11 @@ CREATE TABLE bulk_job_table (
   PRIMARY KEY (`mid`)
 );
 
-CREATE TABLE bulk_job_request (
+CREATE TABLE file_payment_request (
   `mid` bigint NOT NULL,
   `status` varchar(45) DEFAULT NULL,
-  `reason` varchar(45) DEFAULT NULL,
+  `result_code` varchar(10) DEFAULT NULL,
+  `result_msg` varchar(45) DEFAULT NULL,
   `waiting_jobs` varchar(45) DEFAULT NULL,
   `job_id` varchar(45) NOT NULL,
   `upload_file` varchar(45) DEFAULT NULL,
@@ -23,7 +24,7 @@ CREATE TABLE bulk_job_request (
   PRIMARY KEY (`mid`)
 );
 
-CREATE TABLE bulk_job_noti_result (
+CREATE TABLE file_payment_noti_result (
   `job_id` varchar(45) NOT NULL,
   `event` varchar(45) DEFAULT NULL,
   `status` varchar(20) DEFAULT NULL,
@@ -33,4 +34,4 @@ CREATE TABLE bulk_job_noti_result (
   PRIMARY KEY (`job_id`)
 );
 
-ALTER TABLE bulk_job_request ALTER COLUMN mid bigint AUTO_INCREMENT;
+ALTER TABLE file_payment_request ALTER COLUMN mid bigint AUTO_INCREMENT;

@@ -79,7 +79,7 @@ public class AdminController {
 		modelAndView.setViewName("admin_tid_info");
 		
 		if (tid == null) {
-			tid = "You don't transmit some file";
+			tid = "Please upload your file";
 			return modelAndView;
 		}
 				

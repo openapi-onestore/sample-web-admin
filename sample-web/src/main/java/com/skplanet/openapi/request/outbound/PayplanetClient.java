@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.skplanet.openapi.dao.BulkJobDAO;
+import com.skplanet.openapi.dao.FilePaymentDAO;
 import com.skplanet.openapi.dao.NotificationDAO;
 import com.skplanet.openapi.external.notification.NotiManagerImpl;
 import com.skplanet.openapi.external.oauth.OAuthClientInfo;
@@ -38,7 +38,7 @@ public class PayplanetClient {
 	private static final Logger logger = LoggerFactory.getLogger(PayplanetClient.class);
 	
 	@Autowired
-	private BulkJobDAO bulkJobDao;
+	private FilePaymentDAO filePaymentDAO;
 	
 	@Autowired
 	private NotificationDAO notificationDAO;
@@ -62,7 +62,7 @@ public class PayplanetClient {
 		return result;
 	}
 	
-	public String createBulkPayment(int processingCount, File requestFile) throws Exception {		
+	public FilePaymentResult createFilePayment(int processingCount, File requestFile) throws Exception {		
 		logger.debug("createBulkPayment() called");
 		
 		String accessToken = null;
@@ -76,17 +76,17 @@ public class PayplanetClient {
 		
 		FilePaymentResult filePaymentResult = openApiManager.createFilePayment(getFilepaymentHeader(processingCount), requestFile, accessToken);
 		
-		return objectMapper.writeValueAsString(filePaymentResult);
+		return filePaymentResult;
 	}
 	
-	public void insertBulkPaymentRequest(Map<String,String> param) throws Exception {
-		logger.debug("insertBulkPaymentRequest() called");
-		bulkJobDao.addBulkJobRequest(param);
+	public void insertFilePaymentRequest(Map<String,String> param) throws Exception {
+		logger.debug("insertFilePaymentRequest() called");
+		filePaymentDAO.insertFilePaymentRequest(param);
 	}
 	
-	public List<Map<String, String>> selectBulkJobRequest() throws Exception {
-		logger.debug("selectBulkJobRequest() called");
-		List<Map<String, String>> result = bulkJobDao.selectBulkJobRequest();
+	public List<Map<String, String>> selectFilePaymentRequest() throws Exception {
+		logger.debug("selectFilePaymentRequest() called");
+		List<Map<String, String>> result = filePaymentDAO.selectFilePaymentRequest();
 		return result;
 	}
 	
@@ -97,7 +97,7 @@ public class PayplanetClient {
 	
 	public void updateNotificationVerify(Map<String,String> param) throws Exception {
 		logger.debug("updateNotificationVerify() called");
-		bulkJobDao.updateNotifiVerified(param);
+		filePaymentDAO.updateNotifiVerified(param);
 	}
 	
 	public NotificationResult selectNotificationResult(Map<String,String> param) throws Exception {
@@ -121,8 +121,8 @@ public class PayplanetClient {
 		return notificationResult;
 	}
 	
-	public String getBulkJobResultFile(Map<String, String> param) throws Exception {
-		logger.debug("getBulkJobResultFile() called");		
+	public String getFilePaymentResultFile(Map<String, String> param) throws Exception {
+		logger.debug("getFilePaymentResultFile() called");		
 		String accessToken = getAccessTokenFromOauthManager();
 		String jobId = param.get("jobId");
 		String verifySign = param.get("verifySign");
@@ -201,7 +201,7 @@ public class PayplanetClient {
 		Payer payer = transactionDetail.getPayer();
 		PaymentMethods[] paymentMethods = paymentTransactionInfo.getPaymentMethods();
 		
-		// for making BulkJobRefund
+		// for making FilePaymentRefund
 		RefundTransactionRequest refundTransactionRequest = new RefundTransactionRequest();
 		refundTransactionRequest.setTid(paymentTransactionInfo.getTid());
 		refundTransactionRequest.setFullRefund(true);

@@ -1,10 +1,11 @@
 package com.skplanet.openapi.vo;
 
-public class BulkJobRequest {
+public class FilePaymentRequest {
 
 	private int mid;
 	private String status;
-	private String reason;
+	private String resultCode;
+	private String resultMsg;
 	private String waitingJob;
 	private String jobId;
 	private String uploadFile;
@@ -21,12 +22,6 @@ public class BulkJobRequest {
 	}
 	public void setStatus(String status) {
 		this.status = status;
-	}
-	public String getReason() {
-		return reason;
-	}
-	public void setReason(String reason) {
-		this.reason = reason;
 	}
 	public String getWaitingJob() {
 		return waitingJob;
@@ -52,5 +47,17 @@ public class BulkJobRequest {
 	public void setUploadDate(String uploadDate) {
 		this.uploadDate = uploadDate;
 	}
-
+	public String getResultCode() {
+		return resultCode;
+	}
+	public void setResultCode(String resultCode) {
+		this.resultCode = resultCode;
+	}
+	public String getResultMsg() {
+		return resultMsg;
+	}
+	public void setResultMsg(String resultMsg) {
+		this.resultMsg = resultMsg;
+	}
+	
 }

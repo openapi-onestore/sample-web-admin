@@ -45,7 +45,8 @@
 							var $rowHtml = $( "<tr>" +
 		    						"<td class='mid'></td>"+
 		    						"<td class='statusBtn'><button type = 'button' class='btn btn-sm'></button></td>"+
-		    						"<td class='reason'></td>" +
+		    						"<td class='resultCode'></td>" +
+		    						"<td class='resultMsg'></td>" +
 		    						"<td class='waitingJob'></td>" +
 		    						"<td><a class='jobId'><button type = 'button' class='btn btn-sm btn-link'/></a></td>" + 
 		    						"<td class='uploadFile'></td>" +
@@ -54,9 +55,9 @@
 								"</tr>" );
 							
 							$rowHtml.find( ".mid" ).html( data[ i ].mid );
-							$rowHtml.find( ".statusBtn>button" ).html( data[ i ].status ).addClass( ( data[ i ].status === "SUCCESS" ) ? "btn-success" : "btn-danger" );
-							
-							$rowHtml.find( ".reason" ).html( data[ i ].reason );
+							$rowHtml.find( ".statusBtn>button" ).html( data[ i ].status ).addClass( ( data[ i ].status === "SUCCESS" ) ? "btn-success" : "btn-danger" );							
+							$rowHtml.find( ".resultCode" ).html( data[ i ].reason );
+							$rowHtml.find( ".resultMsg" ).html( data[ i ].reason );							
 							$rowHtml.find( ".waitingJob" ).html( data[ i ].waitingJob );
 							$rowHtml.find( ".jobId" ).html(data[ i ].jobId);
 							$rowHtml.find( ".jobId" ).attr( "href", "http://172.21.60.143:8181/sample-web/openapi/admin/result/" + data[ i ].jobId );
@@ -146,7 +147,8 @@
               <tr>
                 <th>#</th>
                 <th>Req Status</th>
-                <th>Reason</th>
+                <th>Result Code</th>
+                <th>Result Msg</th>                
                 <th>Waiting jobs</th>
                 <th>Job id</th>
                 <th>Upload file</th>

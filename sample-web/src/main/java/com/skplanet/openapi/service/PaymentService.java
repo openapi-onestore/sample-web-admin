@@ -19,10 +19,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.skplanet.openapi.dao.BulkJobDAO;
+import com.skplanet.openapi.dao.FilePaymentDAO;
 import com.skplanet.openapi.request.outbound.PayplanetClient;
 import com.skplanet.openapi.vo.NotificationResult;
 import com.skplanet.openapi.vo.PaymentJobInfo;
+import com.skplanet.openapi.vo.payment.FilePaymentResult;
 import com.skplanet.openapi.vo.payment.TransactionDetail;
 
 @Service("paymentService")
@@ -35,7 +36,7 @@ public class PaymentService {
 	private String localSavingFolder;
 	
 	@Autowired
-	private BulkJobDAO bulkJobDAO;
+	private FilePaymentDAO filePaymentDAO;
 	
 	@Autowired
 	private PayplanetClient payplanetClient;
@@ -44,39 +45,47 @@ public class PaymentService {
 //			"billingToken", "pid", "pName", "orderNo", "amtReqPurchase",
 //			"amtCarrier", "amtCreditCard", "amtTms" });
 
-	public String requestBulkJob(MultipartFile multipartFile) {
-		String result = null;
-		File tmpFile = new File(getBulkfileFormat());
+	public FilePaymentResult requestFilePayment(MultipartFile multipartFile) {
+		FilePaymentResult filePaymentResult = null;
+		File tmpFile = new File(getFilePaymentFormat());
 		
 		try {
 			multipartFile.transferTo(tmpFile);
 			int processCount = countLines(tmpFile.getAbsolutePath());
 			PaymentJobInfo paymentJobInfo = new PaymentJobInfo(tmpFile.getAbsolutePath(), processCount);
-			result = payplanetClient.createBulkPayment(paymentJobInfo.getProcessingCount(), tmpFile);
+			filePaymentResult = payplanetClient.createFilePayment(paymentJobInfo.getProcessingCount(), tmpFile);
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		return result;
+		
+		return filePaymentResult;
 	}
 
-	public String requestBulkJobRequest(String params) {
+	public String requestFilePaymentRequest(FilePaymentResult filePaymentResult, String params) {
 		String result = null;
 
 		Map<String, String> param = new HashMap<String, String>();
-
+		logger.debug("Debug");
+		
+		// Upload date, filename parsing and add
 		String[] temp = params.split("&");
-
 		for (String temps : temp) {
 			String[] kvp = temps.split("=");
 			param.put(kvp[0].toLowerCase(), kvp[1]);
-			logger.debug(kvp[0] + " " + kvp[1]);
+			System.out.println(kvp[0] + " " + kvp[1]);
 		}
-
+		
+		param.put("status", "SUCCESS");
+		param.put("result_code", filePaymentResult.getResultCode());
+		param.put("result_msg", filePaymentResult.getResultMsg());
+		param.put("waiting_jobs", String.valueOf(filePaymentResult.getWaitingJobs()));
+		param.put("job_id", filePaymentResult.getJobId());
+		
 		try {
-			payplanetClient.insertBulkPaymentRequest(param);
+			System.out.println(param);
+			payplanetClient.insertFilePaymentRequest(param);
 			result = "result=SUCCESS";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -86,10 +95,10 @@ public class PaymentService {
 		return result;
 	}
 
-	public List<Map<String, String>> requestBulkJobRequestList() {
+	public List<Map<String, String>> requestFilePaymentRequestList() {
 		List<Map<String, String>> result = null;
 		try {
-			result = payplanetClient.selectBulkJobRequest();
+			result = payplanetClient.selectFilePaymentRequest();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -114,11 +123,11 @@ public class PaymentService {
 	 * @return String
 	 * TODO::get File method
 	 */
-	public String requestBulkJobResultFile(Map<String, String> param) {
+	public String requestFilePaymentResultFile(Map<String, String> param) {
 		String result = null;
 		
 		try {
-			result = payplanetClient.getBulkJobResultFile(param);
+			result = payplanetClient.getFilePaymentResultFile(param);
 			System.out.println(result);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -206,7 +215,7 @@ public class PaymentService {
 //		return new PaymentJobInfo(tmpFile.getAbsolutePath(), processingCount);
 //	}
 
-	private String getBulkfileFormat() {
+	private String getFilePaymentFormat() {
 		return String.format(Locale.getDefault(), "%s/%s.bulk",
 				localSavingFolder, UUID.randomUUID().toString());
 	}

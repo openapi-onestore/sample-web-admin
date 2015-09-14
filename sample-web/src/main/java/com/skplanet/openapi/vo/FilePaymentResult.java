@@ -1,6 +1,6 @@
 package com.skplanet.openapi.vo;
 
-public class BulkJobResult {
+public class FilePaymentResult {
 
 	private String version;
 	private String mid;
