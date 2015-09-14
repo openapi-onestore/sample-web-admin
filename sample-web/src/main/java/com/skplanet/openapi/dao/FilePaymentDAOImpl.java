@@ -57,6 +57,7 @@ public class FilePaymentDAOImpl extends SqlSessionDaoSupport implements FilePaym
 
 	@Override
 	public void insertFilePaymentRequest(Map<String, String> param) throws Exception {
+		System.out.println(param);
 		try {
 			getSqlSession().insert("filePaymentRequest.insertFilePaymentRequest", param);
 		} catch(Exception e) {

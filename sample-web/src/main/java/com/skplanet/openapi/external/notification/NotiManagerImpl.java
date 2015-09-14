@@ -26,26 +26,19 @@ public class NotiManagerImpl implements NotiManager {
 			return notiManagerThread;
 		}
 	});
+	private ObjectMapper objectMapper = new ObjectMapper();
 	
 	private String propertyPath = null;
 	private String verifyUrl = "http://172.21.60.142/openapi/v1/payment/notification/verify";
 	
 	@Override
-	public NotiReceive receiveNotificationFromServer(String result) throws NotiException {
-		
-		String[] splitResult = result.split("&");
-		Map<String, String> paramMap = new HashMap<String, String>();
-		
-		for (String results : splitResult) {
-			String[] temp = results.split("=");
-			paramMap.put(temp[0], temp[1]);
-		}
+	public NotiReceive receiveNotificationFromServer(String notificationResult) throws NotiException {
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		NotiReceive notiReceive = null;
 		
 		try {
-			notiReceive = objectMapper.readValue(objectMapper.writeValueAsString(paramMap),NotiReceive.class);
+			notiReceive = objectMapper.readValue(objectMapper.writeValueAsString(notificationResult),NotiReceive.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new NotiException(Noti.PARAMETER_PARSING_ERROR, "Json Parsing Error");
@@ -55,23 +48,34 @@ public class NotiManagerImpl implements NotiManager {
 	}
 	
 	@Override
-	public String requestNotificationVerification(Map<String, String> params) throws NotiException {
+	public NotiVerifyResult requestNotificationVerification(NotiReceive notiReceive, String listenerType) throws NotiException {
+		
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("listenerType", listenerType);
+		paramMap.put("notifyVersion", notiReceive.getNotifyVersion());
+		paramMap.put("event", notiReceive.getEvent());
+		paramMap.put("status", notiReceive.getStatus());
+		paramMap.put("jobId", notiReceive.getJobId());
+		paramMap.put("updateTime", notiReceive.getUpdateTime());
+		paramMap.put("verifySign", notiReceive.getVerifySign());
 		
 		NotiVerificationTransaction notiVerificationTransaction = new NotiVerificationTransaction();
-		notiVerificationTransaction.setParamMap(params);
+		notiVerificationTransaction.setParamMap(paramMap);
 		notiVerificationTransaction.setCallUrl(verifyUrl);
 		
 		Future<String> future = jobExecutor.submit(notiVerificationTransaction);
 		String result = null;
+		NotiVerifyResult notiVerifyResult = null;
 		
 		try {
 			result = future.get();
+			notiVerifyResult = objectMapper.readValue(result, NotiVerifyResult.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new NotiException(Noti.NOTI_JOB_EXECUTE_FAIL_ERROR, "NotificationVerification reuqest execute error");
 		}
 		
-		return result;
+		return notiVerifyResult;
 	}
 	
 	public void setPropertyFile(String path) throws Exception {

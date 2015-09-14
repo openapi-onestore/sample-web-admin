@@ -2,19 +2,18 @@ package com.skplanet.openapi.external.notification;
 
 public class NotiReceive {
 
-	private String notify_version;
+	private String notifyVersion;
 	private String event;
 	private String status;
-	private String reg_no;
-	private String job_Id;
-	private String update_time;
-	private String verify_sign;
+	private String jobId;
+	private String updateTime;
+	private String verifySign;
 	
-	public String getNotify_version() {
-		return notify_version;
+	public String getNotifyVersion() {
+		return notifyVersion;
 	}
-	public void setNotify_version(String notify_version) {
-		this.notify_version = notify_version;
+	public void setNotifyVersion(String notifyVersion) {
+		this.notifyVersion = notifyVersion;
 	}
 	public String getEvent() {
 		return event;
@@ -28,29 +27,23 @@ public class NotiReceive {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public String getReg_no() {
-		return reg_no;
+	public String getJobId() {
+		return jobId;
 	}
-	public void setReg_no(String reg_no) {
-		this.reg_no = reg_no;
+	public void setJobId(String jobId) {
+		this.jobId = jobId;
 	}
-	public String getJob_Id() {
-		return job_Id;
+	public String getUpdateTime() {
+		return updateTime;
 	}
-	public void setJob_Id(String job_Id) {
-		this.job_Id = job_Id;
+	public void setUpdateTime(String updateTime) {
+		this.updateTime = updateTime;
 	}
-	public String getUpdate_time() {
-		return update_time;
+	public String getVerifySign() {
+		return verifySign;
 	}
-	public void setUpdate_time(String update_time) {
-		this.update_time = update_time;
-	}
-	public String getVerify_sign() {
-		return verify_sign;
-	}
-	public void setVerify_sign(String verify_sign) {
-		this.verify_sign = verify_sign;
+	public void setVerifySign(String verifySign) {
+		this.verifySign = verifySign;
 	}
 	
 }

@@ -16,7 +16,10 @@ import org.springframework.stereotype.Component;
 
 import com.skplanet.openapi.dao.FilePaymentDAO;
 import com.skplanet.openapi.dao.NotificationDAO;
+import com.skplanet.openapi.external.notification.NotiException;
 import com.skplanet.openapi.external.notification.NotiManagerImpl;
+import com.skplanet.openapi.external.notification.NotiReceive;
+import com.skplanet.openapi.external.notification.NotiVerifyResult;
 import com.skplanet.openapi.external.oauth.OAuthClientInfo;
 import com.skplanet.openapi.external.oauth.OAuthManagerImpl;
 import com.skplanet.openapi.external.payment.OpenApiManagerImpl;
@@ -54,13 +57,6 @@ public class PayplanetClient {
 	
 //	@Autowired
 //	private OutBoundRequestHandler<Map<String,String>,String> outRequestHandler;
-	
-	public String verify(Map<String,String> param) throws Exception {
-		logger.debug("verify() called");
-		String result = notiManagerImpl.requestNotificationVerification(param);
-		
-		return result;
-	}
 	
 	public FilePaymentResult createFilePayment(int processingCount, File requestFile) throws Exception {		
 		logger.debug("createBulkPayment() called");
@@ -163,6 +159,30 @@ public class PayplanetClient {
 		return objectMapper.writeValueAsString(cancelResponse);
 	}
 	
+	public NotiReceive getNotiReceive(String notification) throws Exception{
+		NotiReceive notiReceive = null;
+		
+		try {
+			notiReceive = notiManagerImpl.receiveNotificationFromServer(notification);
+		} catch (NotiException e) {
+			e.printStackTrace();
+		}
+		return notiReceive;
+	}
+	
+	public String getNotificationVerifyResult(NotiReceive notiReceive, String listenerType) {
+		NotiVerifyResult notiVerifyResult = null;
+		String result = null;
+		
+		try {
+			notiVerifyResult = notiManagerImpl.requestNotificationVerification(notiReceive, listenerType);
+			result = objectMapper.writeValueAsString(notiVerifyResult);			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
 	private FilePaymentHeader getFilepaymentHeader(int processingCount) {
 		FilePaymentHeader filePaymentHeader = new FilePaymentHeader();
 		filePaymentHeader.setVerBulkPay("1");
@@ -223,4 +243,5 @@ public class PayplanetClient {
 		
 		return cancelRequest;
 	}
+	
 }

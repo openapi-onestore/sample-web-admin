@@ -13,11 +13,11 @@
 	</resultMap>
 	
 	<select id="selectNotificationResult" parameterType="map" resultMap="notificationResultMap">
-		SELECT * FROM BULK_JOB_NOTI_RESULT
+		SELECT * FROM FILE_PAYMENT_NOTI_RESULT
 		WHERE JOB_ID=#{jobId}
 	</select>
 	
 	<insert id="insertNotificationResult" parameterType="map">
-		INSERT INTO BULK_JOB_NOTI_RESULT VALUES(#{jobId}, #{event}, #{status}, #{verifySign}, #{updateTime}, #{notifyVersion})
+		INSERT INTO FILE_PAYMENT_NOTI_RESULT VALUES(#{jobId}, #{event}, #{status}, #{verifySign}, #{updateTime}, #{notifyVersion})
 	</insert>
 </mapper>

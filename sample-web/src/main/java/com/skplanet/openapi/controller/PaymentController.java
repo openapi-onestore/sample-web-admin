@@ -51,7 +51,7 @@ public class PaymentController {
 		if (filePaymentResult.getResultCode().equals("0000")) {
 			// bulkJob file upload success
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HH:mm");
-			result += "upload_file=" + request.getOriginalFilename() + "&upload_date=" + sdf.format(Calendar.getInstance().getTime());
+			result = "upload_file=" + request.getOriginalFilename() + "&upload_date=" + sdf.format(Calendar.getInstance().getTime());
 			result = paymentService.requestFilePaymentRequest(filePaymentResult, result);
 		} else {
 			result = "File payment request failure. code : " + filePaymentResult.getResultCode() + " reason : " + filePaymentResult.getResultMsg();

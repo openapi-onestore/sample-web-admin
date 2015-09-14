@@ -53,13 +53,13 @@
 		    						"<td class='uploadDate'></td>" +
 		    						"<td class='verifyMessage'></td>" +
 								"</tr>" );
-							
+							console.log( data[i].resultCode);
 							$rowHtml.find( ".mid" ).html( data[ i ].mid );
 							$rowHtml.find( ".statusBtn>button" ).html( data[ i ].status ).addClass( ( data[ i ].status === "SUCCESS" ) ? "btn-success" : "btn-danger" );							
-							$rowHtml.find( ".resultCode" ).html( data[ i ].reason );
-							$rowHtml.find( ".resultMsg" ).html( data[ i ].reason );							
+							$rowHtml.find( ".resultCode" ).html( data[ i ].resultCode );
+							$rowHtml.find( ".resultMsg" ).html( data[ i ].resultMsg );							
 							$rowHtml.find( ".waitingJob" ).html( data[ i ].waitingJob );
-							$rowHtml.find( ".jobId" ).html(data[ i ].jobId);
+							$rowHtml.find( ".jobId" ).html(data[ i ].jobId );
 							$rowHtml.find( ".jobId" ).attr( "href", "http://172.21.60.143:8181/sample-web/openapi/admin/result/" + data[ i ].jobId );
 							$rowHtml.find( ".uploadFile" ).html( data[ i ].uploadFile );
 							$rowHtml.find( ".uploadDate" ).html( data[ i ].uploadDate );

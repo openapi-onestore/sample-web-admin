@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.skplanet.openapi.external.notification.NotiVerifyResult;
 import com.skplanet.openapi.request.inbound.InBoundRequestHandler;
 import com.skplanet.openapi.service.NotificationService;
+import com.skplanet.openapi.vo.NotificationResult;
 
 @Controller
 @RequestMapping("/notification")
@@ -28,26 +30,16 @@ public class NotificationController {
 	
 	@RequestMapping(value = "/noti_listener", method = RequestMethod.POST)
 	@ResponseBody
-	public String notiListener(@RequestParam Map<String,String> data) {
-		logger.debug("Notification original Data : " + data.toString());
+	public String notiListener(@RequestParam String notificationResult) {
+		
+		System.out.println("Notification original Data : " + notificationResult);
 		
 		String result = null;
 		try {
 			// TODO request param parse
 			logger.debug("Notification received!");
-			result = notificationService.processNoti(data);
+			result = notificationService.processNoti(notificationResult);
 			// TODO 200 OK
-			logger.debug("Notification verify : " + result);
-			if (result.equals("VERIFIED")) {
-				data.put("verifyResult", result);
-				System.out.println("noti received : " + data);
-				
-				notificationService.requestNotificationResult(data);				
-				notificationService.requestNotificationVerify(data);
-			} else {
-				// TODO when notification is not verified?
-				
-			}
 			
 			return result;
 		} catch (Exception e) {

@@ -1,10 +1,9 @@
 package com.skplanet.openapi.external.notification;
 
-import java.util.Map;
 
 public interface NotiManager {
 
-	NotiReceive receiveNotificationFromServer(String result) throws NotiException;
-	String requestNotificationVerification(Map<String,String> params) throws NotiException;
+	NotiReceive receiveNotificationFromServer(String notificationResult) throws NotiException;
+	NotiVerifyResult requestNotificationVerification(NotiReceive notificationResult, String listenerType) throws NotiException;
 	
 }
