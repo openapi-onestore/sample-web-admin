@@ -111,15 +111,15 @@ public class PaymentController {
 		Map<String, String> hashMap = new HashMap<String, String>();
 		hashMap.put("tid", tid);
 		
-		String tidInfo = paymentService.requestTidInformation(hashMap);
+		String transactionInfo = paymentService.requestTidInformation(hashMap);
 		String result = null;
 		
-		if (tidInfo.startsWith("result=FAIL")) {
+		if (transactionInfo.startsWith("result=FAIL")) {
 			return "Tid information request is failure";
 		}
 		
 		hashMap.clear();
-		hashMap.put("tidInfo", tidInfo);
+		hashMap.put("transactionInfo", transactionInfo);
 		
 		result = paymentService.requestRefund(hashMap);
 		

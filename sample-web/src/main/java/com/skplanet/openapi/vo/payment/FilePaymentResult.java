@@ -4,7 +4,7 @@ public class FilePaymentResult {
 
 	private String resultCode;
 	private String resultMsg;
-	private int watingJobs;
+	private int waitingJobs;
 	private String jobId;
 	
 	public String getResultCode() {
@@ -19,11 +19,11 @@ public class FilePaymentResult {
 	public void setResultMsg(String resultMsg) {
 		this.resultMsg = resultMsg;
 	}
-	public int getWatingJobs() {
-		return watingJobs;
+	public int getWaitingJobs() {
+		return waitingJobs;
 	}
-	public void setWatingJobs(int watingJobs) {
-		this.watingJobs = watingJobs;
+	public void setWaitingJobs(int watingJobs) {
+		this.waitingJobs = watingJobs;
 	}
 	public String getJobId() {
 		return jobId;

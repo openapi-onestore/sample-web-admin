@@ -38,7 +38,8 @@ public class OpenApiManagerImpl implements OpenApiManager{
 	
 	// Property values, uri is default setting
 	private String propertyPath = null;
-	private String fileWritePath = "D:/samplefolder/bulkfile";
+//	private String fileWritePath = "D:/samplefolder/bulkfile";
+	private String fileWritePath = "/home/1000720/sample_folder/download";
 	private String fileJobUrl = "http://172.21.60.141/v1/payment/fileJob";
 	private String resultFileUrl = "http://172.21.60.141/v1/payment/job";
 	private String txidInfoUrl = "http://172.21.60.141/v1/payment/transaction";
@@ -58,8 +59,7 @@ public class OpenApiManagerImpl implements OpenApiManager{
 		headerMap.put("postbackUrl", filePaymentHeader.getPostbackUrl());
 		headerMap.put("cntTotalTrans", filePaymentHeader.getCntTotalTrans());
 		headerMap.put("priority", filePaymentHeader.getPrioity());
-//		headerMap.put("Authorization", "Bearer " + accessToken);
-		headerMap.put("accessToken", accessToken);
+		headerMap.put("Authorization", "Bearer " + accessToken);
 		
 		System.out.println(headerMap);
 		
@@ -86,14 +86,14 @@ public class OpenApiManagerImpl implements OpenApiManager{
 		
 		// authorization
 		Map<String, String> paramMap = new HashMap<String, String>();
-		paramMap.put("accessToken", accessToken);
+		paramMap.put("Authorization", "Bearer " + accessToken);
 		
 		File resultFile = null;
 		
 		OpenApiGetFileTransaction openApiGetFileTransaction = new OpenApiGetFileTransaction(paramMap);
 		openApiGetFileTransaction.setCallUrl(resultFileUrl.concat("/" + jobId + "?signCode=" + verifySign));
 		openApiGetFileTransaction.setFileWritePath(fileWritePath);
-
+		
 		Future<File> future = jobExecutor.submit(openApiGetFileTransaction);
 		
 		try {
@@ -111,7 +111,7 @@ public class OpenApiManagerImpl implements OpenApiManager{
 		
 		// authorization
 		Map<String, String> paramMap = new HashMap<String, String>();
-		paramMap.put("accessToken", accessToken);
+		paramMap.put("Authorization", "Bearer " + accessToken);
 		
 		OpenApiGetTransaction openApiGetTransaction = new OpenApiGetTransaction(paramMap);
 		openApiGetTransaction.setCallUrl(txidInfoUrl.concat("/" + tid));
@@ -135,7 +135,7 @@ public class OpenApiManagerImpl implements OpenApiManager{
 	@Override
 	public CancelResponse cancelPaymentTransaction(CancelRequest cancelRequest, String accessToken) throws OpenApiException {		
 		Map<String, String> paramMap = new HashMap<String, String>();
-		paramMap.put("accessToken", accessToken);
+		paramMap.put("Authorization", "Bearer " + accessToken);
 		
 		CancelResponse cancelResponse = null;
 		OpenApiPostTransaction openApiPostTransaction = null;
@@ -170,7 +170,7 @@ public class OpenApiManagerImpl implements OpenApiManager{
 		try {
 			fis = new FileInputStream(propertyPath);
 			props.load(new BufferedInputStream(fis));
-
+			
 			fileWritePath = props.getProperty("openapi.file_write_path");
 			fileJobUrl = props.getProperty("openapi.file_payment_url");
 			resultFileUrl = props.getProperty("openapi.result_file_url");

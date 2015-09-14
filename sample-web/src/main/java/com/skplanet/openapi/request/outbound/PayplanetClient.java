@@ -3,7 +3,6 @@ package com.skplanet.openapi.request.outbound;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +28,7 @@ import com.skplanet.openapi.vo.payment.PaymentMethods;
 import com.skplanet.openapi.vo.payment.PaymentTransactionInfo;
 import com.skplanet.openapi.vo.payment.TransactionDetail;
 import com.skplanet.openapi.vo.refund.CancelRequest;
+import com.skplanet.openapi.vo.refund.CancelResponse;
 import com.skplanet.openapi.vo.refund.Links;
 import com.skplanet.openapi.vo.refund.RefundTransactionRequest;
 
@@ -155,12 +155,12 @@ public class PayplanetClient {
 	public String getRefundInformation(Map<String, String> param) throws Exception {
 		logger.debug("getRefundInformation() called");		
 		String accessToken = getAccessTokenFromOauthManager();
-		String jsonString = param.get("jsonString");
-		String tid = param.get("tid");
+		String jsonTransactionString = param.get("transactionInfo");
 		
-		param.put("jsonString", getRefundTransactionJsonString(param.get("tid")));
-		return null;
-		//return openApiManager.cancelPaymentTransaction(param);
+		CancelRequest cancelRequest = getRefundTransactionJsonString(jsonTransactionString);
+		CancelResponse cancelResponse = openApiManager.cancelPaymentTransaction(cancelRequest, accessToken);
+		
+		return objectMapper.writeValueAsString(cancelResponse);
 	}
 	
 	private FilePaymentHeader getFilepaymentHeader(int processingCount) {
@@ -187,13 +187,13 @@ public class PayplanetClient {
 		return accessToken;
 	}
 	
-	private String getRefundTransactionJsonString(String tid) throws Exception {
-		tid = "{\"resultCode\":\"0000\",\"resultMsg\":\"SUCCESS\",\"payer\":{\"mdn\":\"01040448500\",\"carrier\":\"SKT\"},\"paymentTransactionInfo\":{\"status\":\"complite\",\"reason\":\"1\",\"message\":\"transaction was succeed\",\"lastestUpdate\":\"20150731175443\",\"tid\":\"TSTORE0004_20150731175443017804817193658\",\"amount\":1000,\"description\":\"transaction was succeed\",\"goods\":[{\"appId\":\"OA00654485\",\"productId\":\"0910009018\"}],\"paymentMethods\":[{\"paymentMethod\":\"11\",\"amount\":1000}]}}";
-		System.out.println(tid);
+	private CancelRequest getRefundTransactionJsonString(String jsonTransactionInfo) throws Exception {
+		//tid = "{\"resultCode\":\"0000\",\"resultMsg\":\"SUCCESS\",\"payer\":{\"mdn\":\"01040448500\",\"carrier\":\"SKT\"},\"paymentTransactionInfo\":{\"status\":\"complite\",\"reason\":\"1\",\"message\":\"transaction was succeed\",\"lastestUpdate\":\"20150731175443\",\"tid\":\"TSTORE0004_20150731175443017804817193658\",\"amount\":1000,\"description\":\"transaction was succeed\",\"goods\":[{\"appId\":\"OA00654485\",\"productId\":\"0910009018\"}],\"paymentMethods\":[{\"paymentMethod\":\"11\",\"amount\":1000}]}}";
+		System.out.println(jsonTransactionInfo);
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		TransactionDetail transactionDetail = objectMapper.readValue(tid, TransactionDetail.class);
+		TransactionDetail transactionDetail = objectMapper.readValue(jsonTransactionInfo, TransactionDetail.class);
 		System.out.println(objectMapper.writeValueAsString(transactionDetail));
 		
 		// for refund request body Payer, RefundTransactionRequest, Links
@@ -221,6 +221,6 @@ public class PayplanetClient {
 		cancelRequest.setLinks(links);
 		System.out.println(objectMapper.writeValueAsString(cancelRequest));
 		
-		return objectMapper.writeValueAsString(cancelRequest);
+		return cancelRequest;
 	}
 }

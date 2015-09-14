@@ -3,14 +3,9 @@ package com.skplanet.openapi.service;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
-import java.io.Writer;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -26,8 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.skplanet.openapi.dao.BulkJobDAO;
 import com.skplanet.openapi.request.outbound.PayplanetClient;
-import com.skplanet.openapi.vo.PaymentJobInfo;
 import com.skplanet.openapi.vo.NotificationResult;
+import com.skplanet.openapi.vo.PaymentJobInfo;
 import com.skplanet.openapi.vo.payment.TransactionDetail;
 
 @Service("paymentService")
@@ -36,18 +31,18 @@ public class PaymentService {
 	private static final Logger logger = LoggerFactory
 			.getLogger(PaymentService.class);
 
-	@Value("${bulkjobservice.localsavefolder}")
+	@Value("${file_payment.localsavefolder}")
 	private String localSavingFolder;
-
+	
 	@Autowired
 	private BulkJobDAO bulkJobDAO;
 	
 	@Autowired
 	private PayplanetClient payplanetClient;
 
-	private List<String> columns = Arrays.asList(new String[] { "mid",
-			"billingToken", "pid", "pName", "orderNo", "amtReqPurchase",
-			"amtCarrier", "amtCreditCard", "amtTms" });
+//	private List<String> columns = Arrays.asList(new String[] { "mid",
+//			"billingToken", "pid", "pName", "orderNo", "amtReqPurchase",
+//			"amtCarrier", "amtCreditCard", "amtTms" });
 
 	public String requestBulkJob(MultipartFile multipartFile) {
 		String result = null;
@@ -174,42 +169,42 @@ public class PaymentService {
 		return result;		
 	}
 	
-	private PaymentJobInfo makeBulkFile(Map<String, String> param)
-			throws FileNotFoundException, IOException {
-		File tmpFile = new File(getBulkfileFormat());
-		Writer writer = new PrintWriter(tmpFile);
-		
-		List<Map<String, String>> bulkJobs = bulkJobDAO.selectBulkJob(param);
-		logger.debug("bulkjob size : " + bulkJobs.size());
-
-		int processingCount = bulkJobs.size();
-
-		Iterator<String> iterator = columns.iterator();
-		while (iterator.hasNext()) {
-			writer.write(iterator.next());
-			if (iterator.hasNext()) {
-				writer.write(",");
-			}
-		}
-
-		writer.write('\n');
-
-		for (Map<String, String> bulkJob : bulkJobs) {
-			iterator = columns.iterator();
-			while (iterator.hasNext()) {
-				String wr = bulkJob.get(iterator.next());
-				logger.debug("Writer : " + wr + " Size : " + bulkJob.size());
-				writer.write(wr);
-				if (iterator.hasNext()) {
-					writer.write(",");
-				}
-			}
-			writer.write('\n');
-		}
-		writer.close();
-
-		return new PaymentJobInfo(tmpFile.getAbsolutePath(), processingCount);
-	}
+//	private PaymentJobInfo makeBulkFile(Map<String, String> param)
+//			throws FileNotFoundException, IOException {
+//		File tmpFile = new File(getBulkfileFormat());
+//		Writer writer = new PrintWriter(tmpFile);
+//		
+//		List<Map<String, String>> bulkJobs = bulkJobDAO.selectBulkJob(param);
+//		logger.debug("bulkjob size : " + bulkJobs.size());
+//
+//		int processingCount = bulkJobs.size();
+//
+//		Iterator<String> iterator = columns.iterator();
+//		while (iterator.hasNext()) {
+//			writer.write(iterator.next());
+//			if (iterator.hasNext()) {
+//				writer.write(",");
+//			}
+//		}
+//
+//		writer.write('\n');
+//
+//		for (Map<String, String> bulkJob : bulkJobs) {
+//			iterator = columns.iterator();
+//			while (iterator.hasNext()) {
+//				String wr = bulkJob.get(iterator.next());
+//				logger.debug("Writer : " + wr + " Size : " + bulkJob.size());
+//				writer.write(wr);
+//				if (iterator.hasNext()) {
+//					writer.write(",");
+//				}
+//			}
+//			writer.write('\n');
+//		}
+//		writer.close();
+//
+//		return new PaymentJobInfo(tmpFile.getAbsolutePath(), processingCount);
+//	}
 
 	private String getBulkfileFormat() {
 		return String.format(Locale.getDefault(), "%s/%s.bulk",

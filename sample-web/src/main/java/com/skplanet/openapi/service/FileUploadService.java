@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service("fileUploadService")
 public class FileUploadService {
 	
-	@Value("${bulkjobservice.localsavefolder}")
+	@Value("${file_payment.localsavefolder}")
 	public String localSaveFolder;
 
 	public boolean fileUpload(MultipartFile mRequest) {

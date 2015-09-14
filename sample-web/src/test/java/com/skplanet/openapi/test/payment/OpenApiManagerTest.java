@@ -95,7 +95,6 @@ public class OpenApiManagerTest {
 		}
 	}
 	
-	@Test
 	public void getResultFileFromPaymentTest() {
 		
 		OpenApiManager openApiManager = new OpenApiManagerImpl();
@@ -103,14 +102,12 @@ public class OpenApiManagerTest {
 		File file = null;
 		
 		try {
-			file = openApiManager.getFilePaymentJobStatus("69", "ABCD", accessToken);
+			file = openApiManager.getFilePaymentJobStatus("38", "ABCD", accessToken);
 		} catch (OpenApiException e) {
 			e.printStackTrace();
 		}
 		
 		Assert.assertNotNull(file);
-		
-		
 		
 	}
 	

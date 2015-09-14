@@ -4,8 +4,7 @@ import java.io.File;
 
 public class PaymentFileWriter {
 	class FilePayment {
-		private String appId;
-		private String productId;
+		
 		// ...
 	}
 	
@@ -20,6 +19,8 @@ public class PaymentFileWriter {
 	}
 	
 	public void close() {
+		file.canRead();
+		
 		;
 	}
 	

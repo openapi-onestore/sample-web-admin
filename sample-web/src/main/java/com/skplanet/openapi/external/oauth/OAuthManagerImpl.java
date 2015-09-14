@@ -91,19 +91,6 @@ public class OAuthManagerImpl implements OAuthManager {
 		this.clientInfo = clientInfo;
 	}
 	
-	private Map<String, String> getOAuthHttpRequestHeader() {
-		StringBuilder sb = new StringBuilder();		
-		System.out.println(clientInfo.getAuthString());
-		
-		byte[] basicStringBase64 = Base64.encodeBase64(clientInfo.getAuthString().getBytes());
-		sb.append("BASIC ").append(new String(basicStringBase64));
-		Map<String, String> headerMap = new HashMap<String, String>();
-		headerMap.put("Authorization", sb.toString());
-		System.out.println("Authorization : " + sb.toString());
-		
-		return headerMap;
-	}	
-	
 	public void setPropertyFile(String path) throws Exception {
 		this.propertyPath = path;
 		Properties props = new Properties();
@@ -133,5 +120,18 @@ public class OAuthManagerImpl implements OAuthManager {
 		}
 		this.jobExecutor = service;
 	}
+	
+	private Map<String, String> getOAuthHttpRequestHeader() {
+		StringBuilder sb = new StringBuilder();		
+		System.out.println(clientInfo.getAuthString());
+		
+		byte[] basicStringBase64 = Base64.encodeBase64(clientInfo.getAuthString().getBytes());
+		sb.append("BASIC ").append(new String(basicStringBase64));
+		Map<String, String> headerMap = new HashMap<String, String>();
+		headerMap.put("Authorization", sb.toString());
+		System.out.println("Authorization : " + sb.toString());
+		
+		return headerMap;
+	}	
 	
 }

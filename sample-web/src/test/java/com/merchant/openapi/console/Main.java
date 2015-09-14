@@ -9,6 +9,7 @@ import com.skplanet.openapi.external.oauth.OAuthManagingException;
 import com.skplanet.openapi.external.payment.OpenApiException;
 import com.skplanet.openapi.external.payment.OpenApiManager;
 import com.skplanet.openapi.external.payment.OpenApiManagerImpl;
+import com.skplanet.openapi.vo.payment.FilePaymentHeader;
 import com.skplanet.openapi.vo.payment.FilePaymentResult;
 
 public class Main { 
@@ -36,16 +37,26 @@ public class Main {
 	
 	public static FilePaymentResult createFilePayment() {
 //		String accessToken = getAccessToken();	//TODO interface is changed by jwkim
-		String accessToken = "AAA";
+		String accessToken = "056c7b3022e026567f23e5901f3245e4";
 		
-		OpenApiManager openApi = new OpenApiManagerImpl();
-		File file = new File("....");
+		OpenApiManager openApiManager = new OpenApiManagerImpl();
+		File file = new File("D:/samplefolder/bulk_job.txt");
 		FilePaymentResult filePaymentResult = null;
-//		try {
-//			filePaymentResult = openApi.createFilePayment(file);
-//		} catch (OpenApiException e) {
-//			e.printStackTrace();
-//		}
+		
+		FilePaymentHeader filePaymentHeader = new FilePaymentHeader();
+		filePaymentHeader.setBid("Tstore");
+		filePaymentHeader.setNotiUrl("");
+		filePaymentHeader.setCntTotalTrans("2");
+		filePaymentHeader.setPostbackUrl("");
+		filePaymentHeader.setPrioity("Instant");
+		filePaymentHeader.setVerBulkPay("1");
+		
+		try {
+			filePaymentResult = openApiManager.createFilePayment(filePaymentHeader, file, accessToken);
+		} catch (OpenApiException e) {
+			e.printStackTrace();
+		}
+		
 		return filePaymentResult;
 	}
 	

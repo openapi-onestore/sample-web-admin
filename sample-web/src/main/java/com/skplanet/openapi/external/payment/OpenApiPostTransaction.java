@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-import com.skplanet.openapi.vo.payment.FilePaymentHeader;
-
 public class OpenApiPostTransaction implements Callable<String> {
 
 	private OpenApiHttpClient httpClient;
