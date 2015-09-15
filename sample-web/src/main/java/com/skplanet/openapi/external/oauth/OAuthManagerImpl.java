@@ -96,6 +96,7 @@ public class OAuthManagerImpl implements OAuthManager {
 		this.clientInfo = clientInfo;
 	}
 	
+	@Override
 	public void setPropertyFile(String path) throws Exception {
 		this.propertyPath = path;
 		Properties props = new Properties();

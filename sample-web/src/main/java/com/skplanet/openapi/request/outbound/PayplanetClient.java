@@ -12,7 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.skplanet.openapi.dao.FilePaymentDAO;
 import com.skplanet.openapi.dao.NotificationDAO;
@@ -55,8 +57,17 @@ public class PayplanetClient {
 	@Value("${notification.verify_url}") private String verifyUrl;
 	@Value("${openapi.notification_url}") private String notificationUrl;
 	
-//	@Autowired
-//	private OutBoundRequestHandler<Map<String,String>,String> outRequestHandler;
+	public PayplanetClient() {
+		System.out.println("Initiation for Manager");
+//		try {
+//			String path = new ClassPathResource("properties/dev_config.properties").getFile().getAbsolutePath();
+//			oauthManager.setPropertyFile(path);
+//			openApiManager.setPropertyFile(path);
+//			notiManagerImpl.setPropertyFile(path);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+	}
 	
 	public FilePaymentResult createFilePayment(int processingCount, File requestFile) throws Exception {		
 		logger.debug("createBulkPayment() called");

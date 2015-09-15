@@ -108,7 +108,7 @@
 		  <span class="input-group-addon" id="sizing-addon2" style="width:100px">resultCode</span>
 		  <input type="text" class="form-control" placeholder="None" aria-describedby="sizing-addon2" value='${resultCode}'>
 		</div>
-		<div class="input-group" style="width: 250px">
+		<div class="input-group" style="width: 700px">
 		  <span class="input-group-addon" id="sizing-addon2" style="width:100px">resultMsg</span>
 		  <input type="text" class="form-control" placeholder="None" aria-describedby="sizing-addon2" value='${resultMsg}'>
 		</div>

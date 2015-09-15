@@ -159,6 +159,7 @@ public class OpenApiManagerImpl implements OpenApiManager{
 		return cancelResponse;
 	}
 	
+	@Override
 	public void setPropertyFile(String path) throws Exception {
 		this.propertyPath = path;
 		Properties props = new Properties();

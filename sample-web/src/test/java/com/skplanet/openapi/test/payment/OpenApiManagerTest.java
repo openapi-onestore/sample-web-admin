@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -94,7 +95,6 @@ public class OpenApiManagerTest {
 		}
 	}
 	
-	@Test
 	public void getResultFileFromPaymentTest() {
 		
 		OpenApiManager openApiManager = new OpenApiManagerImpl();
@@ -113,7 +113,25 @@ public class OpenApiManagerTest {
 		
 	}
 	
+	@Test
+	public void propertyTest() {
+		
+//		Assert.assertNotNull(OAuthManagerImpl.class.getResource("dev_config.properties").getPath());
+		
+		try {
+			String path = new ClassPathResource("properties/dev_config.properties").getFile().getAbsolutePath();
+			
+			Assert.assertNotNull(path);
+			System.out.println(path);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
 	public void getTransactionDetailTest() {
+		
 		OpenApiManager openApiManager = new OpenApiManagerImpl();
 		TransactionDetail transactionDetail = null;
 		
@@ -159,8 +177,6 @@ public class OpenApiManagerTest {
 		
 		Assert.assertNotNull(cancelResponse);
 	}
-	
-	
 	
 	
 }

@@ -10,10 +10,11 @@ import com.skplanet.openapi.vo.refund.CancelResponse;
 
 public interface OpenApiManager {
 	
-	public FilePaymentResult createFilePayment(FilePaymentHeader filePaymentHeader, File file, String accessToken) throws OpenApiException;
+	FilePaymentResult createFilePayment(FilePaymentHeader filePaymentHeader, File file, String accessToken) throws OpenApiException;
 //	public FilePaymentResult createFilePayment(List<File> paymentFileList);
-	public File getFilePaymentJobStatus(String jobId, String accessToken) throws OpenApiException;
-	public TransactionDetail getPaymentTransactionDetail(String tid, String accessToken) throws OpenApiException;
-	public CancelResponse cancelPaymentTransaction(CancelRequest cancelRequest, String accessToken) throws OpenApiException;
+	File getFilePaymentJobStatus(String jobId, String accessToken) throws OpenApiException;
+	TransactionDetail getPaymentTransactionDetail(String tid, String accessToken) throws OpenApiException;
+	CancelResponse cancelPaymentTransaction(CancelRequest cancelRequest, String accessToken) throws OpenApiException;
+	void setPropertyFile(String path) throws Exception;
 	
 }

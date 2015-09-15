@@ -88,6 +88,7 @@ public class NotiManagerImpl implements NotiManager {
 		return notiVerifyResult;
 	}
 	
+	@Override
 	public void setPropertyFile(String path) throws Exception {
 		this.propertyPath = path;
 		Properties props = new Properties();

@@ -78,7 +78,7 @@
 							$rowHtml.find( ".amtCarrier" ).html( data[8] );
 							$rowHtml.find( ".amtCreditCard" ).html( data[9] );
 							$rowHtml.find( ".amtTms" ).html( data[10] );
-							$rowHtml.find( ".tid" ).html( ( data[11] == "None" ) ? "<a href=http://172.21.60.143:8181/sample-web/openapi/admin/transaction/"+data[11]+">"+data[13]+"</a>" : "None");
+							$rowHtml.find( ".tid" ).html( ( data[11] != "None" ) ? "<a href=http://172.21.60.143:8181/sample-web/openapi/admin/transaction/"+data[11]+">"+data[11]+"</a>" : "None");
 							$rowHtml.find( ".cdResult" ).html( data[12] );
 							$rowHtml.find( ".msgResult" ).html( data[13] );
 							
@@ -129,7 +129,7 @@
     </div>
 -->
 
-    <div class="container theme-showcase" role="main" style="width: 1600px;">
+    <div class="container theme-showcase" role="main" style="width: 1800px;">
 	
       <div class="page-header" align="center">
         <h1>Open API test page - payment result</h1>
@@ -147,21 +147,21 @@
 -->
 	
     <br/>
-      <div class="page-content" align="center" style="width: 1600px;">
+      <div class="page-content" align="center" style="width: 1800px;">
          <table class="table table-striped">
             <thead>
               <tr>
                 <th>id</th>
                 <th>cmId</th>
                 <th>bid</th>
-                <th>billingToken</th>
-                <th>productId</th>
-                <th>nmProduct</th>
+                <th>bToken</th>
+                <th>Pid</th>
+                <th>Pname</th>
                 <th>noBranchOrder</th>                
-                <th>amtReqPurchase</th>
-                <th>amtCarrier</th>
-                <th>amtCreditCard</th>
-                <th>amtTms</th>
+                <th>ReqPurchase</th>
+                <th>Carrier</th>
+                <th>CreditCard</th>
+                <th>Tms</th>
                 <th>tid</th>
                 <th>cdResult</th>
                 <th>msgResult</th>
