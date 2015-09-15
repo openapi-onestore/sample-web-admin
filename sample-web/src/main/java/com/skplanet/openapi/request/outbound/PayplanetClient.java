@@ -121,9 +121,8 @@ public class PayplanetClient {
 		logger.debug("getFilePaymentResultFile() called");		
 		String accessToken = getAccessTokenFromOauthManager();
 		String jobId = param.get("jobId");
-		String verifySign = param.get("verifySign");
 		
-		File resultFile = openApiManager.getFilePaymentJobStatus(jobId, verifySign, accessToken);
+		File resultFile = openApiManager.getFilePaymentJobStatus(jobId, accessToken);
 		
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(resultFile));
 		StringBuffer stringBuffer = new StringBuffer();
@@ -170,17 +169,15 @@ public class PayplanetClient {
 		return notiReceive;
 	}
 	
-	public String getNotificationVerifyResult(NotiReceive notiReceive, String listenerType) {
+	public NotiVerifyResult getNotificationVerifyResult(NotiReceive notiReceive, String listenerType) {
 		NotiVerifyResult notiVerifyResult = null;
-		String result = null;
-		
 		try {
-			notiVerifyResult = notiManagerImpl.requestNotificationVerification(notiReceive, listenerType);
-			result = objectMapper.writeValueAsString(notiVerifyResult);			
+			String accessToken = getAccessTokenFromOauthManager();
+			notiVerifyResult = notiManagerImpl.requestNotificationVerification(notiReceive, listenerType, accessToken);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return result;
+		return notiVerifyResult;
 	}
 	
 	private FilePaymentHeader getFilepaymentHeader(int processingCount) {

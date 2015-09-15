@@ -1,6 +1,5 @@
 package com.skplanet.openapi.external.notification;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
@@ -21,9 +20,6 @@ public class NotiVerificationTransaction implements Callable<String>{
 	private String param = null;	
 	private Map<String, String> headers = null;
 
-	private final String delemeter = "&";
-	private final String equal = "=";
-		
 	private StatusLine statusLine;
 	
 	@Override
@@ -46,7 +42,7 @@ public class NotiVerificationTransaction implements Callable<String>{
 		}
 		
 		HttpEntity httpEntity = null;
-		httpEntity = new StringEntity(param, ContentType.APPLICATION_FORM_URLENCODED);			
+		httpEntity = new StringEntity(param, ContentType.APPLICATION_JSON);			
 		
 		httpPost.setEntity(httpEntity);
 		CloseableHttpResponse response = httpclient.execute(httpPost);
@@ -63,21 +59,6 @@ public class NotiVerificationTransaction implements Callable<String>{
 	
 	public void setHeader(Map<String, String> header) {
 		this.headers = header;
-	}
-	
-	public void setParamMap(Map<String, String> paramMap) {		
-		StringBuilder sb = new StringBuilder();
-		Iterator<String> iterator = paramMap.keySet().iterator();
-		
-		while (iterator.hasNext()) {
-			String key = iterator.next();
-			sb.append(key).append(equal).append(paramMap.get(key));
-			
-			if (iterator.hasNext()) {
-				sb.append(delemeter);
-			}
-		}
-		this.param = sb.toString();
 	}
 	
 	public void setParam(String param) {

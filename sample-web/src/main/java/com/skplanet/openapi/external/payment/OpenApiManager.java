@@ -12,7 +12,7 @@ public interface OpenApiManager {
 	
 	public FilePaymentResult createFilePayment(FilePaymentHeader filePaymentHeader, File file, String accessToken) throws OpenApiException;
 //	public FilePaymentResult createFilePayment(List<File> paymentFileList);
-	public File getFilePaymentJobStatus(String jobId, String verifySign, String accessToken) throws OpenApiException;
+	public File getFilePaymentJobStatus(String jobId, String accessToken) throws OpenApiException;
 	public TransactionDetail getPaymentTransactionDetail(String tid, String accessToken) throws OpenApiException;
 	public CancelResponse cancelPaymentTransaction(CancelRequest cancelRequest, String accessToken) throws OpenApiException;
 	

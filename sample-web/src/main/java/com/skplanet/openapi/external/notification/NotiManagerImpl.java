@@ -48,7 +48,7 @@ public class NotiManagerImpl implements NotiManager {
 	}
 	
 	@Override
-	public NotiVerifyResult requestNotificationVerification(NotiReceive notiReceive, String listenerType) throws NotiException {
+	public NotiVerifyResult requestNotificationVerification(NotiReceive notiReceive, String listenerType, String accessToken) throws NotiException {
 		
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("listenerType", listenerType);
@@ -60,7 +60,16 @@ public class NotiManagerImpl implements NotiManager {
 		paramMap.put("verifySign", notiReceive.getVerifySign());
 		
 		NotiVerificationTransaction notiVerificationTransaction = new NotiVerificationTransaction();
-		notiVerificationTransaction.setParamMap(paramMap);
+		
+		try {
+			notiVerificationTransaction.setParam(objectMapper.writeValueAsString(paramMap));
+		} catch (Exception exception) {
+			
+		}
+		
+		paramMap.clear();
+		paramMap.put("Authorization", "Bearer "+accessToken);
+		notiVerificationTransaction.setHeader(paramMap);
 		notiVerificationTransaction.setCallUrl(verifyUrl);
 		
 		Future<String> future = jobExecutor.submit(notiVerificationTransaction);
@@ -69,6 +78,7 @@ public class NotiManagerImpl implements NotiManager {
 		
 		try {
 			result = future.get();
+			System.out.println("Notification verify Result" + result);
 			notiVerifyResult = objectMapper.readValue(result, NotiVerifyResult.class);
 		} catch (Exception e) {
 			e.printStackTrace();

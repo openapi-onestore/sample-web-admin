@@ -72,7 +72,6 @@ public class OpenApiManagerImpl implements OpenApiManager{
 		
 		try {
 			String result = future.get();
-			System.out.println("Create file payment : " + result);
 			FilePaymentResult filePaymentResult = objectMapper.readValue(result, FilePaymentResult.class);
 			return filePaymentResult;
 		} catch (Exception e) {
@@ -83,7 +82,7 @@ public class OpenApiManagerImpl implements OpenApiManager{
 	}
 	
 	@Override
-	public File getFilePaymentJobStatus(String jobId, String verifySign, String accessToken) throws OpenApiException {
+	public File getFilePaymentJobStatus(String jobId, String accessToken) throws OpenApiException {
 		
 		// authorization
 		Map<String, String> paramMap = new HashMap<String, String>();
@@ -92,7 +91,7 @@ public class OpenApiManagerImpl implements OpenApiManager{
 		File resultFile = null;
 		
 		OpenApiGetFileTransaction openApiGetFileTransaction = new OpenApiGetFileTransaction(paramMap);
-		openApiGetFileTransaction.setCallUrl(resultFileUrl.concat("/" + jobId + "?signCode=" + verifySign));
+		openApiGetFileTransaction.setCallUrl(resultFileUrl.concat("/" + jobId));
 		openApiGetFileTransaction.setFileWritePath(fileWritePath);
 		
 		Future<File> future = jobExecutor.submit(openApiGetFileTransaction);

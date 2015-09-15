@@ -59,7 +59,6 @@ public class OpenApiManagerTest {
 		}
 	}
 	
-	@Test
 	public void createFilePaymentTest() {
 		// file payment test
 		File requestFile = new File("D:/samplefolder/bulk_job.txt");
@@ -95,6 +94,7 @@ public class OpenApiManagerTest {
 		}
 	}
 	
+	@Test
 	public void getResultFileFromPaymentTest() {
 		
 		OpenApiManager openApiManager = new OpenApiManagerImpl();
@@ -102,16 +102,17 @@ public class OpenApiManagerTest {
 		File file = null;
 		
 		try {
-			file = openApiManager.getFilePaymentJobStatus("38", "ABCD", accessToken);
+			file = openApiManager.getFilePaymentJobStatus("38", accessToken);
 		} catch (OpenApiException e) {
 			e.printStackTrace();
 		}
 		
 		Assert.assertNotNull(file);
 		
+		
+		
 	}
 	
-	@Test
 	public void getTransactionDetailTest() {
 		OpenApiManager openApiManager = new OpenApiManagerImpl();
 		TransactionDetail transactionDetail = null;

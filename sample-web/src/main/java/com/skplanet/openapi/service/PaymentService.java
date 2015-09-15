@@ -107,7 +107,6 @@ public class PaymentService {
 	
 	public NotificationResult requestNotificationResult(Map<String, String> param) {
 		NotificationResult notificationResult = null;
-		
 		try {
 			notificationResult = payplanetClient.selectNotificationResult(param);
 		} catch (Exception e) {

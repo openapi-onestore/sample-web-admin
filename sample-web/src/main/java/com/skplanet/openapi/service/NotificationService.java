@@ -21,29 +21,28 @@ public class NotificationService {
 	 * @param param
 	 * @return // TODO return 타입을 처리 방식에 맞게 변경
 	 */
-	public String processNoti(String notificationResult) {
+	public String processNoti(NotiReceive notificationResult) {
 		// TODO Notification 처리
 		// TODO 반드시 비동기로 처리되어야함.
+		NotiVerifyResult notiVerifyResult = null;
 		String result = null;
-		NotiReceive notiReceive = null;
 		
 		try {
-			notiReceive = payplanetClient.getNotiReceive(notificationResult);
-			result = payplanetClient.getNotificationVerifyResult(notiReceive, "bulkJob");				
-			
-			if (result.contains("VERIFIED")) {
+			notiVerifyResult = payplanetClient.getNotificationVerifyResult(notificationResult, "bulkJob");				
+			if (notiVerifyResult.getResultCode().equals("0000")) {
 				Map<String, String> paramMap = new HashMap<String, String>();
-				paramMap.put("notifyVersion", notiReceive.getNotifyVersion());
-				paramMap.put("event", notiReceive.getEvent());
-				paramMap.put("status", notiReceive.getStatus());
-				paramMap.put("jobId", notiReceive.getJobId());
-				paramMap.put("updateTime", notiReceive.getUpdateTime());
-				paramMap.put("verifySign", notiReceive.getVerifySign());
+				paramMap.put("notifyVersion", notificationResult.getNotifyVersion());
+				paramMap.put("event", notificationResult.getEvent());
+				paramMap.put("status", notificationResult.getStatus());
+				paramMap.put("jobId", notificationResult.getJobId());
+				paramMap.put("updateTime", notificationResult.getUpdateTime());
+				paramMap.put("verifySign", notificationResult.getVerifySign());
 				requestNotificationResult(paramMap);
 			}
-			
+			result = notiVerifyResult.getResultCode();
 		} catch (Exception e) {
 			e.printStackTrace();
+			result = "9999";
 		}
 		return result;
 	}
