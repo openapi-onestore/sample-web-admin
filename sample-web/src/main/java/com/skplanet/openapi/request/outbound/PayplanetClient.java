@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.WebApplicationContext;
 
 import com.skplanet.openapi.dao.FilePaymentDAO;
 import com.skplanet.openapi.dao.NotificationDAO;
@@ -59,14 +58,14 @@ public class PayplanetClient {
 	
 	public PayplanetClient() {
 		System.out.println("Initiation for Manager");
-//		try {
-//			String path = new ClassPathResource("properties/dev_config.properties").getFile().getAbsolutePath();
-//			oauthManager.setPropertyFile(path);
-//			openApiManager.setPropertyFile(path);
-//			notiManagerImpl.setPropertyFile(path);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
+		try {
+			String path = new ClassPathResource("properties/release_config.properties").getFile().getAbsolutePath();
+			oauthManager.setPropertyFile(path);
+			openApiManager.setPropertyFile(path);
+			notiManagerImpl.setPropertyFile(path);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public FilePaymentResult createFilePayment(int processingCount, File requestFile) throws Exception {		
