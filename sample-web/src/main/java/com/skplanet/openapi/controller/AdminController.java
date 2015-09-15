@@ -47,7 +47,7 @@ public class AdminController {
 		modelAndView.setViewName("admin_result");
 		
 		if (jobId == null) {
-			jobId = "You don't transmit some file";
+			jobId = "null";
 			return modelAndView;
 		}
 		
@@ -89,15 +89,22 @@ public class AdminController {
 		TransactionDetail transactionDetail = paymentService.requestTidInformationObject(param);
 		
 		if (transactionDetail != null) {
+			// TransactionDetail
 			modelAndView.addObject("resultCode", transactionDetail.getResultCode());
 			modelAndView.addObject("resultMsg", transactionDetail.getResultMsg());
-			modelAndView.addObject("status", transactionDetail.getPaymentTransactionInfo().getStatus());
-			modelAndView.addObject("reason", transactionDetail.getPaymentTransactionInfo().getReason());
-			modelAndView.addObject("message", transactionDetail.getPaymentTransactionInfo().getMessage());
+			
+			// Payer
+			modelAndView.addObject("authkey", transactionDetail.getPayer().getAuthkey());
+			
+			// TransactionInfo
+			modelAndView.addObject("status", transactionDetail.getPaymentTransactionInfo().getStatus());			
+			modelAndView.addObject("reason", transactionDetail.getPaymentTransactionInfo().getReason());			
+			modelAndView.addObject("message", transactionDetail.getPaymentTransactionInfo().getMessage());			
 			modelAndView.addObject("latestUpdate", transactionDetail.getPaymentTransactionInfo().getLastestUpdate());
 			modelAndView.addObject("tid", transactionDetail.getPaymentTransactionInfo().getTid());
 			modelAndView.addObject("amount", transactionDetail.getPaymentTransactionInfo().getAmount());
 			modelAndView.addObject("description", transactionDetail.getPaymentTransactionInfo().getDescription());
+			
 			modelAndView.addObject("goods",transactionDetail.getPaymentTransactionInfo().getGoods());
 			modelAndView.addObject("paymentMethods",transactionDetail.getPaymentTransactionInfo().getPaymentMethods());
 		}

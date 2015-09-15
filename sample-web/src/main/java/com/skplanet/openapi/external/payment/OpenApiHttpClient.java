@@ -80,7 +80,7 @@ public class OpenApiHttpClient {
 			
 			String buffer = null;
 			while( (buffer=bufferedReader.readLine()) != null) {
-				fileWriter.append(buffer);
+				fileWriter.append(buffer).append("\n");
 				fileWriter.flush();
 			}
 			fileWriter.close();
@@ -97,8 +97,10 @@ public class OpenApiHttpClient {
 
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(url);
-		addHeaders(httpPost);
-
+		if (headers != null) {
+			addHeaders(httpPost);			
+		}
+		
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		Iterator<String> keys = data.keySet().iterator();
 		while (keys.hasNext()) {
@@ -121,8 +123,10 @@ public class OpenApiHttpClient {
 
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(url);
-		addHeaders(httpPost);
-
+		if (headers != null) {
+			addHeaders(httpPost);			
+		}
+		
 		HttpEntity httpEntity = new StringEntity(data,
 				ContentType.APPLICATION_JSON);
 		httpPost.setEntity(httpEntity);
@@ -150,7 +154,9 @@ public class OpenApiHttpClient {
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		try {
 			HttpPost httpPost = new HttpPost(uri);
-			addHeaders(httpPost);
+			if (headers != null) {
+				addHeaders(httpPost);			
+			}
 			
 			// TODO plain/text로 처리 가능한지 확인 필
 			InputStreamEntity reqEntity = new InputStreamEntity(new FileInputStream(sendFile), sendFile.length(), ContentType.TEXT_PLAIN);

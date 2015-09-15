@@ -31,7 +31,7 @@
     <![endif]-->
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
     <script type="text/javascript">   
-
+	
 	    (function($){
 	    	count = 0;
 	    	
@@ -45,18 +45,17 @@
 					} else {
 						var original = data.split('\n');
 						console.log( original );
+						console.log( original[0]);
 						
-						for( var i = 0; i < original.length-1; i++) {
+						for( var i = 1; i < original.length-1; i++) {
 							data = original[i].split(',');
 							console.log( data );
 							
 							var $rowHtml = $( "<tr>" +
-		    						"<td class='count'></td>"+
+		    						"<td class='id'></td>"+		    						
 		    						"<td class='cmId'></td>" +
 		    						"<td class='bid'></td>" +
-		    						"<td class='cdCarrier'></td>" + 
-		    						"<td class='appId'></td>" +
-		    						"<td class='nudTid'></td>" +		    						
+		    						"<td class='billingToken'></td>" + 
 		    						"<td class='productId'></td>" +
 		    						"<td class='nmProduct'></td>" +
 		    						"<td class='noBranchOrder'></td>" +
@@ -65,28 +64,23 @@
 		    						"<td class='amtCreditCard'></td>" +
 		    						"<td class='amtTms'></td>" +
 		    						"<td class='tid'></td>" +
-		    						"<td class='ymTrans'></td>" +
-		    						"<td class='resultCode'></td>" +
-		    						"<td class='resultMsg'></td>" +
+		    						"<td class='cdResult'></td>" +
+		    						"<td class='msgResult'></td>" +
 								"</tr>" );
-							$rowHtml.find( ".count" ).html( data[0] );
+							$rowHtml.find( ".id" ).html( data[0] );
 							$rowHtml.find( ".cmId" ).html( data[1] );
 							$rowHtml.find( ".bid" ).html( data[2] );
-							$rowHtml.find( ".cdCarrier" ).html( data[3] );
-							$rowHtml.find( ".appId" ).html( data[4] );
-							$rowHtml.find( ".nudTid" ).html( data[5] );							
-							$rowHtml.find( ".productId" ).html( data[6] );
-							$rowHtml.find( ".nmProduct" ).html( data[7] );
-							$rowHtml.find( ".noBranchOrder" ).html( data[8] );							
-							$rowHtml.find( ".amtReqPurchase" ).html( data[9] );
-							$rowHtml.find( ".amtCarrier" ).html( data[10] );
-							$rowHtml.find( ".amtCreditCard" ).html( data[11] );
-							$rowHtml.find( ".amtTms" ).html( data[12] );
-							//( data[ i ].status === "SUCCESS" ) ? "btn-success" : "btn-danger" 
-							$rowHtml.find( ".tid" ).html( ( data[13] == "None" ) ? "<a href=http://172.21.60.143:8181/sample-web/openapi/admin/transaction/"+data[13]+">"+data[13]+"</a>" : "None");
-							$rowHtml.find( ".ymTrans" ).html( data[14] );							
-							$rowHtml.find( ".resultCode" ).html( data[15] );
-							$rowHtml.find( ".resultMsg" ).html( data[16] );
+							$rowHtml.find( ".billingToken" ).html( data[3].substr(0,8) + '..' );
+							$rowHtml.find( ".productId" ).html( data[4] );							
+							$rowHtml.find( ".nmProduct" ).html( data[5] );
+							$rowHtml.find( ".noBranchOrder" ).html( data[6] );							
+							$rowHtml.find( ".amtReqPurchase" ).html( data[7] );
+							$rowHtml.find( ".amtCarrier" ).html( data[8] );
+							$rowHtml.find( ".amtCreditCard" ).html( data[9] );
+							$rowHtml.find( ".amtTms" ).html( data[10] );
+							$rowHtml.find( ".tid" ).html( ( data[11] == "None" ) ? "<a href=http://172.21.60.143:8181/sample-web/openapi/admin/transaction/"+data[11]+">"+data[13]+"</a>" : "None");
+							$rowHtml.find( ".cdResult" ).html( data[12] );
+							$rowHtml.find( ".msgResult" ).html( data[13] );
 							
 							$( "table.table>tbody" ).append( $rowHtml );
 						}						
@@ -153,16 +147,14 @@
 -->
 	
     <br/>
-      <div class="page-content" align="center" style="width: 1000px;">
+      <div class="page-content" align="center" style="width: 1600px;">
          <table class="table table-striped">
             <thead>
               <tr>
-                <th>#</th>
-                <th>version</th>
-                <th>mdn</th>
-                <th>cdCarrier</th>
-                <th>appId</th>
-                <th>nudTid</th>
+                <th>id</th>
+                <th>cmId</th>
+                <th>bid</th>
+                <th>billingToken</th>
                 <th>productId</th>
                 <th>nmProduct</th>
                 <th>noBranchOrder</th>                
@@ -171,9 +163,8 @@
                 <th>amtCreditCard</th>
                 <th>amtTms</th>
                 <th>tid</th>
-                <th>ymTrans</th>                   
-                <th>resultCode</th>
-                <th>resultMsg</th>
+                <th>cdResult</th>
+                <th>msgResult</th>
               </tr>
             </thead>
             <tbody>

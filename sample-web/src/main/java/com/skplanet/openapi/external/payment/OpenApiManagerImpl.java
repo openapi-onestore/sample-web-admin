@@ -135,6 +135,7 @@ public class OpenApiManagerImpl implements OpenApiManager{
 	@Override
 	public CancelResponse cancelPaymentTransaction(CancelRequest cancelRequest, String accessToken) throws OpenApiException {		
 		Map<String, String> paramMap = new HashMap<String, String>();
+		System.out.println("Cancel Request access Token : " + accessToken);
 		paramMap.put("Authorization", "Bearer " + accessToken);
 		
 		CancelResponse cancelResponse = null;
@@ -143,11 +144,12 @@ public class OpenApiManagerImpl implements OpenApiManager{
 		try {
 			String cancelJsonString = objectMapper.writeValueAsString(cancelRequest);
 			openApiPostTransaction = new OpenApiPostTransaction(cancelJsonString);
+			openApiPostTransaction.setParamMap(paramMap);
 			openApiPostTransaction.setCallUrl(refundUrl);
 			
 			Future<String> future = jobExecutor.submit(openApiPostTransaction);
 			String result = future.get();
-			
+			System.out.println("Cancel response" + result);
 			cancelResponse = objectMapper.readValue(result, CancelResponse.class);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -173,9 +175,9 @@ public class OpenApiManagerImpl implements OpenApiManager{
 			
 			fileWritePath = props.getProperty("openapi.file_write_path");
 			fileJobUrl = props.getProperty("openapi.file_payment_url");
-			resultFileUrl = props.getProperty("openapi.result_file_url");
-			txidInfoUrl = props.getProperty("openapi.txid_info_url");
-			refundUrl = props.getProperty("openapi.refund_url");
+			resultFileUrl = props.getProperty("openapi.file_payment_info_url");			
+			txidInfoUrl = props.getProperty("openapi.payment_transaction_detail_url");
+			refundUrl = props.getProperty("openapi.payment_cancel_url");
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new OpenApiException(OpenApi.OPENAPI_PROPERTY_SETTING_ERROR, "File creation is incorect!!");

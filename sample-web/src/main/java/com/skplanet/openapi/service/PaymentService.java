@@ -137,9 +137,10 @@ public class PaymentService {
 	
 	public String requestTidInformation(Map<String, String> param) {
 		String result = null;
+		String tid = param.get("tid");
 		
 		try {
-			result = payplanetClient.getTidInformation(param);
+			result = payplanetClient.getTidInformation(tid);
 		} catch (Exception e) {
 			e.printStackTrace();
 			result = "result=FAIL&reason="+e.getMessage();
@@ -149,9 +150,10 @@ public class PaymentService {
 	
 	public TransactionDetail requestTidInformationObject(Map<String, String> param) {
 		TransactionDetail transactionDetail = null;
+		String tid = param.get("tid");
 		
 		try {
-			String result = payplanetClient.getTidInformation(param);
+			String result = payplanetClient.getTidInformation(tid);
 			if (result.length() >= 20) {
 				ObjectMapper objectMapper = new ObjectMapper();
 				transactionDetail = objectMapper.readValue(result, TransactionDetail.class);

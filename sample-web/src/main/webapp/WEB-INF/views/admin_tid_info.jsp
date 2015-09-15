@@ -19,7 +19,7 @@
 
     <!-- Custom styles for this template -->
     <link href="<c:url value='/openapi/css/starter-template.css' />" rel="stylesheet">
-
+	
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
     <script src="<c:url value='/openapi/assets/js/ie-emulation-modes-warning.js' />"></script>
@@ -116,14 +116,10 @@
 		<!-- Payer -->
 		<div class="input-group" style="width: 400px; left: 100px;">
 			<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" value="Payer" style="width: 150px">		  
-			<span class="input-group-addon" id="sizing-addon2" style="width: 100px">mdn</span>
-			<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" value='${mdn}'>
+			<span class="input-group-addon" id="sizing-addon2" style="width: 100px">authkey</span>
+			<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" value='${authkey}'>
 		</div>
-		<div class="input-group" style="width: 250px; left: 250px">
-		  <span class="input-group-addon" id="sizing-addon2" style="width:100px">carrier</span>
-		  <input type="text" class="form-control" placeholder="None" aria-describedby="sizing-addon2" value='${carrier}'>
-		</div>
-		
+				
 		<!-- trInfo content -->
 		<div class="input-group" style="width: 400px; left: 100px;">
 			<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" value="TransactionInfo" style="width: 150px">		  
@@ -157,24 +153,24 @@
 		
 		<!-- goods -->
 		<div class="input-group" style="width: 400px; left: 250px;">
-			<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" value="Goods" style="width: 100px">		  
+			<input type="text" class="form-control" value="Goods" style="width: 100px">		  
 			<span class="input-group-addon" id="sizing-addon2" style="width: 100px">appId</span>
-			<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" value="">		  		  
+			<input type="text" class="form-control" value='${goods[0].appId}'>		  		  
 		</div>
 		<div class="input-group" style="width: 300px; left: 350px;">
 			<span class="input-group-addon" id="sizing-addon2" style="width: 100px">product id</span>
-			<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" value="">		  		  
+			<input type="text" class="form-control" value='${goods[0].productId}'>
 		</div>
 		
 		<!-- payment method -->
 		<div class="input-group" style="width: 400px; left: 250px;">
-			<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" value="Methods" style="width: 100px">		  
-			<span class="input-group-addon" id="sizing-addon2" style="width: 100px">Payment Method</span>
-			<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" value="">		  		  
+			<input type="text" class="form-control" value="Methods" style="width: 100px">		  
+			<span class="input-group-addon" id="sizing-addon2" style="width: 100px">PayMethod</span>
+			<input type="text" class="form-control" value='${paymentMethods[0].paymentMethod}'>		  		  
 		</div>
 		<div class="input-group" style="width: 300px; left: 350px;">
 			<span class="input-group-addon" id="sizing-addon2" style="width: 100px">amount</span>
-			<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" value="">		  		  
+			<input type="text" class="form-control" value='${paymentMethods[0].amount}'>
 		</div>
 		
 		<br/>

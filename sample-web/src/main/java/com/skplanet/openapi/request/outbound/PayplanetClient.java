@@ -127,9 +127,10 @@ public class PayplanetClient {
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(resultFile));
 		StringBuffer stringBuffer = new StringBuffer();
 		String temp = null;
+		stringBuffer.append(resultFile.getName()).append("\n");
 		
 		while((temp = bufferedReader.readLine()) != null) {
-			stringBuffer.append(temp);
+			stringBuffer.append(temp).append("\n");
 		}
 		
 		bufferedReader.close();
@@ -137,11 +138,9 @@ public class PayplanetClient {
 		return stringBuffer.toString();
 	}
 	
-	public String getTidInformation(Map<String, String> param) throws Exception {
+	public String getTidInformation(String tid) throws Exception {
 		logger.debug("getTidInformation() called");		
 		String accessToken = getAccessTokenFromOauthManager();
-		String tid = param.get("tid");
-		
 		TransactionDetail transactionDetail = openApiManager.getPaymentTransactionDetail(tid, accessToken);
 		
 		return objectMapper.writeValueAsString(transactionDetail);
@@ -215,6 +214,11 @@ public class PayplanetClient {
 		
 		// for refund request body Payer, RefundTransactionRequest, Links
 		PaymentTransactionInfo paymentTransactionInfo = transactionDetail.getPaymentTransactionInfo();
+		
+		if (paymentTransactionInfo == null) {
+			throw new Exception();
+		}
+		
 		Payer payer = transactionDetail.getPayer();
 		PaymentMethods[] paymentMethods = paymentTransactionInfo.getPaymentMethods();
 		

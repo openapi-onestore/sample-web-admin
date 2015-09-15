@@ -35,9 +35,14 @@ public class OAuthManagerImpl implements OAuthManager {
 	
 	// url default setting
 	private String oauthAccessTokenUrl = "http://172.21.60.143:8080/oauth/service/accessToken";
+	private String clientId = "9z/fmk5hAC7fcXWjbPq4Tlh3dgYmafZBKfrGOpIIYeqlfqVoTfyxgGoe/NU2Ycp7";
+	private String clientSecret = "wJakRyD02F+c7LGiYseIG5PxRAK14IuT8DBfLFycX48=";
 	
 	public OAuthManagerImpl() {
-		
+		OAuthClientInfo oauthClientInfo = new OAuthClientInfo();
+		oauthClientInfo.setClientId(this.clientId);
+		oauthClientInfo.setClientSecret(this.clientSecret);
+		this.clientInfo = oauthClientInfo;
 	}
 	
 	public OAuthManagerImpl(String clientId, String clientSecret) {
@@ -106,6 +111,8 @@ public class OAuthManagerImpl implements OAuthManager {
 			props.load(new BufferedInputStream(fis));
 			
 			oauthAccessTokenUrl = props.getProperty("oauth.token_create_url");
+			clientId = props.getProperty("oauth.client_id");
+			clientSecret = props.getProperty("oauth.client_secret");
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new OAuthManagingException(OAuthManaging.UNKNOWN_ERROR, "File creation is incorect!!");

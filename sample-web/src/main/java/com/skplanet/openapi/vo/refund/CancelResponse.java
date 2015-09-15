@@ -2,27 +2,27 @@ package com.skplanet.openapi.vo.refund;
 
 public class CancelResponse {
 
-	private String result;
-	private String reasonCode;
+	private String resultCode;
+	private String resultMsg;
 	private String message;
 	private RefundTransactionRequest refundTransactionRequest;
 	
-	public String getResult() {
-		return result;
+	public String getResultCode() {
+		return resultCode;
 	}
-	
-	public void setResult(String result) {
-		this.result = result;
+
+	public void setResultCode(String resultCode) {
+		this.resultCode = resultCode;
 	}
-	
-	public String getReasonCode() {
-		return reasonCode;
+
+	public String getResultMsg() {
+		return resultMsg;
 	}
-	
-	public void setReasonCode(String reasonCode) {
-		this.reasonCode = reasonCode;
+
+	public void setResultMsg(String resultMsg) {
+		this.resultMsg = resultMsg;
 	}
-	
+
 	public String getMessage() {
 		return message;
 	}
