@@ -31,9 +31,9 @@ public class PaymentService {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(PaymentService.class);
-
+	
 	@Value("${file_payment.localsavefolder}")
-	private String localSavingFolder;
+	private String localSavingFolder = "/app/openapi/sample/sample_folder";
 	
 	@Autowired
 	private FilePaymentDAO filePaymentDAO;
@@ -65,7 +65,7 @@ public class PaymentService {
 
 	public String requestFilePaymentRequest(FilePaymentResult filePaymentResult, String params) {
 		String result = null;
-
+		
 		Map<String, String> param = new HashMap<String, String>();
 		logger.debug("Debug");
 		

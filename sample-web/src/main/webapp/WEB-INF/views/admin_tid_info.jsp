@@ -32,12 +32,15 @@
     
     <script type="text/javascript">   
 
+	var dev_url = "http://172.21.60.143:8181";
+	var sandbox_url = "http://172.21.142.194:8181";
+    
 	    (function($){
 	    	count = 0;
 	    	
 	    	bulkJobRefundRequest = function() {
 				$.ajax( {
-					url: "http://172.21.60.143:8181/sample-web/openapi/payment/refund/${tid}"
+					url: sandbox_url + "/sample-web/openapi/payment/refund/${tid}"
 				}).success( function( data ) {
 					console.log( data );
 					

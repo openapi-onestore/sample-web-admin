@@ -39,7 +39,7 @@ public class OpenApiManagerImpl implements OpenApiManager{
 	// Property values, uri is default setting
 	private String propertyPath = null;
 //	private String fileWritePath = "D:/samplefolder/bulkfile";
-	private String fileWritePath = "/home/1000720/sample_folder/download";
+	private String fileWritePath = "/app/openapi/sample/sample_folder/download";
 	private String fileJobUrl = "http://172.21.60.141/v1/payment/fileJob";
 	private String resultFileUrl = "http://172.21.60.141/v1/payment/job";
 	private String txidInfoUrl = "http://172.21.60.141/v1/payment/transaction";

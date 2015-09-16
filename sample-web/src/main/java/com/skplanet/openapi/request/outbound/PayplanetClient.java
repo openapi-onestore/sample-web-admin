@@ -74,8 +74,8 @@ public class PayplanetClient {
 		String accessToken = null;
 		
 		OAuthClientInfo oauthClientInfo = new OAuthClientInfo();
-		oauthClientInfo.setClientId("84xK38rx9iCrFRJVOynsRA0MT0o3LTs83OqDLEJf5g0=");
-		oauthClientInfo.setClientSecret("GS1qrhoHMJWpmS6QwLNaG5NcFWFqzh5TrmY5476a2nA=");
+		oauthClientInfo.setClientId("pfnWKkKJzSZipMTVKg2FIsj1FQory8Hh/mqAy1/CTI8=");
+		oauthClientInfo.setClientSecret("jizYJ/CY1lJdgmSy6c3vvzFHxUHddz36DX5ubMcsgCI=");
 		oauthClientInfo.setGrantType("client_credentials");
 		oauthManager.setClientInfo(oauthClientInfo);
 		accessToken = oauthManager.createAccessToken().getAccessToken();
@@ -203,8 +203,8 @@ public class PayplanetClient {
 		String accessToken = null;
 		
 		OAuthClientInfo oauthClientInfo = new OAuthClientInfo();
-		oauthClientInfo.setClientId("84xK38rx9iCrFRJVOynsRA0MT0o3LTs83OqDLEJf5g0=");
-		oauthClientInfo.setClientSecret("GS1qrhoHMJWpmS6QwLNaG5NcFWFqzh5TrmY5476a2nA=");
+		oauthClientInfo.setClientId("pfnWKkKJzSZipMTVKg2FIsj1FQory8Hh/mqAy1/CTI8=");
+		oauthClientInfo.setClientSecret("jizYJ/CY1lJdgmSy6c3vvzFHxUHddz36DX5ubMcsgCI=");
 		oauthClientInfo.setGrantType("client_credentials");
 		
 		oauthManager.setClientInfo(oauthClientInfo);

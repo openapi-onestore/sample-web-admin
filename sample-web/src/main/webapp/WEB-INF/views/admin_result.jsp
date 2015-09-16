@@ -32,12 +32,15 @@
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
     <script type="text/javascript">   
 	
+    	var dev_url = "http://172.21.60.143:8181";
+    	var sandbox_url = "http://172.21.142.194:8181";
+    
 	    (function($){
 	    	count = 0;
 	    	
 	    	bulkJobResultRequest = function() {
 				$.ajax( {
-					url: "http://172.21.60.143:8181/sample-web/openapi/payment/result/${jobid}"
+					url: sandbox_url + "/sample-web/openapi/payment/result/${jobid}"
 				}).success( function( data ) {
 					console.log( data );
 					if (data.length <= 20) {

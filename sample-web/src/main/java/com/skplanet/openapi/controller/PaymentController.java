@@ -73,8 +73,8 @@ public class PaymentController {
 		Map<String, String> hashMap = new HashMap<String, String>();
 		hashMap.put("jobId", jobid);
 		
-		NotificationResult notificationResult = paymentService.requestNotificationResult(hashMap);
-		hashMap.put("verifySign", notificationResult.getVerifySign());
+//		NotificationResult notificationResult = paymentService.requestNotificationResult(hashMap);
+//		hashMap.put("verifySign", notificationResult.getVerifySign());
 		
 		System.out.println(hashMap);
 		

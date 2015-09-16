@@ -31,12 +31,15 @@
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
     <script type="text/javascript">   
 
+	var dev_url = "http://172.21.60.143:8181";
+	var sandbox_url = "http://172.21.142.194:8181";    
+    
 	    (function($){
 	    	count = 0;
 	    	
 	    	bulkJobRequest = function() {
 				$.ajax( {
-					url: "http://172.21.60.143:8181/sample-web/openapi/payment/request"
+					url: sandbox_url + "/sample-web/openapi/payment/request"
 				}).success( function( data ) {
 					console.log( data );
 					
@@ -60,7 +63,7 @@
 							$rowHtml.find( ".resultMsg" ).html( data[ i ].resultMsg );							
 							$rowHtml.find( ".waitingJob" ).html( data[ i ].waitingJob );
 							$rowHtml.find( ".jobId" ).html(data[ i ].jobId );
-							$rowHtml.find( ".jobId" ).attr( "href", "http://172.21.60.143:8181/sample-web/openapi/admin/result/" + data[ i ].jobId );
+							$rowHtml.find( ".jobId" ).attr( "href", sandbox_url + "/sample-web/openapi/admin/result/" + data[ i ].jobId );
 							$rowHtml.find( ".uploadFile" ).html( data[ i ].uploadFile );
 							$rowHtml.find( ".uploadDate" ).html( data[ i ].uploadDate );
 							$rowHtml.find( ".verifyMessage" ).html( data[ i ].verifyMessage );
