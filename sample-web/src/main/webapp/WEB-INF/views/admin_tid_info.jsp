@@ -40,7 +40,7 @@
 	    	
 	    	bulkJobRefundRequest = function() {
 				$.ajax( {
-					url: sandbox_url + "/sample-web/openapi/payment/refund/${tid}"
+					url: dev_url + "/sample-web/openapi/payment/refund/${tid}"
 				}).success( function( data ) {
 					console.log( data );
 					

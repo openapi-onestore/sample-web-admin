@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -57,7 +58,10 @@ public class OAuthHttpRequest implements Callable<String>{
 		
 		try {
 			this.statusLine = response.getStatusLine();
-			result = EntityUtils.toString(response.getEntity());
+			System.out.println("Http result code : " + statusLine.getStatusCode());
+			if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
+				result = EntityUtils.toString(response.getEntity());				
+			}
 		} finally {
 			response.close();
 		}

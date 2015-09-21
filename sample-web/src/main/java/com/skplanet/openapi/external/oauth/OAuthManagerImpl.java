@@ -71,6 +71,7 @@ public class OAuthManagerImpl implements OAuthManager {
 		OAuthHttpRequest httpRequest = new OAuthHttpRequest();
 		
 		try {
+			System.out.println("Set Call url " + oauthAccessTokenUrl);
 			httpRequest.setCallUrl(oauthAccessTokenUrl);
 			httpRequest.setParamMap(data);
 			httpRequest.setHeader(getOAuthHttpRequestHeader());
@@ -82,6 +83,8 @@ public class OAuthManagerImpl implements OAuthManager {
 			if (response != null) {
 				ObjectMapper objectMapper = new ObjectMapper();
 				oauth = objectMapper.readValue(response, OAuthAccessToken.class);
+			} else {
+				throw new OAuthManagingException(OAuthManaging.OAUTH_HTTP_REQUEST_FAIL, "OAUTH http request is failure!! Status");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -40,7 +40,7 @@
 	    	
 	    	bulkJobResultRequest = function() {
 				$.ajax( {
-					url: sandbox_url + "/sample-web/openapi/payment/result/${jobid}"
+					url: dev_url + "/sample-web/openapi/payment/result/${jobid}"
 				}).success( function( data ) {
 					console.log( data );
 					if (data.length <= 20) {

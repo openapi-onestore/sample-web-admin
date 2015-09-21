@@ -39,7 +39,7 @@
 	    	
 	    	bulkJobRequest = function() {
 				$.ajax( {
-					url: sandbox_url + "/sample-web/openapi/payment/request"
+					url: dev_url + "/sample-web/openapi/payment/request"
 				}).success( function( data ) {
 					console.log( data );
 					

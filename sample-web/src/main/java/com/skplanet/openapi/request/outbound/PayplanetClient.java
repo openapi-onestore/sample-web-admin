@@ -59,7 +59,7 @@ public class PayplanetClient {
 	public PayplanetClient() {
 		System.out.println("Initiation for Manager");
 		try {
-			String path = new ClassPathResource("properties/release_config.properties").getFile().getAbsolutePath();
+			String path = new ClassPathResource("properties/config.properties").getFile().getAbsolutePath();
 			oauthManager.setPropertyFile(path);
 			openApiManager.setPropertyFile(path);
 			notiManagerImpl.setPropertyFile(path);

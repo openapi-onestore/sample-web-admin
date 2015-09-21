@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.skplanet.openapi.service.PaymentService;
-import com.skplanet.openapi.vo.NotificationResult;
 import com.skplanet.openapi.vo.payment.FilePaymentResult;
 
 @Controller

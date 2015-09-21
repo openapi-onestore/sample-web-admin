@@ -32,8 +32,7 @@ public class PaymentService {
 	private static final Logger logger = LoggerFactory
 			.getLogger(PaymentService.class);
 	
-	@Value("${file_payment.localsavefolder}")
-	private String localSavingFolder = "/app/openapi/sample/sample_folder";
+	private String localSavingFolder = "/home/1000720/sample_folder";
 	
 	@Autowired
 	private FilePaymentDAO filePaymentDAO;
