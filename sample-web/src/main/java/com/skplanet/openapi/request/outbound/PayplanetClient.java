@@ -53,6 +53,8 @@ public class PayplanetClient {
 	
 	private ObjectMapper objectMapper = new ObjectMapper();
 	
+	@Value("${oauth.client_id}") private String clientId;
+	@Value("${oauth.client_secret}") private String clientSecret;
 	@Value("${notification.verify_url}") private String verifyUrl;
 	@Value("${openapi.notification_url}") private String notificationUrl;
 	
@@ -74,8 +76,8 @@ public class PayplanetClient {
 		String accessToken = null;
 		
 		OAuthClientInfo oauthClientInfo = new OAuthClientInfo();
-		oauthClientInfo.setClientId("pfnWKkKJzSZipMTVKg2FIsj1FQory8Hh/mqAy1/CTI8=");
-		oauthClientInfo.setClientSecret("jizYJ/CY1lJdgmSy6c3vvzFHxUHddz36DX5ubMcsgCI=");
+		oauthClientInfo.setClientId(clientId);
+		oauthClientInfo.setClientSecret(clientSecret);
 		oauthClientInfo.setGrantType("client_credentials");
 		oauthManager.setClientInfo(oauthClientInfo);
 		accessToken = oauthManager.createAccessToken().getAccessToken();
@@ -203,8 +205,8 @@ public class PayplanetClient {
 		String accessToken = null;
 		
 		OAuthClientInfo oauthClientInfo = new OAuthClientInfo();
-		oauthClientInfo.setClientId("pfnWKkKJzSZipMTVKg2FIsj1FQory8Hh/mqAy1/CTI8=");
-		oauthClientInfo.setClientSecret("jizYJ/CY1lJdgmSy6c3vvzFHxUHddz36DX5ubMcsgCI=");
+		oauthClientInfo.setClientId(clientId);
+		oauthClientInfo.setClientSecret(clientSecret);
 		oauthClientInfo.setGrantType("client_credentials");
 		
 		oauthManager.setClientInfo(oauthClientInfo);

@@ -63,7 +63,7 @@
 							$rowHtml.find( ".resultMsg" ).html( data[ i ].resultMsg );							
 							$rowHtml.find( ".waitingJob" ).html( data[ i ].waitingJob );
 							$rowHtml.find( ".jobId" ).html(data[ i ].jobId );
-							$rowHtml.find( ".jobId" ).attr( "href", sandbox_url + "/sample-web/openapi/admin/result/" + data[ i ].jobId );
+							$rowHtml.find( ".jobId" ).attr( "href", dev_url + "/sample-web/openapi/admin/result/" + data[ i ].jobId );
 							$rowHtml.find( ".uploadFile" ).html( data[ i ].uploadFile );
 							$rowHtml.find( ".uploadDate" ).html( data[ i ].uploadDate );
 							$rowHtml.find( ".verifyMessage" ).html( data[ i ].verifyMessage );

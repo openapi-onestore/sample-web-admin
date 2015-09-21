@@ -35,8 +35,8 @@ public class OAuthManagerImpl implements OAuthManager {
 	
 	// url default setting
 	private String oauthAccessTokenUrl = "http://172.21.60.143:8080/oauth/service/accessToken";
-	private String clientId = "pfnWKkKJzSZipMTVKg2FIsj1FQory8Hh/mqAy1/CTI8=";
-	private String clientSecret = "jizYJ/CY1lJdgmSy6c3vvzFHxUHddz36DX5ubMcsgCI=";
+	private String clientId = "/0Ny9V9Kp06EHEhqfE3anmLpV9OeuvRYY3OSqiSkzMwcp2O5K0sYAAjguN8sfPRF";
+	private String clientSecret = "UkCq4QydghHHV+bRGfGJ1dIF9mcX66Hq61fDdylRP2Q=";
 	
 	public OAuthManagerImpl() {
 		OAuthClientInfo oauthClientInfo = new OAuthClientInfo();
