@@ -52,8 +52,9 @@ public class NotificationDaoTest {
 		List<Map<String, String>> list = notificationDAO.selectNotificationResult(hashMap);
 		
 		Assert.assertEquals(1, list.size());
-		
 		hashMap = list.get(0);
+		System.out.println(hashMap);
+
 		Assert.assertEquals(hashMap.get("jobId"), "145");
 		Assert.assertEquals(hashMap.get("event"), "bulkJob");
 		Assert.assertEquals(hashMap.get("status"), "initialized");

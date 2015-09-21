@@ -33,48 +33,6 @@ public class BulkJobDaoTest {
 	}
 	
 	@Test
-	public void getBulkJobDaoStandard() {	
-		hashMap.clear();
-		hashMap.put("START_NO", "1");
-		hashMap.put("END_NO", "2");
-		
-		List<Map<String,String>> map = filePaymentDAO.selectFilePayment(hashMap);
-		
-		Assert.assertEquals(map.size(), 2);
-		
-		Assert.assertEquals("1", map.get(0).get("mid"));
-		Assert.assertEquals("AABBCCDD", map.get(0).get("billingToken"));
-		Assert.assertEquals("0901208001", map.get(0).get("pid"));
-		Assert.assertEquals("Health portion 1", map.get(0).get("pName"));
-		Assert.assertEquals("11125521", map.get(0).get("orderNo"));
-		Assert.assertEquals("5000", map.get(0).get("amtReqPurchase"));
-		Assert.assertEquals("1000", map.get(0).get("amtCarrier"));
-		Assert.assertEquals("4000", map.get(0).get("amtCreditCard"));
-		Assert.assertEquals("0", map.get(0).get("amtTms"));
-		
-		Assert.assertEquals("2", map.get(1).get("mid"));
-		Assert.assertEquals("AABBCCDD", map.get(1).get("billingToken"));
-		Assert.assertEquals("0901208002", map.get(1).get("pid"));
-		Assert.assertEquals("Health portion 2", map.get(1).get("pName"));
-		Assert.assertEquals("11125522", map.get(1).get("orderNo"));
-		Assert.assertEquals("1000", map.get(1).get("amtReqPurchase"));
-		Assert.assertEquals("1000", map.get(1).get("amtCarrier"));
-		Assert.assertEquals("0", map.get(1).get("amtCreditCard"));
-		Assert.assertEquals("0", map.get(1).get("amtTms"));
-	}
-	
-	@Test
-	public void getBulkJobFail() {
-		hashMap.clear();
-		hashMap.put("START_NO", "4");
-		hashMap.put("END_NO", "5");
-		
-		List<Map<String,String>> map = filePaymentDAO.selectFilePayment(hashMap);
-		
-		Assert.assertEquals(map.size(), 0);
-	}
-	
-	@Test
 	public void getBulkJobRequest() {
 		List<Map<String,String>> map = filePaymentDAO.selectFilePaymentRequest();
 		

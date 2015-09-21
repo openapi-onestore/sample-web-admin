@@ -5,8 +5,6 @@ import java.util.Map;
 
 public interface FilePaymentDAO {
 
-	List<Map<String, String>> selectFilePayment(Map<String, String> param);
-	
 	List<Map<String, String>> selectFilePaymentRequest();
 	void insertFilePaymentRequest(Map<String, String> param) throws Exception;
 	void updateNotifiVerified(Map<String, String> param) throws Exception;

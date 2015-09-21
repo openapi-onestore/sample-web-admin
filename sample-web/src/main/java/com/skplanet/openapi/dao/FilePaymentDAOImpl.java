@@ -27,19 +27,6 @@ public class FilePaymentDAOImpl extends SqlSessionDaoSupport implements FilePaym
 		super.setSqlSessionTemplate(sqlSessionTemplate);
 	}
 	
-	public List<Map<String, String>> selectFilePayment(Map<String, String> param) {
-		
-		List<Map<String,String>> result = null;
-		
-		try {
-			result = getSqlSession().selectList("filePayment.selectFilePayment", param);
-		} catch(Exception e) {
-			logger.error("fail to load file payment, error message : " + e.getMessage());
-		}
-		
-		return result;
-	}
-
 	@Override
 	public List<Map<String, String>> selectFilePaymentRequest() {
 		
