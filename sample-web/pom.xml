@@ -4,7 +4,7 @@
 	<groupId>com.skplanet.openapi</groupId>
 	<artifactId>sample-web</artifactId>
 	<packaging>war</packaging>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>sample-web Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 	
@@ -163,12 +163,28 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<includes>
-						<include></include>
-					</includes>
-				</configuration>
-			</plugin>			
+				<version>2.6</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					<configuration>
+						<finalName>OpenApiManager-${version}</finalName>
+						<includes>
+							<include>com/skplanet/openapi/external/payment/**</include>
+							<include>com/skplanet/openapi/external/oauth/**</include>
+							<include>com/skplanet/openapi/external/notification/**</include>
+							<include>com/skplanet/openapi/vo/**</include>
+							<include>com/skplanet/openapi/vo/payment/**</include>
+							<include>com/skplanet/openapi/vo/refund/**</include>
+						</includes>
+					</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 	</plugins>
 	</build>
 </project>
