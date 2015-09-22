@@ -28,17 +28,18 @@ public class NotificationService {
 		String result = null;
 		
 		try {
-			notiVerifyResult = payplanetClient.getNotificationVerifyResult(notificationResult, "bulkJob");				
+			Map<String, String> paramMap = new HashMap<String, String>();
+			paramMap.put("notifyVersion", notificationResult.getNotifyVersion());
+			paramMap.put("event", notificationResult.getEvent());
+			paramMap.put("status", notificationResult.getStatus());
+			paramMap.put("jobId", notificationResult.getJobId());
+			paramMap.put("updateTime", notificationResult.getUpdateTime());
+			paramMap.put("verifySign", notificationResult.getVerifySign());
+			requestNotificationResult(paramMap);
+			
+			notiVerifyResult = payplanetClient.getNotificationVerifyResult(notificationResult, "bigcharging_notify_verification");
+			System.out.println("Noti verify msg : " + notiVerifyResult.getResultCode() + " " + notiVerifyResult.getResultMsg());
 			if (notiVerifyResult.getResultCode().equals("0000")) {
-				Map<String, String> paramMap = new HashMap<String, String>();
-				paramMap.put("notifyVersion", notificationResult.getNotifyVersion());
-				paramMap.put("event", notificationResult.getEvent());
-				paramMap.put("status", notificationResult.getStatus());
-				paramMap.put("jobId", notificationResult.getJobId());
-				paramMap.put("updateTime", notificationResult.getUpdateTime());
-				paramMap.put("verifySign", notificationResult.getVerifySign());
-				requestNotificationResult(paramMap);
-				
 				Map<String, String> updateParam = new HashMap<String, String>();
 				updateParam.put("jobId", notificationResult.getJobId());
 				updateParam.put("verifyResult", notiVerifyResult.getResultMsg());
