@@ -23,17 +23,13 @@ public class OAuthManagerTest {
 	
 	@Before
 	public void setUp() {
-		oauthClientInfo = new OAuthClientInfo();
-		oauthClientInfo.setClientId("84xK38rx9iCrFRJVOynsRA0MT0o3LTs83OqDLEJf5g0=");
-		oauthClientInfo.setClientSecret("GS1qrhoHMJWpmS6QwLNaG5NcFWFqzh5TrmY5476a2nA=");
-		oauthClientInfo.setGrantType("client_credentials");
+		oauthClientInfo = new OAuthClientInfo("84xK38rx9iCrFRJVOynsRA0MT0o3LTs83OqDLEJf5g0=", "GS1qrhoHMJWpmS6QwLNaG5NcFWFqzh5TrmY5476a2nA=", "client_credentials");
 	}
 	
 	@Test
 	public void getAccessToken() {
 		
-		OAuthManagerImpl oauthManager = new OAuthManagerImpl();
-		oauthManager.setClientInfo(oauthClientInfo);
+		OAuthManagerImpl oauthManager = new OAuthManagerImpl(oauthClientInfo);
 		OAuthAccessToken oauth = null;
 		
 		try {

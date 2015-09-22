@@ -40,23 +40,24 @@ import com.skplanet.openapi.vo.refund.RefundTransactionRequest;
 public class PayplanetClient {
 	
 	private static final Logger logger = LoggerFactory.getLogger(PayplanetClient.class);
-	
+
+	@Value("${oauth.client_id}") private String clientId;
+	@Value("${oauth.client_secret}") private String clientSecret;
+	@Value("${notification.verify_url}") private String verifyUrl;
+	@Value("${openapi.notification_url}") private String notificationUrl;
+
 	@Autowired
 	private FilePaymentDAO filePaymentDAO;
 	
 	@Autowired
 	private NotificationDAO notificationDAO;
 	
-	private OAuthManagerImpl oauthManager = new OAuthManagerImpl();
+	private OAuthManagerImpl oauthManager = new OAuthManagerImpl(new OAuthClientInfo(clientId, clientSecret, "client_credentials"));
 	private OpenApiManagerImpl openApiManager = new OpenApiManagerImpl();
 	private NotiManagerImpl notiManagerImpl = new NotiManagerImpl();
 	
 	private ObjectMapper objectMapper = new ObjectMapper();
 	
-	@Value("${oauth.client_id}") private String clientId;
-	@Value("${oauth.client_secret}") private String clientSecret;
-	@Value("${notification.verify_url}") private String verifyUrl;
-	@Value("${openapi.notification_url}") private String notificationUrl;
 	
 	public PayplanetClient() {
 		System.out.println("Initiation for Manager");
@@ -75,10 +76,7 @@ public class PayplanetClient {
 		
 		String accessToken = null;
 		
-		OAuthClientInfo oauthClientInfo = new OAuthClientInfo();
-		oauthClientInfo.setClientId(clientId);
-		oauthClientInfo.setClientSecret(clientSecret);
-		oauthClientInfo.setGrantType("client_credentials");
+		OAuthClientInfo oauthClientInfo = new OAuthClientInfo(clientId, clientSecret, "client_credentials");
 		oauthManager.setClientInfo(oauthClientInfo);
 		accessToken = oauthManager.createAccessToken().getAccessToken();
 		
@@ -204,11 +202,7 @@ public class PayplanetClient {
 	private String getAccessTokenFromOauthManager() throws Exception {
 		String accessToken = null;
 		
-		OAuthClientInfo oauthClientInfo = new OAuthClientInfo();
-		oauthClientInfo.setClientId(clientId);
-		oauthClientInfo.setClientSecret(clientSecret);
-		oauthClientInfo.setGrantType("client_credentials");
-		
+		OAuthClientInfo oauthClientInfo = new OAuthClientInfo(clientId, clientSecret, "client_credentials");
 		oauthManager.setClientInfo(oauthClientInfo);
 		accessToken = oauthManager.createAccessToken().getAccessToken();
 		

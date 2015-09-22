@@ -38,6 +38,11 @@ public class NotificationService {
 				paramMap.put("updateTime", notificationResult.getUpdateTime());
 				paramMap.put("verifySign", notificationResult.getVerifySign());
 				requestNotificationResult(paramMap);
+				
+				Map<String, String> updateParam = new HashMap<String, String>();
+				updateParam.put("jobId", notificationResult.getJobId());
+				updateParam.put("verifyResult", notiVerifyResult.getResultMsg());
+				requestNotificationVerify(updateParam);
 			}
 			result = notiVerifyResult.getResultCode();
 		} catch (Exception e) {

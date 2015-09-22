@@ -34,13 +34,9 @@ public class NotiManagerTest {
 	public void setUp() {
 		objectMapper = new ObjectMapper();
 		
-		oauthClientInfo = new OAuthClientInfo();
-		oauthClientInfo.setClientId("84xK38rx9iCrFRJVOynsRA0MT0o3LTs83OqDLEJf5g0=");
-		oauthClientInfo.setClientSecret("GS1qrhoHMJWpmS6QwLNaG5NcFWFqzh5TrmY5476a2nA=");
-		oauthClientInfo.setGrantType("client_credentials");
+		oauthClientInfo = new OAuthClientInfo("84xK38rx9iCrFRJVOynsRA0MT0o3LTs83OqDLEJf5g0=", "GS1qrhoHMJWpmS6QwLNaG5NcFWFqzh5TrmY5476a2nA=", "client_credentials");
 		
-		oauthManager = new OAuthManagerImpl();
-		oauthManager.setClientInfo(oauthClientInfo);
+		oauthManager = new OAuthManagerImpl(oauthClientInfo);
 		try {
 			accessToken = oauthManager.createAccessToken().getAccessToken();
 		} catch (OAuthManagingException e) {

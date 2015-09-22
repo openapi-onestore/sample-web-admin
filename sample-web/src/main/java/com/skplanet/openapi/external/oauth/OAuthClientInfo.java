@@ -11,6 +11,12 @@ public final class OAuthClientInfo {
 	private String clientSecret;	
 	private String grantType;
 	
+	public OAuthClientInfo(String clientId, String clientSecret, String grantType) {
+		this.clientId = clientId;
+		this.clientSecret = clientSecret;
+		this.grantType = grantType;
+	}
+	
 	public String getAuthString() {
 		return clientId + ":" + clientSecret;
 	}

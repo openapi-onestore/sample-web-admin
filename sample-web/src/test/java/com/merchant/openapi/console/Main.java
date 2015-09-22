@@ -17,14 +17,11 @@ public class Main {
 	public static OAuthClientInfo oauthClientInfo = null;
 	
 	public static void init() {
-		oauthClientInfo = new OAuthClientInfo();
-		oauthClientInfo.setClientId("84xK38rx9iCrFRJVOynsRA0MT0o3LTs83OqDLEJf5g0=");
-		oauthClientInfo.setClientSecret("GS1qrhoHMJWpmS6QwLNaG5NcFWFqzh5TrmY5476a2nA=");
-		oauthClientInfo.setGrantType("client_credentials");
+		oauthClientInfo = new OAuthClientInfo("84xK38rx9iCrFRJVOynsRA0MT0o3LTs83OqDLEJf5g0=", "GS1qrhoHMJWpmS6QwLNaG5NcFWFqzh5TrmY5476a2nA=", "client_credentials");
 	}
 	
 	public static String getAccessToken() {
-		OAuthManagerImpl oauthManager = new OAuthManagerImpl(oauthClientInfo.getClientId(), oauthClientInfo.getClientSecret());
+		OAuthManagerImpl oauthManager = new OAuthManagerImpl(oauthClientInfo);
 		OAuthAccessToken accessToken = null;
 		try {
 			accessToken = oauthManager.createAccessToken();

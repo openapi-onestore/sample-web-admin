@@ -30,25 +30,12 @@ public class OAuthManagerImpl implements OAuthManager {
 	
 	private OAuthClientInfo clientInfo = null;
 	private OAuthAccessToken oauth = null;
-	
 	private String propertyPath = null;
 	
 	// url default setting
 	private String oauthAccessTokenUrl = "http://172.21.60.143:8080/oauth/service/accessToken";
-	private String clientId = "/0Ny9V9Kp06EHEhqfE3anmLpV9OeuvRYY3OSqiSkzMwcp2O5K0sYAAjguN8sfPRF";
-	private String clientSecret = "UkCq4QydghHHV+bRGfGJ1dIF9mcX66Hq61fDdylRP2Q=";
 	
-	public OAuthManagerImpl() {
-		OAuthClientInfo oauthClientInfo = new OAuthClientInfo();
-		oauthClientInfo.setClientId(this.clientId);
-		oauthClientInfo.setClientSecret(this.clientSecret);
-		this.clientInfo = oauthClientInfo;
-	}
-	
-	public OAuthManagerImpl(String clientId, String clientSecret) {
-		OAuthClientInfo oauthClientInfo = new OAuthClientInfo();
-		oauthClientInfo.setClientId(clientId);
-		oauthClientInfo.setClientSecret(clientSecret);
+	public OAuthManagerImpl(OAuthClientInfo oauthClientInfo) {
 		this.clientInfo = oauthClientInfo;
 	}
 	
@@ -115,8 +102,6 @@ public class OAuthManagerImpl implements OAuthManager {
 			props.load(new BufferedInputStream(fis));
 			
 			oauthAccessTokenUrl = props.getProperty("oauth.token_create_url");
-			clientId = props.getProperty("oauth.client_id");
-			clientSecret = props.getProperty("oauth.client_secret");
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new OAuthManagingException(OAuthManaging.UNKNOWN_ERROR, "File creation is incorect!!");

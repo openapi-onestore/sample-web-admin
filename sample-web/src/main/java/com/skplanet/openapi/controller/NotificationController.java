@@ -41,6 +41,10 @@ public class NotificationController {
 			System.out.println("Notification original Data : " + objectMapper.writeValueAsString(notificationResult));
 			result = notificationService.processNoti(notificationResult);
 			// TODO 200 OK
+			if (result.equals("0000")) {
+				
+			}
+			
 			return result;
 		} catch (Exception e) {
 			// TODO Fail Response
