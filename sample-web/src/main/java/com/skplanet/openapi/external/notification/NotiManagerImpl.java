@@ -57,7 +57,6 @@ public class NotiManagerImpl implements NotiManager {
 		paramMap.put("status", notiReceive.getStatus());
 		paramMap.put("jobId", notiReceive.getJobId());
 		paramMap.put("updateTime", notiReceive.getUpdateTime());
-		paramMap.put("verifySign", notiReceive.getVerifySign());
 		
 		NotiVerificationTransaction notiVerificationTransaction = new NotiVerificationTransaction();
 		

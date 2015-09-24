@@ -34,7 +34,6 @@ public class NotificationService {
 			paramMap.put("status", notificationResult.getStatus());
 			paramMap.put("jobId", notificationResult.getJobId());
 			paramMap.put("updateTime", notificationResult.getUpdateTime());
-			paramMap.put("verifySign", notificationResult.getVerifySign());
 			requestNotificationResult(paramMap);
 			
 			notiVerifyResult = payplanetClient.getNotificationVerifyResult(notificationResult, "bigcharging_notify_verification");

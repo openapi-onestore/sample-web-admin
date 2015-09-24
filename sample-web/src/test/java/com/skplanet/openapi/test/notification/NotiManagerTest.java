@@ -54,7 +54,6 @@ public class NotiManagerTest {
 		notiReceive.setStatus("completed");
 		notiReceive.setJobId("100");
 		notiReceive.setUpdateTime("20150910010101");
-		notiReceive.setVerifySign("AtkOfasdsadwfjenfe");
 		notiReceive.setNotifyVersion("1.0");
 		
 		NotiVerifyResult notiVerifyResult = null;

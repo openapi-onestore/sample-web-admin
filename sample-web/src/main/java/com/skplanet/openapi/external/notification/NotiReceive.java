@@ -7,7 +7,6 @@ public class NotiReceive {
 	private String status;
 	private String jobId;
 	private String updateTime;
-	private String verifySign;
 	
 	public String getNotifyVersion() {
 		return notifyVersion;
@@ -38,12 +37,6 @@ public class NotiReceive {
 	}
 	public void setUpdateTime(String updateTime) {
 		this.updateTime = updateTime;
-	}
-	public String getVerifySign() {
-		return verifySign;
-	}
-	public void setVerifySign(String verifySign) {
-		this.verifySign = verifySign;
 	}
 	
 }

@@ -50,7 +50,7 @@
 						console.log( original );
 						console.log( original[0]);
 						
-						for( var i = 1; i < original.length-1; i++) {
+						for( var i = 2; i < original.length-2; i++) {
 							data = original[i].split(',');
 							console.log( data );
 							
