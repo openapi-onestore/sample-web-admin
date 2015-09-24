@@ -3,10 +3,14 @@ package com.skplanet.openapi.request.outbound;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.DeserializationConfig.Feature;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -178,15 +182,22 @@ public class PayplanetClient {
 		return notiReceive;
 	}
 	
-	public NotiVerifyResult getNotificationVerifyResult(NotiReceive notiReceive, String listenerType) {
+	public void getNotificationVerifyResult(NotiReceive notiReceive, String listenerType, String jobId) {
 		NotiVerifyResult notiVerifyResult = null;
 		try {
 			String accessToken = getAccessTokenFromOauthManager();
 			notiVerifyResult = notiManagerImpl.requestNotificationVerification(notiReceive, listenerType, accessToken);
+			
+			System.out.println("Noti verify msg : " + notiVerifyResult.getResultCode() + " " + notiVerifyResult.getResultMsg());
+			if (notiVerifyResult.getResultCode().equals("0000")) {
+				Map<String, String> updateParam = new HashMap<String, String>();
+				updateParam.put("jobId", jobId);
+				updateParam.put("verifyResult", notiVerifyResult.getResultMsg());
+				updateNotificationVerify(updateParam);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return notiVerifyResult;
 	}
 	
 	private FilePaymentHeader getFilepaymentHeader(int processingCount) {
@@ -249,6 +260,22 @@ public class PayplanetClient {
 		System.out.println(objectMapper.writeValueAsString(cancelRequest));
 		
 		return cancelRequest;
+	}
+	
+	public <T> String getObjectJsonString(T object) {
+		String result = null;
+		
+		try {
+			result = objectMapper.writeValueAsString(object);
+		} catch (JsonGenerationException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 	
 }

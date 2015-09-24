@@ -24,7 +24,6 @@ public class NotificationService {
 	public String processNoti(NotiReceive notificationResult) {
 		// TODO Notification 처리
 		// TODO 반드시 비동기로 처리되어야함.
-		NotiVerifyResult notiVerifyResult = null;
 		String result = null;
 		
 		try {
@@ -35,19 +34,19 @@ public class NotificationService {
 			paramMap.put("jobId", notificationResult.getJobId());
 			paramMap.put("updateTime", notificationResult.getUpdateTime());
 			requestNotificationResult(paramMap);
+
+			NotiVerifyResult notiResult = new NotiVerifyResult();
+			notiResult.setResultCode("0000");
+			notiResult.setResultMsg("SUCCESS");
+			result = payplanetClient.getObjectJsonString(notiResult);
+			payplanetClient.getNotificationVerifyResult(notificationResult, "bigcharging_notify_verification", notificationResult.getJobId());
 			
-			notiVerifyResult = payplanetClient.getNotificationVerifyResult(notificationResult, "bigcharging_notify_verification");
-			System.out.println("Noti verify msg : " + notiVerifyResult.getResultCode() + " " + notiVerifyResult.getResultMsg());
-			if (notiVerifyResult.getResultCode().equals("0000")) {
-				Map<String, String> updateParam = new HashMap<String, String>();
-				updateParam.put("jobId", notificationResult.getJobId());
-				updateParam.put("verifyResult", notiVerifyResult.getResultMsg());
-				requestNotificationVerify(updateParam);
-			}
-			result = notiVerifyResult.getResultCode();
 		} catch (Exception e) {
 			e.printStackTrace();
-			result = "9999";
+			NotiVerifyResult exceptionResult = new NotiVerifyResult();
+			exceptionResult.setResultCode("9999");
+			exceptionResult.setResultMsg("Exception occur");
+			result = payplanetClient.getObjectJsonString(exceptionResult);
 		}
 		return result;
 	}

@@ -40,10 +40,6 @@ public class NotificationController {
 			logger.debug("Notification received!");
 			System.out.println("Notification original Data : " + objectMapper.writeValueAsString(notificationResult));
 			result = notificationService.processNoti(notificationResult);
-			// TODO 200 OK
-			if (result.equals("0000")) {
-				
-			}
 			
 			return result;
 		} catch (Exception e) {
