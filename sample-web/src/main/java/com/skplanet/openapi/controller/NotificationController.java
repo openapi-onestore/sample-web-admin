@@ -1,7 +1,5 @@
 package com.skplanet.openapi.controller;
 
-import java.util.Map;
-
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.skplanet.openapi.external.notification.NotiReceive;
-import com.skplanet.openapi.request.inbound.InBoundRequestHandler;
 import com.skplanet.openapi.service.NotificationService;
 
 @Controller
@@ -26,9 +23,6 @@ public class NotificationController {
 	private NotificationService notificationService;
 	
 	ObjectMapper objectMapper = new ObjectMapper();
-	
-	@Autowired
-	private InBoundRequestHandler<Map<String, String>> requestHandler;
 	
 	@RequestMapping(value = "/noti_listener", method = RequestMethod.POST)
 	@ResponseBody

@@ -49,7 +49,7 @@ public class PayplanetClient {
 	@Value("${oauth.client_secret}") private String clientSecret;
 	@Value("${notification.verify_url}") private String verifyUrl;
 	@Value("${openapi.notification_url}") private String notificationUrl;
-
+	
 	@Autowired
 	private FilePaymentDAO filePaymentDAO;
 	
