@@ -1,7 +1,7 @@
 package com.skplanet.openapi.vo.payment;
 
 public class FilePaymentResult {
-
+	
 	private String resultCode;
 	private String resultMsg;
 	private int waitingJobs;
