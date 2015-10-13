@@ -13,6 +13,7 @@ import java.util.concurrent.ThreadFactory;
 import org.apache.commons.codec.binary.Base64;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import com.skplanet.openapi.external.framework.OAuthTokenResponse;
 import com.skplanet.openapi.external.oauth.OAuthManagingException.OAuthManaging;
 
 public class OAuthManagerImpl implements OAuthManager {
@@ -39,13 +40,27 @@ public class OAuthManagerImpl implements OAuthManager {
 		this.clientInfo = oauthClientInfo;
 	}
 	
-	@Override
+	public void createAccessToken(OAuthTokenResponse tokenResponse) {
+		
+		OAuthAccessToken oauthAccessToken = null;
+		
+		try {
+			oauthAccessToken = createAccessToken();
+			tokenResponse.onOAuthTokenReceive(oauthAccessToken);
+		} catch (OAuthManagingException e) {
+			e.printStackTrace();
+			tokenResponse.onOAuthTokenError(e);
+		}
+		
+	}
+	
+	// TODO : change private and interface
 	public OAuthAccessToken createAccessToken() throws OAuthManagingException {
 		
 		if (clientInfo == null) {
 			throw new OAuthManagingException(OAuthManaging.OAUTH_OBJECT_NULL, "Client info is null!!");
 		}
-
+		
 		if (!clientInfo.validateClientInfo()) {
 			throw new OAuthManagingException(OAuthManaging.INVALID_PARAMETER, "Client info is invalid!!");
 		}

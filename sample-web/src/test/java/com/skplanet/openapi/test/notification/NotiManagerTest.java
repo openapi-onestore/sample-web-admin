@@ -13,7 +13,6 @@ import com.skplanet.openapi.external.notification.NotiManagerImpl;
 import com.skplanet.openapi.external.notification.NotiReceive;
 import com.skplanet.openapi.external.notification.NotiVerifyResult;
 import com.skplanet.openapi.external.oauth.OAuthClientInfo;
-import com.skplanet.openapi.external.oauth.OAuthManager;
 import com.skplanet.openapi.external.oauth.OAuthManagerImpl;
 import com.skplanet.openapi.external.oauth.OAuthManagingException;
 
@@ -25,7 +24,7 @@ import com.skplanet.openapi.external.oauth.OAuthManagingException;
 public class NotiManagerTest {
 	
 	private ObjectMapper objectMapper;
-	private OAuthManager oauthManager;
+	private OAuthManagerImpl oauthManager;
 	private NotiManager notiManager;
 	private OAuthClientInfo oauthClientInfo;
 	private String accessToken;

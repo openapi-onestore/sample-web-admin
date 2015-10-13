@@ -14,7 +14,7 @@ public interface OpenApiManager {
 //	public FilePaymentResult createFilePayment(List<File> paymentFileList);
 	File getFilePaymentJobStatus(String jobId, String accessToken) throws OpenApiException;
 	TransactionDetail getPaymentTransactionDetail(String tid, String accessToken) throws OpenApiException;
-	CancelResponse cancelPaymentTransaction(CancelRequest cancelRequest, String accessToken) throws OpenApiException;
+	CancelResponse getCancelPaymentTransaction(CancelRequest cancelRequest, String accessToken) throws OpenApiException;
 	void setPropertyFile(String path) throws Exception;
 	
 }

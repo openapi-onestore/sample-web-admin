@@ -133,7 +133,7 @@ public class OpenApiManagerImpl implements OpenApiManager{
 	}
 	
 	@Override
-	public CancelResponse cancelPaymentTransaction(CancelRequest cancelRequest, String accessToken) throws OpenApiException {		
+	public CancelResponse getCancelPaymentTransaction(CancelRequest cancelRequest, String accessToken) throws OpenApiException {		
 		Map<String, String> paramMap = new HashMap<String, String>();
 		System.out.println("Cancel Request access Token : " + accessToken);
 		paramMap.put("Authorization", "Bearer " + accessToken);

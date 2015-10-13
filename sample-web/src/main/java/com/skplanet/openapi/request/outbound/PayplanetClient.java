@@ -166,7 +166,7 @@ public class PayplanetClient {
 		String jsonTransactionString = param.get("transactionInfo");
 		
 		CancelRequest cancelRequest = getRefundTransactionJsonString(jsonTransactionString);
-		CancelResponse cancelResponse = openApiManager.cancelPaymentTransaction(cancelRequest, accessToken);
+		CancelResponse cancelResponse = openApiManager.getCancelPaymentTransaction(cancelRequest, accessToken);
 		
 		return objectMapper.writeValueAsString(cancelResponse);
 	}

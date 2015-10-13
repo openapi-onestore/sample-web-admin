@@ -15,7 +15,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.skplanet.openapi.external.oauth.OAuthClientInfo;
-import com.skplanet.openapi.external.oauth.OAuthManager;
 import com.skplanet.openapi.external.oauth.OAuthManagerImpl;
 import com.skplanet.openapi.external.oauth.OAuthManagingException;
 import com.skplanet.openapi.external.payment.OpenApiException;
@@ -38,7 +37,7 @@ import com.skplanet.openapi.vo.refund.RefundTransactionRequest;
 public class OpenApiManagerTest {
 
 	private ObjectMapper objectMapper;
-	private OAuthManager oauthManager;
+	private OAuthManagerImpl oauthManager;
 	private OAuthClientInfo oauthClientInfo;
 	private String accessToken;
 	
@@ -165,7 +164,7 @@ public class OpenApiManagerTest {
 		CancelResponse cancelResponse = null;
 		
 		try {
-			cancelResponse = openApiManager.cancelPaymentTransaction(cancelRequest, accessToken);
+			cancelResponse = openApiManager.getCancelPaymentTransaction(cancelRequest, accessToken);
 			System.out.println(objectMapper.writeValueAsString(cancelResponse));
 		} catch (Exception e) {
 			e.printStackTrace();
