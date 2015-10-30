@@ -10,9 +10,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import com.skplanet.openapi.external.oauth.OAuthClientInfo;
 import com.skplanet.openapi.external.oauth.OAuthManagerImpl;
@@ -54,6 +56,25 @@ public class OpenApiManagerTest {
 			e.printStackTrace();
 		}
 	}
+
+	@Test
+	public void exTest() {
+		ObjectFactoryCreatingFactoryBean testFactory = new ObjectFactoryCreatingFactoryBean();
+		testFactory.setTargetBeanName("transactionTemplate");
+		
+		try {
+			TransactionTemplate transactionTemplate_1 = (TransactionTemplate)testFactory.getObject();
+			TransactionTemplate transactionTemplate_2 = (TransactionTemplate)testFactory.getObject();
+			
+			Assert.assertNotEquals(transactionTemplate_1, transactionTemplate_2);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+	}
 	
 	public void createFilePaymentTest() {
 		// file payment test
@@ -90,6 +111,7 @@ public class OpenApiManagerTest {
 		}
 	}
 	
+	@Test
 	public void getResultFileFromPaymentTest() {
 		
 		OpenApiManager openApiManager = new OpenApiManagerImpl();
@@ -103,8 +125,6 @@ public class OpenApiManagerTest {
 		}
 		
 		Assert.assertNotNull(file);
-		
-		
 		
 	}
 	
@@ -125,6 +145,7 @@ public class OpenApiManagerTest {
 		
 	}
 	
+	@Test
 	public void getTransactionDetailTest() {
 		
 		OpenApiManager openApiManager = new OpenApiManagerImpl();
@@ -140,7 +161,7 @@ public class OpenApiManagerTest {
 		Assert.assertNotNull(transactionDetail);
 	}
 	
-	
+	@Test
 	public void cancelPaymentTransactionTest() {
 		OpenApiManager openApiManager = new OpenApiManagerImpl();
 		

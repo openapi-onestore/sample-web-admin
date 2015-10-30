@@ -16,7 +16,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.AbstractHttpMessage;
 import org.apache.http.util.EntityUtils;
 
-public class OAuthHttpRequest implements Callable<String>{
+public class OAuthHttpRequest implements Callable<String> {
 
 	private String callUrl = null;
 	private String param = null;	
@@ -27,12 +27,10 @@ public class OAuthHttpRequest implements Callable<String>{
 		
 	private StatusLine statusLine;
 	
-	private boolean isJsonRequest = false;
-	
 	@Override
 	public String call() throws Exception {
 		String result = null;
-				
+		
 		if (!validation())
 			return null;
 		
@@ -41,17 +39,12 @@ public class OAuthHttpRequest implements Callable<String>{
 		
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(callUrl);
-
+		
 		if (headers != null)
 			addHeaders(httpPost);
 		
 		HttpEntity httpEntity = null;
-		
-		if (isJsonRequest) {
-			httpEntity = new StringEntity(param, ContentType.APPLICATION_JSON);
-		} else {
-			httpEntity = new StringEntity(param, ContentType.APPLICATION_FORM_URLENCODED);			
-		}
+		httpEntity = new StringEntity(param, ContentType.APPLICATION_FORM_URLENCODED);			
 		
 		httpPost.setEntity(httpEntity);
 		CloseableHttpResponse response = httpclient.execute(httpPost);
@@ -90,7 +83,6 @@ public class OAuthHttpRequest implements Callable<String>{
 	
 	public void setParam(String param) {
 		this.param = param;
-		this.isJsonRequest = true;
 	}
 	
 	public void setCallUrl(String callUrl) {
@@ -115,10 +107,6 @@ public class OAuthHttpRequest implements Callable<String>{
 		} else {
 			return null;
 		}
-	}
-	
-	public void setJsonRequest(boolean isJson) {
-		this.isJsonRequest = isJson;
 	}
 	
 	private void addHeaders(AbstractHttpMessage httpMessage) {

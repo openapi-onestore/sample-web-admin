@@ -28,5 +28,5 @@ public class OpenApiGetTransaction implements Callable<String>{
 		this.callUrl = callingUrl;
 		System.out.println("OpenApiGetTransaction" + this.callUrl);
 	}
-		
+	
 }

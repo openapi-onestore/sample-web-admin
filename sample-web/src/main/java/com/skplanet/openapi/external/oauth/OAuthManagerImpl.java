@@ -13,11 +13,10 @@ import java.util.concurrent.ThreadFactory;
 import org.apache.commons.codec.binary.Base64;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import com.skplanet.openapi.external.framework.OAuthTokenResponse;
 import com.skplanet.openapi.external.oauth.OAuthManagingException.OAuthManaging;
 
 public class OAuthManagerImpl implements OAuthManager {
-
+	
 	private int threadPoolCount = 1;
 	private ExecutorService jobExecutor = Executors.newFixedThreadPool(threadPoolCount, new ThreadFactory() {
 		@Override
@@ -40,21 +39,6 @@ public class OAuthManagerImpl implements OAuthManager {
 		this.clientInfo = oauthClientInfo;
 	}
 	
-	public void createAccessToken(OAuthTokenResponse tokenResponse) {
-		
-		OAuthAccessToken oauthAccessToken = null;
-		
-		try {
-			oauthAccessToken = createAccessToken();
-			tokenResponse.onOAuthTokenReceive(oauthAccessToken);
-		} catch (OAuthManagingException e) {
-			e.printStackTrace();
-			tokenResponse.onOAuthTokenError(e);
-		}
-		
-	}
-	
-	// TODO : change private and interface
 	public OAuthAccessToken createAccessToken() throws OAuthManagingException {
 		
 		if (clientInfo == null) {
@@ -125,6 +109,7 @@ public class OAuthManagerImpl implements OAuthManager {
 		}
 	}
 	
+	@Override
 	public void setExecutorService(ExecutorService service) {
 		if (jobExecutor != null) {
 			this.jobExecutor.shutdown();			

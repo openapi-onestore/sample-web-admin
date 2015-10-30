@@ -1,5 +1,9 @@
 package com.skplanet.openapi.test.oauth;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.codec.binary.Base64;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,6 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.skplanet.openapi.external.oauth.OAuthAccessToken;
 import com.skplanet.openapi.external.oauth.OAuthClientInfo;
 import com.skplanet.openapi.external.oauth.OAuthManagerImpl;
+import com.skplanet.openapi.external.util.KvpPostRequest;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -44,6 +49,25 @@ public class OAuthManagerTest {
 		String scope = oauth.getScope();
 		Assert.assertEquals(true, scope.contains("GetTxInfo"));
 		Assert.assertEquals(true, scope.contains("GetTxInfoV2"));
+		
+		// TODO: Http client test
+		KvpPostRequest kvpPostRequest = new KvpPostRequest();
+		kvpPostRequest.setCallUrl("http://172.21.60.143:8080/oauth/service/accessToken");
+		Map<String, String> param = new HashMap<String, String>();
+		param.put("grant_type", "client-secret");
+		kvpPostRequest.setParameter(param);
+		
+		StringBuilder sb = new StringBuilder();		
+		System.out.println(oauthClientInfo.getAuthString());
+		
+		byte[] basicStringBase64 = Base64.encodeBase64(oauthClientInfo.getAuthString().getBytes());
+		sb.append("BASIC ").append(new String(basicStringBase64));
+		Map<String, String> headerMap = new HashMap<String, String>();
+		headerMap.put("Authorization", sb.toString());
+		
+		kvpPostRequest.setHeader(headerMap);
+		
+		
 	}
 	
 //	@Test
