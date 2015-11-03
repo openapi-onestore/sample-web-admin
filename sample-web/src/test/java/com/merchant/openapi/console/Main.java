@@ -45,7 +45,7 @@ public class Main {
 		filePaymentHeader.setNotiUrl("");
 		filePaymentHeader.setCntTotalTrans("2");
 		filePaymentHeader.setPostbackUrl("");
-		filePaymentHeader.setPrioity("Instant");
+		filePaymentHeader.setPriority("Instant");
 		filePaymentHeader.setVerBulkPay("1");
 		
 		try {

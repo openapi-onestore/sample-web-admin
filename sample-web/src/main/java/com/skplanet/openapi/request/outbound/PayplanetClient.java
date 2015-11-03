@@ -206,7 +206,7 @@ public class PayplanetClient {
 		filePaymentHeader.setBid("skplanet");
 		filePaymentHeader.setNotiUrl(notificationUrl);
 		filePaymentHeader.setCntTotalTrans(Integer.toString(processingCount));
-		filePaymentHeader.setPrioity("Instant");
+		filePaymentHeader.setPriority("Instant");
 		return filePaymentHeader;
 	}
 	

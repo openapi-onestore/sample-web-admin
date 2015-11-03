@@ -7,7 +7,18 @@ public class FilePaymentHeader {
 	private String notiUrl;
 	private String postbackUrl;
 	private String cntTotalTrans;
-	private String prioity;
+	private String priority;
+	
+	public FilePaymentHeader() {
+		;
+	}
+	
+	public FilePaymentHeader(String bid, String notiUrl, String cntTotalTrans, String priority) {
+		this.bid = bid;
+		this.notiUrl = notiUrl;
+		this.cntTotalTrans = cntTotalTrans;
+		this.priority = priority;
+	}
 	
 	public String getVerBulkPay() {
 		return verBulkPay;
@@ -39,11 +50,11 @@ public class FilePaymentHeader {
 	public void setCntTotalTrans(String cntTotalTrans) {
 		this.cntTotalTrans = cntTotalTrans;
 	}
-	public String getPrioity() {
-		return prioity;
+	public String getPriority() {
+		return priority;
 	}
-	public void setPrioity(String prioity) {
-		this.prioity = prioity;
+	public void setPriority(String priority) {
+		this.priority = priority;
 	}
 	
 }

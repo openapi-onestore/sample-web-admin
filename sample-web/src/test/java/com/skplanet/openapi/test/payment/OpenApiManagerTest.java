@@ -86,7 +86,7 @@ public class OpenApiManagerTest {
 		filePaymentHeader.setBid("skplanet");
 		filePaymentHeader.setNotiUrl("");
 		filePaymentHeader.setCntTotalTrans("2");
-		filePaymentHeader.setPrioity("Instant");
+		filePaymentHeader.setPriority("Instant");
 		
 		OpenApiManager openApiManager = new OpenApiManagerImpl();
 		

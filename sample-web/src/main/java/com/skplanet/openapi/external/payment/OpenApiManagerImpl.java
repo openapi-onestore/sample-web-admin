@@ -39,7 +39,8 @@ public class OpenApiManagerImpl implements OpenApiManager{
 	// Property values, uri is default setting
 	private String propertyPath = null;
 //	private String fileWritePath = "D:/samplefolder/bulkfile";
-	private String fileWritePath = "/home/1000720/sample_folder/download";
+//	private String fileWritePath = "/home/1000720/sample_folder/download";
+	private String fileWritePath = "/Users/1002000/dev/temp";
 	private String fileJobUrl = "http://172.21.60.141/v1/payment/fileJob";
 	private String resultFileUrl = "http://172.21.60.141/v1/payment/job";
 	private String txidInfoUrl = "http://172.21.60.141/v1/payment/transaction";
@@ -58,7 +59,7 @@ public class OpenApiManagerImpl implements OpenApiManager{
 		headerMap.put("notiUrl", filePaymentHeader.getNotiUrl());
 		headerMap.put("postbackUrl", filePaymentHeader.getPostbackUrl());
 		headerMap.put("cntTotalTrans", filePaymentHeader.getCntTotalTrans());
-		headerMap.put("priority", filePaymentHeader.getPrioity());
+		headerMap.put("priority", filePaymentHeader.getPriority());
 		headerMap.put("Authorization", "Bearer " + accessToken);
 		
 		System.out.println(headerMap);
