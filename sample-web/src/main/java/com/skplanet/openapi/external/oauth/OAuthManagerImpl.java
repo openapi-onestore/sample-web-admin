@@ -5,32 +5,18 @@ import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ThreadFactory;
 
 import org.apache.commons.codec.binary.Base64;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.skplanet.openapi.external.oauth.OAuthManagingException.OAuthManaging;
+import com.skplanet.openapi.external.util.KvpPostRequest;
 
 public class OAuthManagerImpl implements OAuthManager {
 	
-	private int threadPoolCount = 1;
-	private ExecutorService jobExecutor = Executors.newFixedThreadPool(threadPoolCount, new ThreadFactory() {
-		@Override
-		public Thread newThread(Runnable runnable) {
-			Thread oauthManagerThread = Executors.defaultThreadFactory().newThread(runnable);
-			oauthManagerThread.setName("oauthManager");
-			oauthManagerThread.setDaemon(true);
-			return oauthManagerThread;
-		}
-	});
-	
 	private OAuthClientInfo clientInfo = null;
-	private OAuthAccessToken oauth = null;
 	private String propertyPath = null;
+	private ObjectMapper objectMapper = new ObjectMapper();
 	
 	// url default setting
 	private String oauthAccessTokenUrl = "http://172.21.60.143:8080/oauth/service/accessToken";
@@ -52,32 +38,25 @@ public class OAuthManagerImpl implements OAuthManager {
 		Map<String, String> data = new HashMap<String, String>();
 		data.put(clientInfo.GRANT_TYPE, clientInfo.getGrantType());
 		
-		String response = null;
+		KvpPostRequest kvpPostRequest = new KvpPostRequest();
+		kvpPostRequest.setHeader(getOAuthHttpRequestHeader());
+		kvpPostRequest.setCallUrl(oauthAccessTokenUrl);
+		kvpPostRequest.setParameter(data);
 		
-		OAuthHttpRequest httpRequest = new OAuthHttpRequest();
+		String response = null;
+		OAuthAccessToken accessToken = null;
 		
 		try {
-			System.out.println("Set Call url " + oauthAccessTokenUrl);
-			httpRequest.setCallUrl(oauthAccessTokenUrl);
-			httpRequest.setParamMap(data);
-			httpRequest.setHeader(getOAuthHttpRequestHeader());
-			
-			Future<String> future = jobExecutor.submit(httpRequest);
-			response = future.get();
-			
+			System.out.println("Set call uri : " + oauthAccessTokenUrl);
+			response = kvpPostRequest.executeRequest();
+			accessToken = objectMapper.readValue(response, OAuthAccessToken.class);
 			System.out.println("Post response : " + response);
-			if (response != null) {
-				ObjectMapper objectMapper = new ObjectMapper();
-				oauth = objectMapper.readValue(response, OAuthAccessToken.class);
-			} else {
-				throw new OAuthManagingException(OAuthManaging.OAUTH_HTTP_REQUEST_FAIL, "OAUTH http request is failure!! Status");
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new OAuthManagingException(OAuthManaging.OAUTH_HTTP_REQUEST_FAIL, "OAUTH http request is failure!!");
+			throw new OAuthManagingException(OAuthManaging.OAUTH_HTTP_REQUEST_FAIL, "OAUTH http request is failure!!");			
 		}
 		
-		return oauth;
+		return accessToken;
 	}	
 	
 	@Override
@@ -107,14 +86,6 @@ public class OAuthManagerImpl implements OAuthManager {
 		} finally {
 			fis.close();
 		}
-	}
-	
-	@Override
-	public void setExecutorService(ExecutorService service) {
-		if (jobExecutor != null) {
-			this.jobExecutor.shutdown();			
-		}
-		this.jobExecutor = service;
 	}
 	
 	private Map<String, String> getOAuthHttpRequestHeader() {

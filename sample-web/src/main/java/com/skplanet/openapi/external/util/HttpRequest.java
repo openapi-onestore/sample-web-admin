@@ -5,7 +5,7 @@ import java.util.Map;
 import org.apache.http.StatusLine;
 import org.apache.http.message.AbstractHttpMessage;
 
-public abstract class HttpRequest<T> {
+public abstract class HttpRequest<T, R> {
 	
 	protected String callUrl = null;
 	protected String parameter = null;
@@ -13,6 +13,7 @@ public abstract class HttpRequest<T> {
 	protected StatusLine statusLine;
 		
 	abstract public void setParameter(T parameter);
+	abstract public R executeRequest() throws Exception;
 	
 	protected void addHeaders(AbstractHttpMessage httpMessage) {
 		for (String key : headers.keySet()) {

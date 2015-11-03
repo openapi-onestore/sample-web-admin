@@ -5,11 +5,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.UUID;
-import java.util.concurrent.Callable;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -17,14 +12,12 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
-public class GetFileRequest extends HttpRequest<String> implements Callable<File> {
+public class GetFileRequest extends HttpRequest<File, Void> {
 
-	private String fileWritePath = null;
+	private File targetFile = null;
 	
 	@Override
-	public File call() throws Exception {
-		String path = fileWritePath + getFileName();
-		File resultFile = new File(path);
+	public Void executeRequest() throws Exception {
 		
 		if (!validationUrl()) {
 			return null;
@@ -33,7 +26,7 @@ public class GetFileRequest extends HttpRequest<String> implements Callable<File
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		HttpGet httpGet = new HttpGet(callUrl);
 		
-		if (!validationHeader()) {
+		if (validationHeader()) {
 			addHeaders(httpGet);
 		}
 		
@@ -44,7 +37,7 @@ public class GetFileRequest extends HttpRequest<String> implements Callable<File
 			HttpEntity httpEntity = response.getEntity();
 			
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpEntity.getContent(), Charset.forName("UTF-8")));
-			FileWriter fileWriter = new FileWriter(resultFile);
+			FileWriter fileWriter = new FileWriter(targetFile);
 			
 			String buffer = null;
 			while( (buffer=bufferedReader.readLine()) != null) {
@@ -61,21 +54,12 @@ public class GetFileRequest extends HttpRequest<String> implements Callable<File
 			httpClient.close();
 		}
 		
-		return resultFile;
+		return null;
 	}
-
 	
 	@Override
-	public void setParameter(String filePath) {
-		
-	}
-
-	private String getFileName() {
-		SimpleDateFormat formatter = new SimpleDateFormat ( "yyyyMMdd-HHmmss", Locale.KOREA );
-		Date currentTime = new Date ( );
-		String dTime = formatter.format ( currentTime );
-		
-		return dTime + UUID.randomUUID().toString();
+	public void setParameter(File targetFile) {
+		this.targetFile = targetFile;
 	}
 	
 }

@@ -2,7 +2,6 @@ package com.skplanet.openapi.external.util;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.concurrent.Callable;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -12,13 +11,12 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-public class FilePostRequest extends HttpRequest<File> implements
-		Callable<String> {
+public class FilePostRequest extends HttpRequest<File, String> {
 	
 	private File sendFile = null;
 	
 	@Override
-	public String call() throws Exception {
+	public String executeRequest() throws Exception {
 		String result = null;
 		
 		// TODO: fail interface
@@ -31,7 +29,7 @@ public class FilePostRequest extends HttpRequest<File> implements
 		}
 		
 		HttpPost httpPost = new HttpPost(callUrl);
-		if (!validationHeader()) {
+		if (validationHeader()) {
 			addHeaders(httpPost);
 		}
 		
@@ -51,10 +49,10 @@ public class FilePostRequest extends HttpRequest<File> implements
 		
 		return result;
 	}
-
+	
 	@Override
 	public void setParameter(File sendFile) {
 		this.sendFile = sendFile;
 	}
-	
+
 }

@@ -2,7 +2,6 @@ package com.skplanet.openapi.external.util;
 
 import java.util.Iterator;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
@@ -15,13 +14,13 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 
-public class KvpPostRequest extends HttpRequest<Map<String, String>> implements Callable<String> {
+public class KvpPostRequest extends HttpRequest<Map<String, String>, String> {
 
 	private final String delemeter = "&";
 	private final String equal = "=";
 	
 	@Override
-	public String call() throws Exception {
+	public String executeRequest() throws Exception {
 		String result = null;
 		
 		if (!validationUrl())
@@ -71,5 +70,5 @@ public class KvpPostRequest extends HttpRequest<Map<String, String>> implements 
 		}
 		this.parameter = sb.toString();
 	}
-
+	
 }

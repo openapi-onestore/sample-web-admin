@@ -3,17 +3,19 @@ package com.skplanet.openapi.external.payment;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ThreadFactory;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.skplanet.openapi.external.payment.OpenApiException.OpenApi;
+import com.skplanet.openapi.external.util.FilePostRequest;
+import com.skplanet.openapi.external.util.GetFileRequest;
+import com.skplanet.openapi.external.util.GetInsRequest;
+import com.skplanet.openapi.external.util.GetRequest;
+import com.skplanet.openapi.external.util.JsonPostRequest;
 import com.skplanet.openapi.vo.payment.FilePaymentHeader;
 import com.skplanet.openapi.vo.payment.FilePaymentResult;
 import com.skplanet.openapi.vo.payment.TransactionDetail;
@@ -23,24 +25,9 @@ import com.skplanet.openapi.vo.refund.CancelResponse;
 public class OpenApiManagerImpl implements OpenApiManager{
 
 	private ObjectMapper objectMapper = new ObjectMapper();
-	private int threadPoolCount = 1;
-	private ExecutorService jobExecutor = Executors.newFixedThreadPool(
-			threadPoolCount, new ThreadFactory() {
-				@Override
-				public Thread newThread(Runnable runnable) {
-					Thread bulkPayThread = Executors.defaultThreadFactory()
-							.newThread(runnable);
-					bulkPayThread.setName("OpenApiManager");
-					bulkPayThread.setDaemon(true);
-					return bulkPayThread;
-				}
-			});
 	
 	// Property values, uri is default setting
 	private String propertyPath = null;
-//	private String fileWritePath = "D:/samplefolder/bulkfile";
-//	private String fileWritePath = "/home/1000720/sample_folder/download";
-	private String fileWritePath = "/Users/1002000/dev/temp";
 	private String fileJobUrl = "http://172.21.60.141/v1/payment/fileJob";
 	private String resultFileUrl = "http://172.21.60.141/v1/payment/job";
 	private String txidInfoUrl = "http://172.21.60.141/v1/payment/transaction";
@@ -53,6 +40,9 @@ public class OpenApiManagerImpl implements OpenApiManager{
 			throw new OpenApiException(OpenApi.OPENAPI_FILE_NOT_FOUND_ERROR, "{'reason':'File not found.'}");
 		}
 		
+		String result = null;
+		FilePaymentResult filePaymentResult = null;
+		
 		Map<String, String> headerMap = new HashMap<String, String>();
 		headerMap.put("verBulkPay", filePaymentHeader.getVerBulkPay());
 		headerMap.put("bid", filePaymentHeader.getBid());
@@ -64,47 +54,73 @@ public class OpenApiManagerImpl implements OpenApiManager{
 		
 		System.out.println(headerMap);
 		
-		OpenApiPostTransaction openApiPostTransaction = new OpenApiPostTransaction(file);
-		openApiPostTransaction.setParamMap(headerMap);
-		openApiPostTransaction.setCallUrl(fileJobUrl);
-		openApiPostTransaction.setChunked(true);
-		
-		Future<String> future = jobExecutor.submit(openApiPostTransaction);
+		FilePostRequest filePostRequest = new FilePostRequest();
+		filePostRequest.setHeader(headerMap);
+		filePostRequest.setCallUrl(fileJobUrl);
+		filePostRequest.setParameter(file);
 		
 		try {
-			String result = future.get();
-			FilePaymentResult filePaymentResult = objectMapper.readValue(result, FilePaymentResult.class);
-			return filePaymentResult;
+			result = filePostRequest.executeRequest();			
+			filePaymentResult = objectMapper.readValue(result, FilePaymentResult.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new OpenApiException(OpenApi.OPENAPI_JOB_EXECUTE_ERROR, e.getMessage());
 		}
 		
+		return filePaymentResult;
+		
 	}
 	
 	@Override
-	public File getFilePaymentJobStatus(String jobId, String accessToken) throws OpenApiException {
+	public void getFilePaymentJobStatus(String jobId, File targetFile, String accessToken) throws OpenApiException {
+
+		if (jobId == null || targetFile == null) {
+			throw new OpenApiException(OpenApi.OPENAPI_FILE_NOT_FOUND_ERROR, "{'reason':'Job ID or targetFile is null.'}");
+		}
 		
 		// authorization
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("Authorization", "Bearer " + accessToken);
 		
-		File resultFile = null;
-		
-		OpenApiGetFileTransaction openApiGetFileTransaction = new OpenApiGetFileTransaction(paramMap);
-		openApiGetFileTransaction.setCallUrl(resultFileUrl.concat("/" + jobId));
-		openApiGetFileTransaction.setFileWritePath(fileWritePath);
-		
-		Future<File> future = jobExecutor.submit(openApiGetFileTransaction);
+		GetFileRequest getFileRequest = new GetFileRequest();
+		getFileRequest.setCallUrl(resultFileUrl.concat("/" + jobId));
+		getFileRequest.setHeader(paramMap);
+		getFileRequest.setParameter(targetFile);
 		
 		try {
-			resultFile = future.get();
+			getFileRequest.executeRequest();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new OpenApiException(OpenApi.OPENAPI_JOB_EXECUTE_ERROR, e.getMessage());
+			throw new OpenApiException(OpenApi.OPENAPI_JOB_EXECUTE_ERROR, e.getMessage());			
+		}
+
+	}
+
+	@Override
+	public InputStream getFilePaymentJobStatus(String jobId, String accessToken)
+			throws OpenApiException {
+		
+		if (jobId == null) {
+			throw new OpenApiException(OpenApi.OPENAPI_FILE_NOT_FOUND_ERROR, "{'reason':'Job ID or targetFile is null.'}");
 		}
 		
-		return resultFile;
+		// authorization
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("Authorization", "Bearer " + accessToken);
+		
+		GetInsRequest getInsRequest = new GetInsRequest();
+		getInsRequest.setCallUrl(resultFileUrl.concat("/" + jobId));
+		getInsRequest.setHeader(paramMap);
+		InputStream inputStream = null;
+		
+		try {
+			inputStream = getInsRequest.executeRequest();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new OpenApiException(OpenApi.OPENAPI_JOB_EXECUTE_ERROR, e.getMessage());			
+		}
+		
+		return inputStream;
 	}
 	
 	@Override
@@ -114,50 +130,52 @@ public class OpenApiManagerImpl implements OpenApiManager{
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("Authorization", "Bearer " + accessToken);
 		
-		OpenApiGetTransaction openApiGetTransaction = new OpenApiGetTransaction(paramMap);
-		openApiGetTransaction.setCallUrl(txidInfoUrl.concat("/" + tid));
+		GetRequest getRequest = new GetRequest();
 		
-		Future<String> future = jobExecutor.submit(openApiGetTransaction);
+		getRequest.setHeader(paramMap);
+		getRequest.setCallUrl(txidInfoUrl.concat("/" + tid));
 		
 		String result = null;
 		TransactionDetail transactionDetail = null;
 		
 		try {
-			result = future.get();
+			result = getRequest.executeRequest();
 			transactionDetail = objectMapper.readValue(result, TransactionDetail.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new OpenApiException(OpenApi.OPENAPI_JOB_EXECUTE_ERROR, e.getMessage());
 		}
-		
+
 		return transactionDetail;
+		
 	}
 	
 	@Override
-	public CancelResponse getCancelPaymentTransaction(CancelRequest cancelRequest, String accessToken) throws OpenApiException {		
+	public CancelResponse cancelPaymentTransaction(CancelRequest cancelRequest, String accessToken) throws OpenApiException {
+		
 		Map<String, String> paramMap = new HashMap<String, String>();
 		System.out.println("Cancel Request access Token : " + accessToken);
 		paramMap.put("Authorization", "Bearer " + accessToken);
 		
+		JsonPostRequest jsonPostRequest = new JsonPostRequest();
+		jsonPostRequest.setHeader(paramMap);
+		jsonPostRequest.setCallUrl(refundUrl);
+		
+		String result = null;
 		CancelResponse cancelResponse = null;
-		OpenApiPostTransaction openApiPostTransaction = null;
 		
 		try {
-			String cancelJsonString = objectMapper.writeValueAsString(cancelRequest);
-			openApiPostTransaction = new OpenApiPostTransaction(cancelJsonString);
-			openApiPostTransaction.setParamMap(paramMap);
-			openApiPostTransaction.setCallUrl(refundUrl);
-			
-			Future<String> future = jobExecutor.submit(openApiPostTransaction);
-			String result = future.get();
+			jsonPostRequest.setParameter(objectMapper.writeValueAsString(cancelRequest));
+			result = jsonPostRequest.executeRequest();
 			System.out.println("Cancel response" + result);
 			cancelResponse = objectMapper.readValue(result, CancelResponse.class);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new OpenApiException(OpenApi.OPENAPI_JOB_EXECUTE_ERROR, e.getMessage());
+			throw new OpenApiException(OpenApi.OPENAPI_JOB_EXECUTE_ERROR, e.getMessage());			
 		}
 		
 		return cancelResponse;
+		
 	}
 	
 	@Override
@@ -166,7 +184,7 @@ public class OpenApiManagerImpl implements OpenApiManager{
 		Properties props = new Properties();
 		
 		if (propertyPath == null) {
-			throw new OpenApiException(OpenApi.OPENAPI_PROPERTY_SETTING_ERROR, "Property path is null");
+			throw new OpenApiException(OpenApi.OPENAPI_PROPERTY_SETTING_ERROR, "{'reason':'Property path is null.'}");
 		}
 		
 		FileInputStream fis = null;
@@ -175,7 +193,6 @@ public class OpenApiManagerImpl implements OpenApiManager{
 			fis = new FileInputStream(propertyPath);
 			props.load(new BufferedInputStream(fis));
 			
-			fileWritePath = props.getProperty("openapi.file_write_path");
 			fileJobUrl = props.getProperty("openapi.file_payment_url");
 			resultFileUrl = props.getProperty("openapi.file_payment_info_url");			
 			txidInfoUrl = props.getProperty("openapi.payment_transaction_detail_url");
@@ -187,12 +204,7 @@ public class OpenApiManagerImpl implements OpenApiManager{
 			fis.close();
 		}
 	}
-	
-	public void setExecutorService(ExecutorService service) {
-		if (jobExecutor != null) {
-			this.jobExecutor.shutdown();			
-		}
-		this.jobExecutor = service;
-	}	
+
+
 	
 }

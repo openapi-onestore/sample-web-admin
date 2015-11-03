@@ -1,7 +1,5 @@
 package com.skplanet.openapi.external.util;
 
-import java.util.concurrent.Callable;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -11,10 +9,10 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-public class JsonPostRequest extends HttpRequest<String> implements Callable<String> {
+public class JsonPostRequest extends HttpRequest<String, String> {
 
 	@Override
-	public String call() throws Exception {
+	public String executeRequest() throws Exception {
 		String result = null;
 		
 		if (!validationUrl()) {
@@ -53,5 +51,6 @@ public class JsonPostRequest extends HttpRequest<String> implements Callable<Str
 	public void setParameter(String parameter) {
 		this.parameter = parameter;
 	}
+
 
 }

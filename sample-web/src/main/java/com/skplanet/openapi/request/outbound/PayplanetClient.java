@@ -135,8 +135,9 @@ public class PayplanetClient {
 		logger.debug("getFilePaymentResultFile() called");		
 		String accessToken = getAccessTokenFromOauthManager();
 		String jobId = param.get("jobId");
+		File resultFile = new File("d:/sample_folder/file_result.txt");
 		
-		File resultFile = openApiManager.getFilePaymentJobStatus(jobId, accessToken);
+		openApiManager.getFilePaymentJobStatus(jobId, resultFile, accessToken);
 		
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(resultFile));
 		StringBuffer stringBuffer = new StringBuffer();
@@ -166,7 +167,7 @@ public class PayplanetClient {
 		String jsonTransactionString = param.get("transactionInfo");
 		
 		CancelRequest cancelRequest = getRefundTransactionJsonString(jsonTransactionString);
-		CancelResponse cancelResponse = openApiManager.getCancelPaymentTransaction(cancelRequest, accessToken);
+		CancelResponse cancelResponse = openApiManager.cancelPaymentTransaction(cancelRequest, accessToken);
 		
 		return objectMapper.writeValueAsString(cancelResponse);
 	}

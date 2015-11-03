@@ -2,7 +2,6 @@ package com.merchant.sample;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -11,7 +10,6 @@ import com.skplanet.openapi.external.oauth.OAuthClientInfo;
 import com.skplanet.openapi.external.oauth.OAuthManager;
 import com.skplanet.openapi.external.oauth.OAuthManagerImpl;
 import com.skplanet.openapi.external.oauth.OAuthManagingException;
-import com.skplanet.openapi.external.payment.OpenApiException;
 import com.skplanet.openapi.external.payment.OpenApiManager;
 import com.skplanet.openapi.external.payment.OpenApiManagerImpl;
 import com.skplanet.openapi.vo.payment.FilePaymentHeader;
@@ -65,7 +63,13 @@ public class ServiceConsole {
 			
 			// Get File Payment Job Result
 			Thread.sleep(2000);
-			File resFile = service.getFilePaymentJobStatus(jobId, accessToken);
+			
+			File resFile = new File("d:/samplefolder/sample-web/resFileinMerchant.txt");
+			if (!resFile.createNewFile()) {
+				System.exit(-1);
+			}
+			
+			service.getFilePaymentJobStatus(jobId, resFile, accessToken);
 			System.out.println("Path :" + resFile.getAbsolutePath());
 			printFile(resFile);
 			
@@ -81,7 +85,7 @@ public class ServiceConsole {
 			refundTxReq.setTid("tx_my00001111");
 			cancelRequest.setRefundTransactionRequest(refundTxReq);
 						
-			CancelResponse cancelRes = service.getCancelPaymentTransaction(cancelRequest, accessToken);
+			CancelResponse cancelRes = service.cancelPaymentTransaction(cancelRequest, accessToken);
 			System.out.println(">>>" + cancelRes.getResultCode() + "|" + cancelRes.getResultMsg());
 			
 			// Verify Transaction Notification

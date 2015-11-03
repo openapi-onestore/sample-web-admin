@@ -10,11 +10,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import com.skplanet.openapi.external.oauth.OAuthClientInfo;
 import com.skplanet.openapi.external.oauth.OAuthManagerImpl;
@@ -56,29 +54,10 @@ public class OpenApiManagerTest {
 			e.printStackTrace();
 		}
 	}
-
-	@Test
-	public void exTest() {
-		ObjectFactoryCreatingFactoryBean testFactory = new ObjectFactoryCreatingFactoryBean();
-		testFactory.setTargetBeanName("transactionTemplate");
-		
-		try {
-			TransactionTemplate transactionTemplate_1 = (TransactionTemplate)testFactory.getObject();
-			TransactionTemplate transactionTemplate_2 = (TransactionTemplate)testFactory.getObject();
-			
-			Assert.assertNotEquals(transactionTemplate_1, transactionTemplate_2);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-		
-	}
 	
 	public void createFilePaymentTest() {
 		// file payment test
-		File requestFile = new File("D:/samplefolder/bulk_job.txt");
+		File requestFile = new File("D:/samplefolder/file_payment.txt");
 		Assert.assertEquals(true, requestFile.canRead());
 		
 		FilePaymentHeader filePaymentHeader = new FilePaymentHeader();
@@ -115,34 +94,18 @@ public class OpenApiManagerTest {
 	public void getResultFileFromPaymentTest() {
 		
 		OpenApiManager openApiManager = new OpenApiManagerImpl();
-		
-		File file = null;
-		
-		try {
-			file = openApiManager.getFilePaymentJobStatus("38", accessToken);
-		} catch (OpenApiException e) {
-			e.printStackTrace();
-		}
-		
-		Assert.assertNotNull(file);
-		
-	}
-	
-	@Test
-	public void propertyTest() {
-		
-//		Assert.assertNotNull(OAuthManagerImpl.class.getResource("dev_config.properties").getPath());
+		File resultFile = new File("d:/samplefolder/sample-web/test_res_file.txt");
 		
 		try {
-			String path = new ClassPathResource("properties/dev_config.properties").getFile().getAbsolutePath();
-			
-			Assert.assertNotNull(path);
-			System.out.println(path);
+			Assert.assertEquals(true, resultFile.createNewFile());
+			Assert.assertEquals(0, resultFile.length());;
+			openApiManager.getFilePaymentJobStatus("38", resultFile, accessToken);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		
+		Assert.assertNotEquals(0, resultFile.length());;
+		resultFile.delete();
 	}
 	
 	@Test
@@ -185,7 +148,7 @@ public class OpenApiManagerTest {
 		CancelResponse cancelResponse = null;
 		
 		try {
-			cancelResponse = openApiManager.getCancelPaymentTransaction(cancelRequest, accessToken);
+			cancelResponse = openApiManager.cancelPaymentTransaction(cancelRequest, accessToken);
 			System.out.println(objectMapper.writeValueAsString(cancelResponse));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -194,5 +157,15 @@ public class OpenApiManagerTest {
 		Assert.assertNotNull(cancelResponse);
 	}
 	
-	
+	@Test
+	public void propertyTest() {
+		try {
+			String path = new ClassPathResource("properties/config.properties").getFile().getAbsolutePath();
+			
+			Assert.assertNotNull(path);
+			System.out.println(path);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

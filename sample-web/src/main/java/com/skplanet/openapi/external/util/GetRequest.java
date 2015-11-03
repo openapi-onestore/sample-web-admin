@@ -1,17 +1,15 @@
 package com.skplanet.openapi.external.util;
 
-import java.util.concurrent.Callable;
-
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-public class GetRequest extends HttpRequest<String> implements Callable<String> {
+public class GetRequest extends HttpRequest<String, String> {
 	
 	@Override
-	public String call() throws Exception {
+	public String executeRequest() throws Exception {
 		String result = null;
 		
 		if (!validationUrl()) {
@@ -21,7 +19,7 @@ public class GetRequest extends HttpRequest<String> implements Callable<String> 
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		HttpGet httpGet = new HttpGet(callUrl);
 		
-		if (!validationHeader()) {
+		if (validationHeader()) {
 			addHeaders(httpGet);
 		}
 		
