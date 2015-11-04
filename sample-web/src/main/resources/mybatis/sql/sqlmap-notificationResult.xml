@@ -17,6 +17,6 @@
 	</select>
 	
 	<insert id="insertNotificationResult" parameterType="map">
-		INSERT INTO FILE_PAYMENT_NOTI_RESULT VALUES(#{jobId}, #{event}, #{status}, #{updateDate}, #{notifyVersion})
+		INSERT INTO FILE_PAYMENT_NOTI_RESULT VALUES(#{jobId}, #{event}, #{status}, #{updateDate}, #{notiVersion})
 	</insert>
 </mapper>

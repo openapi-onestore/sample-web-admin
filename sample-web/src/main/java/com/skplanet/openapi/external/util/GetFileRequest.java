@@ -41,7 +41,6 @@ public class GetFileRequest extends HttpRequest<File, Void> {
 			
 			String buffer = null;
 			while( (buffer=bufferedReader.readLine()) != null) {
-				System.out.println("File read and write!!");
 				fileWriter.append(buffer).append("\n");
 				fileWriter.flush();
 			}

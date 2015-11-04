@@ -36,7 +36,6 @@ public class NotificationDaoTest {
 		hashMap.put("jobId", "145");
 		hashMap.put("event", "bulkJob");
 		hashMap.put("status", "initialized");
-		hashMap.put("verifySign", "AABVCCDD");
 		hashMap.put("updateDate", "20150729080258");
 		hashMap.put("notiVersion", "1.0");
 		
@@ -54,13 +53,13 @@ public class NotificationDaoTest {
 		Assert.assertEquals(1, list.size());
 		hashMap = list.get(0);
 		System.out.println(hashMap);
-
+		
 		Assert.assertEquals(hashMap.get("jobId"), "145");
 		Assert.assertEquals(hashMap.get("event"), "bulkJob");
 		Assert.assertEquals(hashMap.get("status"), "initialized");
-		Assert.assertEquals(hashMap.get("verifySign"), "AABVCCDD");
 		Assert.assertEquals(hashMap.get("updateDate"), "20150729080258");
 		Assert.assertEquals(hashMap.get("notiVersion"), "1.0");
+		
 	}
 	
 	

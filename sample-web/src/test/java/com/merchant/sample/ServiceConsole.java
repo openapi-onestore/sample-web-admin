@@ -5,13 +5,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+import org.springframework.core.io.ClassPathResource;
+
+import com.skplanet.openapi.external.framework.ManagerProducer;
 import com.skplanet.openapi.external.oauth.OAuthAccessToken;
 import com.skplanet.openapi.external.oauth.OAuthClientInfo;
 import com.skplanet.openapi.external.oauth.OAuthManager;
-import com.skplanet.openapi.external.oauth.OAuthManagerImpl;
-import com.skplanet.openapi.external.oauth.OAuthManagingException;
 import com.skplanet.openapi.external.payment.OpenApiManager;
-import com.skplanet.openapi.external.payment.OpenApiManagerImpl;
 import com.skplanet.openapi.vo.payment.FilePaymentHeader;
 import com.skplanet.openapi.vo.payment.FilePaymentResult;
 import com.skplanet.openapi.vo.payment.TransactionDetail;
@@ -22,25 +22,42 @@ import com.skplanet.openapi.vo.refund.RefundTransactionRequest;
 public class ServiceConsole {
 	
 	public static void main(String ... v) {
+		
 		String accessToken = null;
+		String path = null;
+		String logPath = null;
+		
+		try {
+			path = new ClassPathResource("properties/config.properties").getFile().getAbsolutePath();
+			logPath = new ClassPathResource("properties/log4j.properties").getFile().getAbsolutePath();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 		
 		// Get New AccessToken
 		OAuthClientInfo oauthClientInfo = new OAuthClientInfo(
 				"84xK38rx9iCrFRJVOynsRA0MT0o3LTs83OqDLEJf5g0=", "GS1qrhoHMJWpmS6QwLNaG5NcFWFqzh5TrmY5476a2nA=", "client_credentials");
-		OAuthManager oauthManager = new OAuthManagerImpl(oauthClientInfo);
+		OAuthManager oauthManager = ManagerProducer.getFactory(logPath).getOAuthManager(oauthClientInfo);
+		
 		try {
+			oauthManager.setPropertyFile(path);
 			OAuthAccessToken accessTokenObj = oauthManager.createAccessToken();
 			accessToken = accessTokenObj.getAccessToken();
-			System.out.println("AccessToken >" + accessToken);
+			System.out.println("AccessToken >>>" + accessToken);
 			
-		} catch (OAuthManagingException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(-1);
 		}
 		
 		// Create File Payment
-		OpenApiManager service = new OpenApiManagerImpl();
+		OpenApiManager service = ManagerProducer.getFactory(logPath).getOpenApiManager();
+		try {
+			service.setPropertyFile(path);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		
 		FilePaymentHeader filePaymentHeader = new FilePaymentHeader();
 		filePaymentHeader.setVerBulkPay("1");
 		filePaymentHeader.setBid("skplanet");
@@ -70,26 +87,26 @@ public class ServiceConsole {
 			}
 			
 			service.getFilePaymentJobStatus(jobId, resFile, accessToken);
-			System.out.println("Path :" + resFile.getAbsolutePath());
+			System.out.println("Path >>> " + resFile.getAbsolutePath());
 			printFile(resFile);
+			resFile.delete();
 			
 			// Get Payment Transaction Details
 			TransactionDetail txDetail = service.getPaymentTransactionDetail("tx_my00001111", accessToken);
-			System.out.println(txDetail.getResultCode() + "|" + txDetail.getResultMsg() + 
+			System.out.println("Transaction detail result >>>" + txDetail.getResultCode() + "|" + txDetail.getResultMsg() + 
 					"|" + txDetail.getPayer());
-						
+			
 			// Cancel Payment Transaction
 			CancelRequest cancelRequest = new CancelRequest();
 			RefundTransactionRequest refundTxReq = new RefundTransactionRequest();
 			refundTxReq.setAmount(1000);
 			refundTxReq.setTid("tx_my00001111");
 			cancelRequest.setRefundTransactionRequest(refundTxReq);
-						
+					
 			CancelResponse cancelRes = service.cancelPaymentTransaction(cancelRequest, accessToken);
-			System.out.println(">>>" + cancelRes.getResultCode() + "|" + cancelRes.getResultMsg());
+			System.out.println("Cancel response result >>> " + cancelRes.getResultCode() + "|" + cancelRes.getResultMsg());
 			
 			// Verify Transaction Notification
-			
 			
 			
 		} catch (Exception e) {
@@ -106,7 +123,7 @@ public class ServiceConsole {
 			
 			String line = null;
 			while((line = br.readLine()) != null) {
-				System.out.println(">>>" + line);
+				System.out.println(">>> " + line);
 			}
 			
 		} catch (IOException e) {

@@ -8,7 +8,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.skplanet.openapi.external.payment.OpenApiException.OpenApi;
 import com.skplanet.openapi.external.util.FilePostRequest;
@@ -24,14 +27,19 @@ import com.skplanet.openapi.vo.refund.CancelResponse;
 
 public class OpenApiManagerImpl implements OpenApiManager{
 
+	private static final Logger logger = LoggerFactory.getLogger(OpenApiManagerImpl.class);
 	private ObjectMapper objectMapper = new ObjectMapper();
 	
 	// Property values, uri is default setting
-	private String propertyPath = null;
 	private String fileJobUrl = "http://172.21.60.141/v1/payment/fileJob";
 	private String resultFileUrl = "http://172.21.60.141/v1/payment/job";
 	private String txidInfoUrl = "http://172.21.60.141/v1/payment/transaction";
 	private String refundUrl = "http://172.21.60.141/v1/payment/refund";
+	
+	public OpenApiManagerImpl() { }
+	public OpenApiManagerImpl(String logPath) {
+		PropertyConfigurator.configure(logPath);
+	}
 	
 	@Override
 	public FilePaymentResult createFilePayment(FilePaymentHeader filePaymentHeader, File file, String accessToken) throws OpenApiException {
@@ -154,7 +162,7 @@ public class OpenApiManagerImpl implements OpenApiManager{
 	public CancelResponse cancelPaymentTransaction(CancelRequest cancelRequest, String accessToken) throws OpenApiException {
 		
 		Map<String, String> paramMap = new HashMap<String, String>();
-		System.out.println("Cancel Request access Token : " + accessToken);
+		logger.info("Cancel Request access Token : " + accessToken);
 		paramMap.put("Authorization", "Bearer " + accessToken);
 		
 		JsonPostRequest jsonPostRequest = new JsonPostRequest();
@@ -167,7 +175,7 @@ public class OpenApiManagerImpl implements OpenApiManager{
 		try {
 			jsonPostRequest.setParameter(objectMapper.writeValueAsString(cancelRequest));
 			result = jsonPostRequest.executeRequest();
-			System.out.println("Cancel response" + result);
+			logger.info("Cancel response" + result);
 			cancelResponse = objectMapper.readValue(result, CancelResponse.class);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -180,17 +188,17 @@ public class OpenApiManagerImpl implements OpenApiManager{
 	
 	@Override
 	public void setPropertyFile(String path) throws Exception {
-		this.propertyPath = path;
+
 		Properties props = new Properties();
 		
-		if (propertyPath == null) {
+		if (path == null) {
 			throw new OpenApiException(OpenApi.OPENAPI_PROPERTY_SETTING_ERROR, "{'reason':'Property path is null.'}");
 		}
 		
 		FileInputStream fis = null;
 
 		try {
-			fis = new FileInputStream(propertyPath);
+			fis = new FileInputStream(path);
 			props.load(new BufferedInputStream(fis));
 			
 			fileJobUrl = props.getProperty("openapi.file_payment_url");

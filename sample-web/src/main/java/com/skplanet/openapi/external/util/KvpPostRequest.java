@@ -43,7 +43,7 @@ public class KvpPostRequest extends HttpRequest<Map<String, String>, String> {
 		
 		try {
 			statusLine = response.getStatusLine();
-			System.out.println("Http result code : " + statusLine.getStatusCode());
+			logger.info("Http result code : " + statusLine.getStatusCode());
 			if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
 				result = EntityUtils.toString(response.getEntity());
 			}

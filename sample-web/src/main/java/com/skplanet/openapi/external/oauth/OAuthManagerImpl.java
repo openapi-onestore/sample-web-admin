@@ -7,15 +7,18 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.log4j.PropertyConfigurator;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.skplanet.openapi.external.oauth.OAuthManagingException.OAuthManaging;
 import com.skplanet.openapi.external.util.KvpPostRequest;
 
 public class OAuthManagerImpl implements OAuthManager {
 	
+	private static final Logger logger = LoggerFactory.getLogger(OAuthManagerImpl.class);
 	private OAuthClientInfo clientInfo = null;
-	private String propertyPath = null;
 	private ObjectMapper objectMapper = new ObjectMapper();
 	
 	// url default setting
@@ -23,6 +26,11 @@ public class OAuthManagerImpl implements OAuthManager {
 	
 	public OAuthManagerImpl(OAuthClientInfo oauthClientInfo) {
 		this.clientInfo = oauthClientInfo;
+	}
+	
+	public OAuthManagerImpl(OAuthClientInfo oauthClientInfo, String logPath) {
+		this.clientInfo = oauthClientInfo;
+		PropertyConfigurator.configure(logPath);
 	}
 	
 	public OAuthAccessToken createAccessToken() throws OAuthManagingException {
@@ -47,10 +55,10 @@ public class OAuthManagerImpl implements OAuthManager {
 		OAuthAccessToken accessToken = null;
 		
 		try {
-			System.out.println("Set call uri : " + oauthAccessTokenUrl);
+			logger.info("Set call uri : " + oauthAccessTokenUrl);
 			response = kvpPostRequest.executeRequest();
 			accessToken = objectMapper.readValue(response, OAuthAccessToken.class);
-			System.out.println("Post response : " + response);
+			logger.info("Post response : " + response);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new OAuthManagingException(OAuthManaging.OAUTH_HTTP_REQUEST_FAIL, "OAUTH http request is failure!!");			
@@ -66,17 +74,16 @@ public class OAuthManagerImpl implements OAuthManager {
 	
 	@Override
 	public void setPropertyFile(String path) throws Exception {
-		this.propertyPath = path;
 		Properties props = new Properties();
 
-		if (propertyPath == null) {
+		if (path == null) {
 			throw new OAuthManagingException(OAuthManaging.OAUTH_OBJECT_NULL,"Property path is null");
 		}
 
 		FileInputStream fis = null;
 		
 		try {
-			fis = new FileInputStream(propertyPath);
+			fis = new FileInputStream(path);
 			props.load(new BufferedInputStream(fis));
 			
 			oauthAccessTokenUrl = props.getProperty("oauth.token_create_url");
@@ -90,13 +97,13 @@ public class OAuthManagerImpl implements OAuthManager {
 	
 	private Map<String, String> getOAuthHttpRequestHeader() {
 		StringBuilder sb = new StringBuilder();		
-		System.out.println(clientInfo.getAuthString());
+		logger.info(clientInfo.getAuthString());
 		
 		byte[] basicStringBase64 = Base64.encodeBase64(clientInfo.getAuthString().getBytes());
 		sb.append("BASIC ").append(new String(basicStringBase64));
 		Map<String, String> headerMap = new HashMap<String, String>();
 		headerMap.put("Authorization", sb.toString());
-		System.out.println("Authorization : " + sb.toString());
+		logger.info("Authorization : " + sb.toString());
 		
 		return headerMap;
 	}	
