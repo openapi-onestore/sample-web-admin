@@ -25,32 +25,36 @@ import com.skplanet.openapi.vo.payment.TransactionDetail;
 import com.skplanet.openapi.vo.refund.CancelRequest;
 import com.skplanet.openapi.vo.refund.CancelResponse;
 
-public class OpenApiManagerImpl implements OpenApiManager{
+public class OpenApiManagerImpl implements OpenApiManager {
 
-	private static final Logger logger = LoggerFactory.getLogger(OpenApiManagerImpl.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(OpenApiManagerImpl.class);
 	private ObjectMapper objectMapper = new ObjectMapper();
-	
+
 	// Property values, uri is default setting
 	private String fileJobUrl = "http://172.21.60.141/v1/payment/fileJob";
 	private String resultFileUrl = "http://172.21.60.141/v1/payment/job";
 	private String txidInfoUrl = "http://172.21.60.141/v1/payment/transaction";
 	private String refundUrl = "http://172.21.60.141/v1/payment/refund";
-	
+
 	public OpenApiManagerImpl() { }
+
 	public OpenApiManagerImpl(String logPath) {
 		PropertyConfigurator.configure(logPath);
 	}
-	
+
 	@Override
-	public FilePaymentResult createFilePayment(FilePaymentHeader filePaymentHeader, File file, String accessToken) throws OpenApiException {
-		
+	public FilePaymentResult createFilePayment(
+			FilePaymentHeader filePaymentHeader, File file, String accessToken)
+			throws OpenApiException {
 		if (file == null || !file.canRead()) {
-			throw new OpenApiException(OpenApi.OPENAPI_FILE_NOT_FOUND_ERROR, "{'reason':'File not found.'}");
+			throw new OpenApiException(OpenApi.OPENAPI_FILE_NOT_FOUND_ERROR,
+					"{'reason':'File not found.'}");
 		}
-		
+
 		String result = null;
 		FilePaymentResult filePaymentResult = null;
-		
+
 		Map<String, String> headerMap = new HashMap<String, String>();
 		headerMap.put("verBulkPay", filePaymentHeader.getVerBulkPay());
 		headerMap.put("bid", filePaymentHeader.getBid());
@@ -59,160 +63,168 @@ public class OpenApiManagerImpl implements OpenApiManager{
 		headerMap.put("cntTotalTrans", filePaymentHeader.getCntTotalTrans());
 		headerMap.put("priority", filePaymentHeader.getPriority());
 		headerMap.put("Authorization", "Bearer " + accessToken);
-		
+
 		System.out.println(headerMap);
-		
+
 		FilePostRequest filePostRequest = new FilePostRequest();
 		filePostRequest.setHeader(headerMap);
 		filePostRequest.setCallUrl(fileJobUrl);
 		filePostRequest.setParameter(file);
-		
+
 		try {
-			result = filePostRequest.executeRequest();			
-			filePaymentResult = objectMapper.readValue(result, FilePaymentResult.class);
+			result = filePostRequest.executeRequest();
+			filePaymentResult = objectMapper.readValue(result,
+					FilePaymentResult.class);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new OpenApiException(OpenApi.OPENAPI_JOB_EXECUTE_ERROR, e.getMessage());
+			throw new OpenApiException(OpenApi.OPENAPI_JOB_EXECUTE_ERROR,
+					e.getMessage());
 		}
-		
-		return filePaymentResult;
-		
-	}
-	
-	@Override
-	public void getFilePaymentJobStatus(String jobId, File targetFile, String accessToken) throws OpenApiException {
 
+		return filePaymentResult;
+	}
+
+	@Override
+	public void getFilePaymentJobStatus(String jobId, File targetFile,
+			String accessToken) throws OpenApiException {
 		if (jobId == null || targetFile == null) {
-			throw new OpenApiException(OpenApi.OPENAPI_FILE_NOT_FOUND_ERROR, "{'reason':'Job ID or targetFile is null.'}");
+			throw new OpenApiException(OpenApi.OPENAPI_FILE_NOT_FOUND_ERROR,
+					"{'reason':'Job ID or targetFile is null.'}");
 		}
-		
+
 		// authorization
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("Authorization", "Bearer " + accessToken);
-		
+
 		GetFileRequest getFileRequest = new GetFileRequest();
 		getFileRequest.setCallUrl(resultFileUrl.concat("/" + jobId));
 		getFileRequest.setHeader(paramMap);
 		getFileRequest.setParameter(targetFile);
-		
+
 		try {
 			getFileRequest.executeRequest();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new OpenApiException(OpenApi.OPENAPI_JOB_EXECUTE_ERROR, e.getMessage());			
+			throw new OpenApiException(OpenApi.OPENAPI_JOB_EXECUTE_ERROR,
+					e.getMessage());
 		}
-
 	}
 
 	@Override
 	public InputStream getFilePaymentJobStatus(String jobId, String accessToken)
 			throws OpenApiException {
-		
 		if (jobId == null) {
-			throw new OpenApiException(OpenApi.OPENAPI_FILE_NOT_FOUND_ERROR, "{'reason':'Job ID or targetFile is null.'}");
+			throw new OpenApiException(OpenApi.OPENAPI_FILE_NOT_FOUND_ERROR,
+					"{'reason':'Job ID or targetFile is null.'}");
 		}
-		
+
 		// authorization
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("Authorization", "Bearer " + accessToken);
-		
+
 		GetInsRequest getInsRequest = new GetInsRequest();
 		getInsRequest.setCallUrl(resultFileUrl.concat("/" + jobId));
 		getInsRequest.setHeader(paramMap);
 		InputStream inputStream = null;
-		
+
 		try {
 			inputStream = getInsRequest.executeRequest();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new OpenApiException(OpenApi.OPENAPI_JOB_EXECUTE_ERROR, e.getMessage());			
+			throw new OpenApiException(OpenApi.OPENAPI_JOB_EXECUTE_ERROR,
+					e.getMessage());
 		}
-		
 		return inputStream;
 	}
-	
+
 	@Override
-	public TransactionDetail getPaymentTransactionDetail(String tid, String accessToken) throws OpenApiException {
-		
+	public TransactionDetail getPaymentTransactionDetail(String tid,
+			String accessToken) throws OpenApiException {
 		// authorization
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("Authorization", "Bearer " + accessToken);
-		
+
 		GetRequest getRequest = new GetRequest();
-		
+
 		getRequest.setHeader(paramMap);
 		getRequest.setCallUrl(txidInfoUrl.concat("/" + tid));
-		
+
 		String result = null;
 		TransactionDetail transactionDetail = null;
-		
+
 		try {
 			result = getRequest.executeRequest();
-			transactionDetail = objectMapper.readValue(result, TransactionDetail.class);
+			transactionDetail = objectMapper.readValue(result,
+					TransactionDetail.class);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new OpenApiException(OpenApi.OPENAPI_JOB_EXECUTE_ERROR, e.getMessage());
+			throw new OpenApiException(OpenApi.OPENAPI_JOB_EXECUTE_ERROR,
+					e.getMessage());
 		}
-
 		return transactionDetail;
-		
 	}
-	
+
 	@Override
-	public CancelResponse cancelPaymentTransaction(CancelRequest cancelRequest, String accessToken) throws OpenApiException {
-		
+	public CancelResponse cancelPaymentTransaction(CancelRequest cancelRequest,
+			String accessToken) throws OpenApiException {
 		Map<String, String> paramMap = new HashMap<String, String>();
-		logger.info("Cancel Request access Token : " + accessToken);
+		logger.info("[CancelPayment] access Token -> " + accessToken);
 		paramMap.put("Authorization", "Bearer " + accessToken);
-		
+
 		JsonPostRequest jsonPostRequest = new JsonPostRequest();
 		jsonPostRequest.setHeader(paramMap);
 		jsonPostRequest.setCallUrl(refundUrl);
-		
+
 		String result = null;
 		CancelResponse cancelResponse = null;
-		
+
 		try {
-			jsonPostRequest.setParameter(objectMapper.writeValueAsString(cancelRequest));
+			jsonPostRequest.setParameter(objectMapper
+					.writeValueAsString(cancelRequest));
 			result = jsonPostRequest.executeRequest();
-			logger.info("Cancel response" + result);
-			cancelResponse = objectMapper.readValue(result, CancelResponse.class);
+			logger.info("[CancelPayment] Response -> " + result);
+			cancelResponse = objectMapper.readValue(result,
+					CancelResponse.class);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new OpenApiException(OpenApi.OPENAPI_JOB_EXECUTE_ERROR, e.getMessage());			
+			throw new OpenApiException(OpenApi.OPENAPI_JOB_EXECUTE_ERROR,
+					e.getMessage());
 		}
-		
+
 		return cancelResponse;
-		
 	}
-	
+
 	@Override
 	public void setPropertyFile(String path) throws Exception {
-
 		Properties props = new Properties();
-		
+		StringBuilder stringBuilder = new StringBuilder();
+
 		if (path == null) {
-			throw new OpenApiException(OpenApi.OPENAPI_PROPERTY_SETTING_ERROR, "{'reason':'Property path is null.'}");
+			throw new OpenApiException(OpenApi.OPENAPI_PROPERTY_SETTING_ERROR,
+					"{'reason':'Property path is null.'}");
 		}
-		
+
 		FileInputStream fis = null;
 
 		try {
 			fis = new FileInputStream(path);
 			props.load(new BufferedInputStream(fis));
-			
+
 			fileJobUrl = props.getProperty("openapi.file_payment_url");
-			resultFileUrl = props.getProperty("openapi.file_payment_info_url");			
+			resultFileUrl = props.getProperty("openapi.file_payment_info_url");
 			txidInfoUrl = props.getProperty("openapi.payment_transaction_detail_url");
 			refundUrl = props.getProperty("openapi.payment_cancel_url");
+			stringBuilder.append("[setPropertyFile] ").append(fileJobUrl)
+					.append("|").append(resultFileUrl).append("|")
+					.append(txidInfoUrl).append("|").append(refundUrl);
+			logger.info(stringBuilder.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new OpenApiException(OpenApi.OPENAPI_PROPERTY_SETTING_ERROR, "File creation is incorect!!");
+			throw new OpenApiException(OpenApi.OPENAPI_PROPERTY_SETTING_ERROR,
+					"{'reason':'File creation is incorect!!'}");
 		} finally {
 			fis.close();
 		}
 	}
 
-
-	
 }
