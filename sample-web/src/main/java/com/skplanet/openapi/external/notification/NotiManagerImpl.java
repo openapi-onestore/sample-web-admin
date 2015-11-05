@@ -22,7 +22,11 @@ public class NotiManagerImpl implements NotiManager {
 	
 	public NotiManagerImpl() { }
 	public NotiManagerImpl(String logPath) {
-		PropertyConfigurator.configure(logPath);
+		if (logPath != null) {
+			if (logPath.length() > 0) {
+				PropertyConfigurator.configure(logPath);				
+			}
+		}
 	}
 	
 	@Override
@@ -96,7 +100,11 @@ public class NotiManagerImpl implements NotiManager {
 			fis = new FileInputStream(path);
 			props.load(new BufferedInputStream(fis));
 			
-			verifyUrl = props.getProperty("notification.verify_url");
+			String propVerifyUrl = props.getProperty("notification.verify_url");
+			if (propVerifyUrl != null) {
+				verifyUrl = propVerifyUrl;				
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new NotiException(Noti.NOTI_PROPERTY_SETTING_ERROR, "File creation is incorect!!");

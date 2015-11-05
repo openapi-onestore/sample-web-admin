@@ -28,7 +28,7 @@ public class ServiceConsole {
 		String logPath = null;
 		
 		try {
-			path = new ClassPathResource("properties/config.properties").getFile().getAbsolutePath();
+			path = new ClassPathResource("properties/rel_config.properties").getFile().getAbsolutePath();
 			logPath = new ClassPathResource("properties/log4j.properties").getFile().getAbsolutePath();
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -36,7 +36,7 @@ public class ServiceConsole {
 		
 		// Get New AccessToken
 		OAuthClientInfo oauthClientInfo = new OAuthClientInfo(
-				"84xK38rx9iCrFRJVOynsRA0MT0o3LTs83OqDLEJf5g0=", "GS1qrhoHMJWpmS6QwLNaG5NcFWFqzh5TrmY5476a2nA=", "client_credentials");
+				"VTFqvgcLbyyFdG2wZtEzBgbRB++RAp4WLWURY7g8Rvg=", "dxHw4bH8HU0f0+pmVsuvvfATdD8OXr85nL1ZTkmdVig=", "client_credentials");
 		OAuthManager oauthManager = ManagerProducer.getFactory(logPath).getOAuthManager(oauthClientInfo);
 		
 		try {

@@ -46,6 +46,8 @@ public class KvpPostRequest extends HttpRequest<Map<String, String>, String> {
 			logger.info("Http result code : " + statusLine.getStatusCode());
 			if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
 				result = EntityUtils.toString(response.getEntity());
+			} else {
+				throw new Exception("http request fail, result code : " + statusLine.getStatusCode());
 			}
 		} finally {
 			response.close();

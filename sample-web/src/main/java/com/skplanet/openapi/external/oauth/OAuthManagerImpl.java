@@ -30,7 +30,11 @@ public class OAuthManagerImpl implements OAuthManager {
 	
 	public OAuthManagerImpl(OAuthClientInfo oauthClientInfo, String logPath) {
 		this.clientInfo = oauthClientInfo;
-		PropertyConfigurator.configure(logPath);
+		if (logPath != null) {
+			if (logPath.length() > 0) {
+				PropertyConfigurator.configure(logPath);				
+			}
+		}
 	}
 	
 	public OAuthAccessToken createAccessToken() throws OAuthManagingException {
@@ -57,11 +61,17 @@ public class OAuthManagerImpl implements OAuthManager {
 		try {
 			logger.info("Set call uri : " + oauthAccessTokenUrl);
 			response = kvpPostRequest.executeRequest();
-			accessToken = objectMapper.readValue(response, OAuthAccessToken.class);
 			logger.info("Post response : " + response);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new OAuthManagingException(OAuthManaging.OAUTH_HTTP_REQUEST_FAIL, "OAUTH http request is failure!!");			
+			throw new OAuthManagingException(OAuthManaging.OAUTH_HTTP_REQUEST_FAIL, "OAUTH http request is failure!!");
+		}
+		
+		try {
+			accessToken = objectMapper.readValue(response, OAuthAccessToken.class);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			throw new OAuthManagingException(OAuthManaging.OAUTH_HTTP_REQUEST_FAIL, "Json parsing error!!");
 		}
 		
 		return accessToken;
@@ -86,10 +96,15 @@ public class OAuthManagerImpl implements OAuthManager {
 			fis = new FileInputStream(path);
 			props.load(new BufferedInputStream(fis));
 			
-			oauthAccessTokenUrl = props.getProperty("oauth.token_create_url");
+			String propAccessTokenUrl = props.getProperty("oauth.token_create_url");
+			
+			if (propAccessTokenUrl != null) {
+				oauthAccessTokenUrl = propAccessTokenUrl;
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new OAuthManagingException(OAuthManaging.UNKNOWN_ERROR, "File creation is incorect!!");
+			throw new OAuthManagingException(OAuthManaging.UNKNOWN_ERROR, "File read error!!");
 		} finally {
 			fis.close();
 		}

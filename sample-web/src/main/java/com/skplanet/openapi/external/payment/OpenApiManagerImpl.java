@@ -40,7 +40,11 @@ public class OpenApiManagerImpl implements OpenApiManager {
 	public OpenApiManagerImpl() { }
 
 	public OpenApiManagerImpl(String logPath) {
-		PropertyConfigurator.configure(logPath);
+		if (logPath != null) {
+			if (logPath.length() > 0) {
+				PropertyConfigurator.configure(logPath);				
+			}
+		}
 	}
 
 	@Override
@@ -210,10 +214,23 @@ public class OpenApiManagerImpl implements OpenApiManager {
 			fis = new FileInputStream(path);
 			props.load(new BufferedInputStream(fis));
 
-			fileJobUrl = props.getProperty("openapi.file_payment_url");
-			resultFileUrl = props.getProperty("openapi.file_payment_info_url");
-			txidInfoUrl = props.getProperty("openapi.payment_transaction_detail_url");
-			refundUrl = props.getProperty("openapi.payment_cancel_url");
+			String propsFileJobUrl = props.getProperty("openapi.file_payment_url");
+			String propsResultFileUrl = props.getProperty("openapi.file_payment_info_url");
+			String propsTxidInfoUrl = props.getProperty("openapi.payment_transaction_detail_url");
+			String propsRefundUrl = props.getProperty("openapi.payment_cancel_url");
+			
+			if (propsFileJobUrl != null)
+				fileJobUrl = propsFileJobUrl;
+			
+			if (propsResultFileUrl != null)
+				resultFileUrl = propsResultFileUrl;
+			
+			if (propsTxidInfoUrl != null)
+				txidInfoUrl = propsTxidInfoUrl;
+			
+			if (propsRefundUrl != null)
+				refundUrl = propsRefundUrl;
+			
 			stringBuilder.append("[setPropertyFile] ").append(fileJobUrl)
 					.append("|").append(resultFileUrl).append("|")
 					.append(txidInfoUrl).append("|").append(refundUrl);
