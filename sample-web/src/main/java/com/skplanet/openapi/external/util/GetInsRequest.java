@@ -18,9 +18,8 @@ public class GetInsRequest extends HttpRequest<Void, InputStream> {
 	@Override
 	public InputStream executeRequest() throws Exception {
 		
-		if (!validationUrl()) {
-			return null;
-		}
+		// Url check
+		checkCallurl();
 		
 		httpClient = HttpClients.createDefault();
 		HttpGet httpGet = new HttpGet(callUrl);
@@ -32,7 +31,7 @@ public class GetInsRequest extends HttpRequest<Void, InputStream> {
 		response = httpClient.execute(httpGet);
 		
 		try {
-			statusLine = response.getStatusLine();
+			checkHttpStatus(response);
 			HttpEntity httpEntity = response.getEntity();
 			inputStream = httpEntity.getContent();
 		} catch (Exception e) {

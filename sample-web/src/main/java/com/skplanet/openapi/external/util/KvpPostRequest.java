@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
@@ -23,8 +22,8 @@ public class KvpPostRequest extends HttpRequest<Map<String, String>, String> {
 	public String executeRequest() throws Exception {
 		String result = null;
 		
-		if (!validationUrl())
-			return null;
+		// Url check
+		checkCallurl();
 		
 		if (!validationParameter())
 			return null;
@@ -42,13 +41,10 @@ public class KvpPostRequest extends HttpRequest<Map<String, String>, String> {
 		CloseableHttpResponse response = httpClient.execute(httpPost);
 		
 		try {
-			statusLine = response.getStatusLine();
-			logger.info("Http result code : " + statusLine.getStatusCode());
-			if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
-				result = EntityUtils.toString(response.getEntity());
-			} else {
-				throw new Exception("http request fail, result code : " + statusLine.getStatusCode());
-			}
+			checkHttpStatus(response);
+			result = EntityUtils.toString(response.getEntity());			
+		} catch (Exception e) {
+			throw new Exception(e);
 		} finally {
 			response.close();
 			httpClient.close();

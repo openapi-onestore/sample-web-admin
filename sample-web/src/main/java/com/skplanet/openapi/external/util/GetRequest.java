@@ -12,9 +12,8 @@ public class GetRequest extends HttpRequest<String, String> {
 	public String executeRequest() throws Exception {
 		String result = null;
 		
-		if (!validationUrl()) {
-			return null;
-		}
+		// Url check
+		checkCallurl();
 		
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		HttpGet httpGet = new HttpGet(callUrl);
@@ -25,8 +24,10 @@ public class GetRequest extends HttpRequest<String, String> {
 		
 		CloseableHttpResponse response = httpClient.execute(httpGet);
 		try {
-			statusLine = response.getStatusLine();
+			checkHttpStatus(response);
 			result = EntityUtils.toString(response.getEntity());
+		} catch (Exception e) {
+			throw new Exception(e);
 		} finally {
 			response.close();
 			httpClient.close();

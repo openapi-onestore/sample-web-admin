@@ -18,14 +18,13 @@ public class FilePostRequest extends HttpRequest<File, String> {
 	@Override
 	public String executeRequest() throws Exception {
 		String result = null;
+
+		// Url check
+		checkCallurl();
 		
 		// TODO: fail interface
 		if (sendFile == null || !sendFile.canRead()) {
-			return "fail";
-		}
-		
-		if (!validationUrl()) {
-			return "fail - not call Url";
+			throw new Exception("Send file is null or can't be read...");
 		}
 		
 		HttpPost httpPost = new HttpPost(callUrl);
@@ -39,9 +38,12 @@ public class FilePostRequest extends HttpRequest<File, String> {
 		
 		httpPost.setEntity(reqEntity);
 		CloseableHttpResponse response = httpclient.execute(httpPost);
+		
 		try {
-			statusLine = response.getStatusLine();
+			checkHttpStatus(response);
 			result = EntityUtils.toString(response.getEntity());
+		} catch (Exception e) {
+			throw new Exception(e);
 		} finally {
 			response.close();
 			httpclient.close();

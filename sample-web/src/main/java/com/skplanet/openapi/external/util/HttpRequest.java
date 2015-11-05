@@ -2,7 +2,9 @@ package com.skplanet.openapi.external.util;
 
 import java.util.Map;
 
+import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.message.AbstractHttpMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +20,20 @@ public abstract class HttpRequest<T, R> {
 	abstract public void setParameter(T parameter);
 	abstract public R executeRequest() throws Exception;
 	
+	protected void checkCallurl() throws Exception {
+		if (!validationUrl()) {
+			throw new Exception("Call url is not valid...");
+		}
+	}
+	
+	protected void checkHttpStatus(CloseableHttpResponse response) throws Exception {
+		statusLine = response.getStatusLine();
+		logger.info("Http result code : " + statusLine.getStatusCode());
+		if (statusLine.getStatusCode() != HttpStatus.SC_OK) {
+			throw new Exception("Http request fail.. HttpStatus code : " + statusLine.getStatusCode());
+		}
+	}
+	
 	protected void addHeaders(AbstractHttpMessage httpMessage) {
 		for (String key : headers.keySet()) {
 			logger.info("Add headers : " + key + " value : " + headers.get(key));
@@ -25,7 +41,7 @@ public abstract class HttpRequest<T, R> {
 		}
 	}
 	
-	protected boolean validationUrl() {
+	private boolean validationUrl() {
 		if (callUrl == null) 
 			return false;
 		return true;
@@ -58,7 +74,5 @@ public abstract class HttpRequest<T, R> {
 	public void setCallUrl(String callUrl) {
 		this.callUrl = callUrl;
 	}
-	
-	
 	
 }

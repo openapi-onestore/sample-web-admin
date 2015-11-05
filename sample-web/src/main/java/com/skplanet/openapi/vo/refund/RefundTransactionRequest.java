@@ -4,11 +4,12 @@ import com.skplanet.openapi.vo.payment.PaymentMethods;
 
 public class RefundTransactionRequest {
 	
+	private String refundTid;
 	private String tid;
 	private boolean fullRefund;
 	private int amount;
 	private String note;
-
+	
 	private PaymentMethods[] paymentMethods;
 	
 	public String getTid() {
@@ -49,6 +50,14 @@ public class RefundTransactionRequest {
 	
 	public void setPaymentMethods(PaymentMethods[] paymentMethods) {
 		this.paymentMethods = paymentMethods;
+	}
+	
+	public String getRefundTid() {
+		return refundTid;
+	}
+
+	public void setRefundTid(String refundTid) {
+		this.refundTid = refundTid;
 	}
 	
 }

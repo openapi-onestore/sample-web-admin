@@ -19,9 +19,8 @@ public class GetFileRequest extends HttpRequest<File, Void> {
 	@Override
 	public Void executeRequest() throws Exception {
 		
-		if (!validationUrl()) {
-			return null;
-		}
+		// Url check
+		checkCallurl();
 		
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		HttpGet httpGet = new HttpGet(callUrl);
@@ -33,7 +32,7 @@ public class GetFileRequest extends HttpRequest<File, Void> {
 		CloseableHttpResponse response = httpClient.execute(httpGet);
 		
 		try {
-			statusLine = response.getStatusLine();
+			checkHttpStatus(response);
 			HttpEntity httpEntity = response.getEntity();
 			
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpEntity.getContent(), Charset.forName("UTF-8")));

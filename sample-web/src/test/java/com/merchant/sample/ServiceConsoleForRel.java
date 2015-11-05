@@ -5,23 +5,25 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.core.io.ClassPathResource;
 
 import com.skplanet.openapi.external.framework.ManagerProducer;
 import com.skplanet.openapi.external.oauth.OAuthAccessToken;
 import com.skplanet.openapi.external.oauth.OAuthClientInfo;
 import com.skplanet.openapi.external.oauth.OAuthManager;
+import com.skplanet.openapi.external.payment.OpenApiException;
 import com.skplanet.openapi.external.payment.OpenApiManager;
-import com.skplanet.openapi.vo.payment.FilePaymentHeader;
-import com.skplanet.openapi.vo.payment.FilePaymentResult;
 import com.skplanet.openapi.vo.payment.TransactionDetail;
 import com.skplanet.openapi.vo.refund.CancelRequest;
 import com.skplanet.openapi.vo.refund.CancelResponse;
 import com.skplanet.openapi.vo.refund.RefundTransactionRequest;
 
-public class ServiceConsole {
-	
-	public static void main(String ... v) {
+public class ServiceConsoleForRel {
+
+	public static void main(String[] args) {
+		
+		ObjectMapper objectMapper = new ObjectMapper();
 		
 		String accessToken = null;
 		String path = null;
@@ -57,62 +59,57 @@ public class ServiceConsole {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
+
 		
-		FilePaymentHeader filePaymentHeader = new FilePaymentHeader();
-		filePaymentHeader.setVerBulkPay("1");
-		filePaymentHeader.setBid("skplanet");
-		filePaymentHeader.setNotiUrl("");
-		filePaymentHeader.setCntTotalTrans(Integer.toString(1));
-		filePaymentHeader.setPriority("Instant");
-		
-		File file = new File("res/sample.pay");
-		
-		System.out.println(">>>" + file.getAbsolutePath() + ">>>" + file.exists());
-		String jobId = null;
 		try {
-			
-			FilePaymentResult result = 
-					service.createFilePayment(filePaymentHeader, file, accessToken);
-			
-			System.out.println(result.getJobId() + "|" + result.getResultCode() + 
-					"|" + result.getResultMsg() + "|" + result.getWaitingJobs());
-			jobId = result.getJobId();
-			
-			// Get File Payment Job Result
-			Thread.sleep(2000);
 			
 			File resFile = new File("d:/samplefolder/sample-web/resFileinMerchant.txt");
 			if (!resFile.createNewFile()) {
 				System.exit(-1);
 			}
 			
-			service.getFilePaymentJobStatus(jobId, resFile, accessToken);
+			service.getFilePaymentJobStatus("20", resFile, accessToken);
 			System.out.println("Path >>> " + resFile.getAbsolutePath());
 			printFile(resFile);
-			resFile.delete();
+			resFile.delete();			
+			
+		} catch (OpenApiException | IOException e) {
+			e.printStackTrace();
+		}
+		
+		boolean switchBool = false;
+		
+		if ( switchBool ) {
+			String txid = "TSTORE0004_20151105183704751841158519958";
 			
 			// Get Payment Transaction Details
-			TransactionDetail txDetail = service.getPaymentTransactionDetail("tx_my00001111", accessToken);
-			System.out.println("Transaction detail result >>>" + txDetail.getResultCode() + "|" + txDetail.getResultMsg() + 
-					"|" + txDetail.getPayer());
+			TransactionDetail txDetail;
+			try {
+				txDetail = service.getPaymentTransactionDetail(txid, accessToken);
+				System.out.println("Transaction detail result >>>" + txDetail.getResultCode() + "|" + txDetail.getResultMsg() + "|" + txDetail.getPayer().getAuthkey());			
+				System.out.println(objectMapper.writeValueAsString(txDetail));
+			} catch (OpenApiException | IOException e) {
+				e.printStackTrace();
+			}
 			
 			// Cancel Payment Transaction
 			CancelRequest cancelRequest = new CancelRequest();
 			RefundTransactionRequest refundTxReq = new RefundTransactionRequest();
 			refundTxReq.setAmount(1000);
-			refundTxReq.setTid("tx_my00001111");
+			refundTxReq.setTid(txid);
 			cancelRequest.setRefundTransactionRequest(refundTxReq);
 					
-			CancelResponse cancelRes = service.cancelPaymentTransaction(cancelRequest, accessToken);
-			System.out.println("Cancel response result >>> " + cancelRes.getResultCode() + "|" + cancelRes.getResultMsg());
-			
-			// Verify Transaction Notification
-			
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			CancelResponse cancelRes;
+			try {
+				cancelRes = service.cancelPaymentTransaction(cancelRequest, accessToken);
+				System.out.println("Cancel response result >>> " + cancelRes.getResultCode() + "|" + cancelRes.getResultMsg());			
+			} catch (OpenApiException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
 		}
+
+		
 	}
 	
 	public static void printFile(File file) {
@@ -137,6 +134,5 @@ public class ServiceConsole {
 			}
 		}
 		
-	}
-	
+	}	
 }

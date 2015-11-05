@@ -15,9 +15,8 @@ public class JsonPostRequest extends HttpRequest<String, String> {
 	public String executeRequest() throws Exception {
 		String result = null;
 		
-		if (!validationUrl()) {
-			return null;
-		}
+		// Url check
+		checkCallurl();
 		
 		if (!validationParameter()) {
 			return null;
@@ -37,8 +36,10 @@ public class JsonPostRequest extends HttpRequest<String, String> {
 		CloseableHttpResponse response = httpClient.execute(httpPost);
 		
 		try {
-			this.statusLine = response.getStatusLine();
+			checkHttpStatus(response);
 			result = EntityUtils.toString(response.getEntity());
+		} catch (Exception e) {
+			throw new Exception(e);
 		} finally {
 			response.close();
 			httpClient.close();
