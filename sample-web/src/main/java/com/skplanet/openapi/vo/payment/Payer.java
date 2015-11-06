@@ -2,14 +2,14 @@ package com.skplanet.openapi.vo.payment;
 
 public class Payer {
 
-	private String authkey;
+	private String authKey;
 	
-	public String getAuthkey() {
-		return authkey;
+	public String getAuthKey() {
+		return authKey;
 	}
 	
-	public void setAuthkey(String authkey) {
-		this.authkey = authkey;
+	public void setAuthKey(String authKey) {
+		this.authKey = authKey;
 	}
 	
 }

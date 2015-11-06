@@ -129,7 +129,7 @@ public class OpenApiManagerTest {
 		OpenApiManager openApiManager = new OpenApiManagerImpl();
 		
 		Payer payer = new Payer();
-		payer.setAuthkey("AUTHKEY");
+		payer.setAuthKey("AUTHKEY");
 		
 		PaymentMethods paymentMethods = new PaymentMethods();
 		paymentMethods.setAmount(1000);

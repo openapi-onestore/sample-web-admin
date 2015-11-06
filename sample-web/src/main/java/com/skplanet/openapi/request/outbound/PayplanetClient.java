@@ -248,7 +248,7 @@ public class PayplanetClient {
 		refundTransactionRequest.setPaymentMethods(paymentMethods);
 		refundTransactionRequest.setNote("Test refund request");
 		
-		payer.setAuthkey("AuthKey");
+		payer.setAuthKey("AuthKey");
 		
 		Links links = new Links();
 		links.setName("refundurl");

@@ -96,7 +96,7 @@ public class AdminController {
 				modelAndView.addObject("resultMsg", transactionDetail.getResultMsg());
 				
 				// Payer
-				modelAndView.addObject("authkey", transactionDetail.getPayer().getAuthkey());
+				modelAndView.addObject("authkey", transactionDetail.getPayer().getAuthKey());
 				
 				// TransactionInfo
 				modelAndView.addObject("status", transactionDetail.getPaymentTransactionInfo().getStatus());			
