@@ -177,9 +177,11 @@
 					<configuration>
 						<finalName>OpenApiManager-${version}</finalName>
 						<includes>
+							<include>com/skplanet/openapi/external/framework/**</include>
 							<include>com/skplanet/openapi/external/payment/**</include>
 							<include>com/skplanet/openapi/external/oauth/**</include>
 							<include>com/skplanet/openapi/external/notification/**</include>
+							<include>com/skplanet/openapi/external/util/**</include>
 							<include>com/skplanet/openapi/vo/**</include>
 							<include>com/skplanet/openapi/vo/payment/**</include>
 							<include>com/skplanet/openapi/vo/refund/**</include>
