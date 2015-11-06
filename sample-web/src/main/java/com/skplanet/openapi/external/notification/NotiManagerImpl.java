@@ -24,7 +24,7 @@ public class NotiManagerImpl implements NotiManager {
 	public NotiManagerImpl(String logPath) {
 		if (logPath != null) {
 			if (logPath.length() > 0) {
-				PropertyConfigurator.configure(logPath);				
+				PropertyConfigurator.configure(logPath);
 			}
 		}
 	}

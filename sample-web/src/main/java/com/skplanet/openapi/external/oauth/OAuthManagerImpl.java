@@ -32,7 +32,7 @@ public class OAuthManagerImpl implements OAuthManager {
 		this.clientInfo = oauthClientInfo;
 		if (logPath != null) {
 			if (logPath.length() > 0) {
-				PropertyConfigurator.configure(logPath);				
+				PropertyConfigurator.configure(logPath);
 			}
 		}
 	}

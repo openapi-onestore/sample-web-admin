@@ -4,7 +4,7 @@ public class CancelResponse {
 
 	private String resultCode;
 	private String resultMsg;
-	private RefundTransactionRequest refundTransactionRequest;
+	private RefundTransactionResponse refundTransactionResponse;
 	
 	public String getResultCode() {
 		return resultCode;
@@ -21,14 +21,13 @@ public class CancelResponse {
 	public void setResultMsg(String resultMsg) {
 		this.resultMsg = resultMsg;
 	}
-	
-	public RefundTransactionRequest getRefundTransactionRequest() {
-		return refundTransactionRequest;
+
+	public RefundTransactionResponse getRefundTransactionResponse() {
+		return refundTransactionResponse;
 	}
-	
-	public void setRefundTransactionRequest(
-			RefundTransactionRequest refundTransactionRequest) {
-		this.refundTransactionRequest = refundTransactionRequest;
+
+	public void setRefundTransactionResponse(RefundTransactionResponse refundTransactionResponse) {
+		this.refundTransactionResponse = refundTransactionResponse;
 	}
 	
 }

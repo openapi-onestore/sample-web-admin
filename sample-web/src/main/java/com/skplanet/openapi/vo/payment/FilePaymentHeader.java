@@ -5,15 +5,14 @@ public class FilePaymentHeader {
 	private String verBulkPay;
 	private String bid;
 	private String notiUrl;
-	private String postbackUrl;
-	private String cntTotalTrans;
+	private long cntTotalTrans;
 	private String priority;
 	
 	public FilePaymentHeader() {
 		;
 	}
 	
-	public FilePaymentHeader(String bid, String notiUrl, String cntTotalTrans, String priority) {
+	public FilePaymentHeader(String bid, String notiUrl, long cntTotalTrans, String priority) {
 		this.bid = bid;
 		this.notiUrl = notiUrl;
 		this.cntTotalTrans = cntTotalTrans;
@@ -38,16 +37,10 @@ public class FilePaymentHeader {
 	public void setNotiUrl(String notiUrl) {
 		this.notiUrl = notiUrl;
 	}
-	public String getPostbackUrl() {
-		return postbackUrl;
-	}
-	public void setPostbackUrl(String postbackUrl) {
-		this.postbackUrl = postbackUrl;
-	}
-	public String getCntTotalTrans() {
+	public long getCntTotalTrans() {
 		return cntTotalTrans;
 	}
-	public void setCntTotalTrans(String cntTotalTrans) {
+	public void setCntTotalTrans(long cntTotalTrans) {
 		this.cntTotalTrans = cntTotalTrans;
 	}
 	public String getPriority() {

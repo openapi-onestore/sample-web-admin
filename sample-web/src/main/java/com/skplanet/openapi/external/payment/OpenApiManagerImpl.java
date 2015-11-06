@@ -63,8 +63,7 @@ public class OpenApiManagerImpl implements OpenApiManager {
 		headerMap.put("verBulkPay", filePaymentHeader.getVerBulkPay());
 		headerMap.put("bid", filePaymentHeader.getBid());
 		headerMap.put("notiUrl", filePaymentHeader.getNotiUrl());
-		headerMap.put("postbackUrl", filePaymentHeader.getPostbackUrl());
-		headerMap.put("cntTotalTrans", filePaymentHeader.getCntTotalTrans());
+		headerMap.put("cntTotalTrans", String.valueOf(filePaymentHeader.getCntTotalTrans()));
 		headerMap.put("priority", filePaymentHeader.getPriority());
 		headerMap.put("Authorization", "Bearer " + accessToken);
 
@@ -181,7 +180,7 @@ public class OpenApiManagerImpl implements OpenApiManager {
 
 		String result = null;
 		CancelResponse cancelResponse = null;
-
+		
 		try {
 			jsonPostRequest.setParameter(objectMapper
 					.writeValueAsString(cancelRequest));
@@ -194,7 +193,7 @@ public class OpenApiManagerImpl implements OpenApiManager {
 			throw new OpenApiException(OpenApi.OPENAPI_JOB_EXECUTE_ERROR,
 					e.getMessage());
 		}
-
+		
 		return cancelResponse;
 	}
 

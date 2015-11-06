@@ -7,7 +7,7 @@ public class RefundTransactionResponse {
 	private String refundTid;
 	private String tid;
 	private int amount;
-	private PaymentMethods paymentMethods;
+	private PaymentMethods[] paymentMethods;
 	
 	public String getRefundTid() {
 		return refundTid;
@@ -32,12 +32,12 @@ public class RefundTransactionResponse {
 	public void setAmount(int amount) {
 		this.amount = amount;
 	}
-	
-	public PaymentMethods getPaymentMethods() {
+
+	public PaymentMethods[] getPaymentMethods() {
 		return paymentMethods;
 	}
-	
-	public void setPaymentMethods(PaymentMethods paymentMethods) {
+
+	public void setPaymentMethods(PaymentMethods[] paymentMethods) {
 		this.paymentMethods = paymentMethods;
 	}
 	

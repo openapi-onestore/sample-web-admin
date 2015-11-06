@@ -14,28 +14,24 @@ import com.skplanet.openapi.external.oauth.OAuthManager;
 import com.skplanet.openapi.external.payment.OpenApiManager;
 import com.skplanet.openapi.vo.payment.FilePaymentHeader;
 import com.skplanet.openapi.vo.payment.FilePaymentResult;
-import com.skplanet.openapi.vo.payment.TransactionDetail;
-import com.skplanet.openapi.vo.refund.CancelRequest;
-import com.skplanet.openapi.vo.refund.CancelResponse;
-import com.skplanet.openapi.vo.refund.RefundTransactionRequest;
 
-public class ServiceConsoleForDev {
+public class ServiceConsoleForPay {
 	
 	public static void main(String ... v) {
 		
 		// JW's token for dev server
-		String devJwToken = "84xK38rx9iCrFRJVOynsRA0MT0o3LTs83OqDLEJf5g0=";
-		String devJwToken2 = "GS1qrhoHMJWpmS6QwLNaG5NcFWFqzh5TrmY5476a2nA=";
+//		String devJwToken = "84xK38rx9iCrFRJVOynsRA0MT0o3LTs83OqDLEJf5g0=";
+//		String devJwToken2 = "GS1qrhoHMJWpmS6QwLNaG5NcFWFqzh5TrmY5476a2nA=";
 		// Token for Release
-//		String devJwToken = "VTFqvgcLbyyFdG2wZtEzBgbRB++RAp4WLWURY7g8Rvg=";
-//		String devJwToken2 = "dxHw4bH8HU0f0+pmVsuvvfATdD8OXr85nL1ZTkmdVig=";
+		String devJwToken = "VTFqvgcLbyyFdG2wZtEzBgbRB++RAp4WLWURY7g8Rvg=";
+		String devJwToken2 = "dxHw4bH8HU0f0+pmVsuvvfATdD8OXr85nL1ZTkmdVig=";
 		
 		String accessToken = null;
 		String path = null;
 		String logPath = null;
 		
 		try {
-			path = new ClassPathResource("properties/config.properties").getFile().getAbsolutePath();
+			path = new ClassPathResource("properties/rel_config.properties").getFile().getAbsolutePath();
 			logPath = new ClassPathResource("properties/log4j.properties").getFile().getAbsolutePath();
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -68,10 +64,10 @@ public class ServiceConsoleForDev {
 		filePaymentHeader.setVerBulkPay("1");
 		filePaymentHeader.setBid("skplanet");
 		filePaymentHeader.setNotiUrl("");
-		filePaymentHeader.setCntTotalTrans(Integer.toString(1));
+		filePaymentHeader.setCntTotalTrans(1);
 		filePaymentHeader.setPriority("Instant");
 		
-		File file = new File("res/sample.pay");
+		File file = new File("res/sample_release.pay");
 		
 		System.out.println(">>>" + file.getAbsolutePath() + ">>>" + file.exists());
 		String jobId = null;
@@ -96,21 +92,21 @@ public class ServiceConsoleForDev {
 			System.out.println("Path >>> " + resFile.getAbsolutePath());
 			printFile(resFile);
 			resFile.delete();
-
-			// Get Payment Transaction Details
-			TransactionDetail txDetail = service.getPaymentTransactionDetail("tx_my00001111", accessToken);
-			System.out.println("Transaction detail result >>>" + txDetail.getResultCode() + "|" + txDetail.getResultMsg() + 
-					"|" + txDetail.getPayer());
 			
-			// Cancel Payment Transaction
-			CancelRequest cancelRequest = new CancelRequest();
-			RefundTransactionRequest refundTxReq = new RefundTransactionRequest();
-			refundTxReq.setAmount(1000);
-			refundTxReq.setTid("tx_my00001111");
-			cancelRequest.setRefundTransactionRequest(refundTxReq);
-					
-			CancelResponse cancelRes = service.cancelPaymentTransaction(cancelRequest, accessToken);
-			System.out.println("Cancel response result >>> " + cancelRes.getResultCode() + "|" + cancelRes.getResultMsg());
+//			// Get Payment Transaction Details
+//			TransactionDetail txDetail = service.getPaymentTransactionDetail("tx_my00001111", accessToken);
+//			System.out.println("Transaction detail result >>>" + txDetail.getResultCode() + "|" + txDetail.getResultMsg() + 
+//					"|" + txDetail.getPayer());
+//			
+//			// Cancel Payment Transaction
+//			CancelRequest cancelRequest = new CancelRequest();
+//			RefundTransactionRequest refundTxReq = new RefundTransactionRequest();
+//			refundTxReq.setAmount(1000);
+//			refundTxReq.setTid("tx_my00001111");
+//			cancelRequest.setRefundTransactionRequest(refundTxReq);
+//					
+//			CancelResponse cancelRes = service.cancelPaymentTransaction(cancelRequest, accessToken);
+//			System.out.println("Cancel response result >>> " + cancelRes.getResultCode() + "|" + cancelRes.getResultMsg());
 			
 			// Verify Transaction Notification
 			

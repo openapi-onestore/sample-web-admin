@@ -19,7 +19,7 @@ import com.skplanet.openapi.vo.refund.CancelRequest;
 import com.skplanet.openapi.vo.refund.CancelResponse;
 import com.skplanet.openapi.vo.refund.RefundTransactionRequest;
 
-public class ServiceConsoleForRel {
+public class ServiceConsoleForInfo {
 
 	public static void main(String[] args) {
 		
@@ -52,40 +52,35 @@ public class ServiceConsoleForRel {
 			System.exit(-1);
 		}
 		
-		// Create File Payment
+		// Get result file of payment job status
 		OpenApiManager service = ManagerProducer.getFactory(logPath).getOpenApiManager();
 		try {
 			service.setPropertyFile(path);
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-
 		
 		try {
-			
-			File resFile = new File("d:/samplefolder/sample-web/resFileinMerchant.txt");
-			if (!resFile.createNewFile()) {
-				System.exit(-1);
-			}
-			
-			service.getFilePaymentJobStatus("20", resFile, accessToken);
+			File resFile = new File("d:/samplefolder/sample-web/resFileinMerchant.txt");			
+			service.getFilePaymentJobStatus("31", resFile, accessToken);				
 			System.out.println("Path >>> " + resFile.getAbsolutePath());
 			printFile(resFile);
-			resFile.delete();			
-			
-		} catch (OpenApiException | IOException e) {
+			resFile.delete();
+		} catch (OpenApiException e) {
 			e.printStackTrace();
 		}
 		
-		boolean switchBool = false;
+		// Detail information and Cancel request
+		boolean switchBool = true;
 		
 		if ( switchBool ) {
-			String txid = "TSTORE0004_20151105183704751841158519958";
+			// Change a txid from information
+			String txid = "TSTORE0004_20151106112850215742361123827";
 			
 			// Get Payment Transaction Details
 			TransactionDetail txDetail;
 			try {
-				txDetail = service.getPaymentTransactionDetail(txid, accessToken);
+				txDetail = service.getPaymentTransactionDetail(txid, accessToken);					
 				System.out.println("Transaction detail result >>>" + txDetail.getResultCode() + "|" + txDetail.getResultMsg() + "|" + txDetail.getPayer().getAuthkey());			
 				System.out.println(objectMapper.writeValueAsString(txDetail));
 			} catch (OpenApiException | IOException e) {
@@ -108,7 +103,6 @@ public class ServiceConsoleForRel {
 				e.printStackTrace();
 			}			
 		}
-
 		
 	}
 	

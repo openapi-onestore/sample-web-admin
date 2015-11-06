@@ -12,8 +12,8 @@ public class ManagerFactory extends AbstractManagerFactory {
 
 	private String logPropertyPath = null;
 	
-	public ManagerFactory(String logPropertyPath) {
-		this.logPropertyPath = logPropertyPath;
+	public ManagerFactory(String propertyPath) {
+		this.logPropertyPath = propertyPath;
 	}
 	
 	@Override
