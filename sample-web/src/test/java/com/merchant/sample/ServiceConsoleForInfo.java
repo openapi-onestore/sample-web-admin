@@ -27,11 +27,9 @@ public class ServiceConsoleForInfo {
 		ObjectMapper objectMapper = new ObjectMapper();
 		
 		String accessToken = null;
-		String path = null;
 		String logPath = null;
 		
 		try {
-			path = new ClassPathResource("properties/rel_config.properties").getFile().getAbsolutePath();
 			logPath = new ClassPathResource("properties/log4j.properties").getFile().getAbsolutePath();
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -54,15 +52,10 @@ public class ServiceConsoleForInfo {
 		
 		// Get result file of payment job status
 		OpenApiManager service = ManagerProducer.getFactory(Environment.LIVE, logPath).getOpenApiManager();
-		try {
-			service.setPropertyFile(path);
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
 		
 		try {
 			File resFile = new File("d:/samplefolder/sample-web/resFileinMerchant.txt");			
-			service.getFilePaymentJobStatus("31", resFile, accessToken);				
+			service.getFilePaymentJobStatus("35", resFile, accessToken);				
 			System.out.println("Path >>> " + resFile.getAbsolutePath());
 			printFile(resFile);
 			resFile.delete();
@@ -75,7 +68,7 @@ public class ServiceConsoleForInfo {
 		
 		if ( switchBool ) {
 			// Change a txid from information
-			String txid = "TSTORE0004_20151106112850215742361123827";
+			String txid = "TSTORE0004_20151108163027850842776563868";
 			
 			// Get Payment Transaction Details
 			TransactionDetail txDetail;

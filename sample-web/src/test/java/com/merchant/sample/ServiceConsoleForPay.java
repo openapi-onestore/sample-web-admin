@@ -28,11 +28,9 @@ public class ServiceConsoleForPay {
 		String devJwToken2 = "dxHw4bH8HU0f0+pmVsuvvfATdD8OXr85nL1ZTkmdVig=";
 		
 		String accessToken = null;
-		String path = null;
 		String logPath = null;
 		
 		try {
-			path = new ClassPathResource("properties/rel_config.properties").getFile().getAbsolutePath();
 			logPath = new ClassPathResource("properties/log4j.properties").getFile().getAbsolutePath();
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -40,7 +38,7 @@ public class ServiceConsoleForPay {
 		
 		// Get New AccessToken
 		OAuthClientInfo oauthClientInfo = new OAuthClientInfo(devJwToken, devJwToken2, "client_credentials");
-		OAuthManager oauthManager = ManagerProducer.getFactory(Environment.SANDBOX, logPath).getOAuthManager(oauthClientInfo);
+		OAuthManager oauthManager = ManagerProducer.getFactory(Environment.LIVE, logPath).getOAuthManager(oauthClientInfo);
 		
 		try {
 			OAuthAccessToken accessTokenObj = oauthManager.createAccessToken();
@@ -53,12 +51,7 @@ public class ServiceConsoleForPay {
 		}
 		
 		// Create File Payment
-		OpenApiManager service = ManagerProducer.getFactory(Environment.SANDBOX, logPath).getOpenApiManager();
-		try {
-			service.setPropertyFile(path);
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
+		OpenApiManager service = ManagerProducer.getFactory(Environment.LIVE, logPath).getOpenApiManager();
 		
 		FilePaymentHeader filePaymentHeader = new FilePaymentHeader();
 		filePaymentHeader.setVerBulkPay("1");

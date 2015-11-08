@@ -27,11 +27,9 @@ public class ServiceConsoleForInfoSandBox {
 		ObjectMapper objectMapper = new ObjectMapper();
 		
 		String accessToken = null;
-		String path = null;
 		String logPath = null;
 		
 		try {
-			path = new ClassPathResource("properties/rel_config.properties").getFile().getAbsolutePath();
 			logPath = new ClassPathResource("properties/log4j.properties").getFile().getAbsolutePath();
 		} catch (IOException e1) {
 			e1.printStackTrace();

@@ -8,12 +8,14 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.skplanet.openapi.external.framework.Environment;
+import com.skplanet.openapi.external.framework.ManagerProducer;
 import com.skplanet.openapi.external.notification.NotiManager;
 import com.skplanet.openapi.external.notification.NotiManagerImpl;
 import com.skplanet.openapi.external.notification.NotiReceive;
 import com.skplanet.openapi.external.notification.NotiVerifyResult;
 import com.skplanet.openapi.external.oauth.OAuthClientInfo;
-import com.skplanet.openapi.external.oauth.OAuthManagerImpl;
+import com.skplanet.openapi.external.oauth.OAuthManager;
 import com.skplanet.openapi.external.oauth.OAuthManagingException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -24,7 +26,7 @@ import com.skplanet.openapi.external.oauth.OAuthManagingException;
 public class NotiManagerTest {
 	
 	private ObjectMapper objectMapper;
-	private OAuthManagerImpl oauthManager;
+	private OAuthManager oauthManager;
 	private NotiManager notiManager;
 	private OAuthClientInfo oauthClientInfo;
 	private String accessToken;
@@ -34,8 +36,8 @@ public class NotiManagerTest {
 		objectMapper = new ObjectMapper();
 		
 		oauthClientInfo = new OAuthClientInfo("84xK38rx9iCrFRJVOynsRA0MT0o3LTs83OqDLEJf5g0=", "GS1qrhoHMJWpmS6QwLNaG5NcFWFqzh5TrmY5476a2nA=", "client_credentials");
+		oauthManager = ManagerProducer.getFactory(Environment.SANDBOX, "").getOAuthManager(oauthClientInfo);
 		
-		oauthManager = new OAuthManagerImpl(oauthClientInfo);
 		try {
 			accessToken = oauthManager.createAccessToken().getAccessToken();
 		} catch (OAuthManagingException e) {

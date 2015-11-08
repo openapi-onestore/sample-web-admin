@@ -21,7 +21,6 @@ import com.skplanet.openapi.external.oauth.OAuthManager;
 import com.skplanet.openapi.external.oauth.OAuthManagingException;
 import com.skplanet.openapi.external.payment.OpenApiException;
 import com.skplanet.openapi.external.payment.OpenApiManager;
-import com.skplanet.openapi.external.payment.OpenApiManagerImpl;
 import com.skplanet.openapi.vo.payment.FilePaymentHeader;
 import com.skplanet.openapi.vo.payment.FilePaymentResult;
 import com.skplanet.openapi.vo.payment.Payer;
@@ -68,7 +67,7 @@ public class OpenApiManagerTest {
 		filePaymentHeader.setCntTotalTrans(2);
 		filePaymentHeader.setPriority("Instant");
 		
-		OpenApiManager openApiManager = new OpenApiManagerImpl();
+		OpenApiManager openApiManager = ManagerProducer.getFactory(Environment.SANDBOX, "").getOpenApiManager();
 		
 		FilePaymentResult filePaymentResult = null;
 		try {
@@ -94,7 +93,7 @@ public class OpenApiManagerTest {
 	@Test
 	public void getResultFileFromPaymentTest() {
 		
-		OpenApiManager openApiManager = new OpenApiManagerImpl();
+		OpenApiManager openApiManager = ManagerProducer.getFactory(Environment.SANDBOX, "").getOpenApiManager();
 		File resultFile = new File("d:/samplefolder/sample-web/test_res_file.txt");
 		
 		try {
@@ -112,7 +111,7 @@ public class OpenApiManagerTest {
 	@Test
 	public void getTransactionDetailTest() {
 		
-		OpenApiManager openApiManager = new OpenApiManagerImpl();
+		OpenApiManager openApiManager = ManagerProducer.getFactory(Environment.SANDBOX, "").getOpenApiManager();
 		TransactionDetail transactionDetail = null;
 		
 		try {
@@ -127,7 +126,7 @@ public class OpenApiManagerTest {
 	
 	@Test
 	public void cancelPaymentTransactionTest() {
-		OpenApiManager openApiManager = new OpenApiManagerImpl();
+		OpenApiManager openApiManager = ManagerProducer.getFactory(Environment.SANDBOX, "").getOpenApiManager();
 		
 		Payer payer = new Payer();
 		payer.setAuthKey("AUTHKEY");

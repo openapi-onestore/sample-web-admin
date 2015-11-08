@@ -16,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import com.skplanet.openapi.dao.FilePaymentDAO;
@@ -58,31 +57,16 @@ public class PayplanetClient {
 	@Autowired
 	private NotificationDAO notificationDAO;
 	
-	private OAuthManager oauthManager = ManagerProducer.getFactory(Environment.LIVE, "").getOAuthManager(new OAuthClientInfo(clientId, clientSecret, ""));
-	private OpenApiManager openApiManager = ManagerProducer.getFactory(Environment.LIVE, "").getOpenApiManager();
+	private OAuthManager oauthManager = ManagerProducer.getFactory(Environment.SANDBOX, "").getOAuthManager(new OAuthClientInfo(clientId, clientSecret, ""));
+	private OpenApiManager openApiManager = ManagerProducer.getFactory(Environment.SANDBOX, "").getOpenApiManager();
 	private NotiManagerImpl notiManagerImpl = new NotiManagerImpl();
 	
 	private ObjectMapper objectMapper = new ObjectMapper();
-	
-	
-	public PayplanetClient() {
-		System.out.println("Initiation for Manager");
-		try {
-			String path = new ClassPathResource("properties/config.properties").getFile().getAbsolutePath();
-//			openApiManager.setPropertyFile(path);
-//			notiManagerImpl.setPropertyFile(path);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 	
 	public FilePaymentResult createFilePayment(int processingCount, File requestFile) throws Exception {		
 		logger.debug("createBulkPayment() called");
 		
 		String accessToken = null;
-		
-		OAuthClientInfo oauthClientInfo = new OAuthClientInfo(clientId, clientSecret, "client_credentials");
-//		oauthManager.setClientInfo(oauthClientInfo);
 		accessToken = oauthManager.createAccessToken().getAccessToken();
 		
 		FilePaymentResult filePaymentResult = openApiManager.createFilePayment(getFilepaymentHeader(processingCount), requestFile, accessToken);
@@ -213,13 +197,7 @@ public class PayplanetClient {
 	}
 	
 	private String getAccessTokenFromOauthManager() throws Exception {
-		String accessToken = null;
-		
-		OAuthClientInfo oauthClientInfo = new OAuthClientInfo(clientId, clientSecret, "client_credentials");
-//		oauthManager.setClientInfo(oauthClientInfo);
-		accessToken = oauthManager.createAccessToken().getAccessToken();
-		
-		return accessToken;
+		return oauthManager.createAccessToken().getAccessToken();
 	}
 	
 	private CancelRequest getRefundTransactionJsonString(String jsonTransactionInfo) throws Exception {

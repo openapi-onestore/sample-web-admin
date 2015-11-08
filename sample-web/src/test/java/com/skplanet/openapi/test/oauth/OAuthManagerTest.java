@@ -8,15 +8,14 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.skplanet.openapi.external.framework.Environment;
 import com.skplanet.openapi.external.framework.ManagerProducer;
 import com.skplanet.openapi.external.oauth.OAuthAccessToken;
 import com.skplanet.openapi.external.oauth.OAuthClientInfo;
 import com.skplanet.openapi.external.oauth.OAuthManager;
-import com.skplanet.openapi.external.oauth.OAuthManagerImpl;
 import com.skplanet.openapi.external.util.KvpPostRequest;
 
 
@@ -37,7 +36,7 @@ public class OAuthManagerTest {
 	@Test
 	public void getAccessToken() {
 		
-		OAuthManagerImpl oauthManager = new OAuthManagerImpl(oauthClientInfo);
+		OAuthManager oauthManager = ManagerProducer.getFactory(Environment.SANDBOX, "").getOAuthManager(oauthClientInfo);
 		OAuthAccessToken oauth = null;
 		
 		try {
@@ -69,21 +68,6 @@ public class OAuthManagerTest {
 		headerMap.put("Authorization", sb.toString());
 		
 		kvpPostRequest.setHeader(headerMap);
-		
-	}
-	
-	@Test
-	public void setPropertyTest() {
-		
-		OAuthManager oauthManager = ManagerProducer.getFactory("").getOAuthManager(oauthClientInfo);
-
-		String path = null;
-		try {
-			path = new ClassPathResource("properties/rel_config.properties").getFile().getAbsolutePath();
-			oauthManager.setPropertyFile(path);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		
 	}
 	

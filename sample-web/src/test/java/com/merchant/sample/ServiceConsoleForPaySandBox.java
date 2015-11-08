@@ -1,6 +1,12 @@
 package com.merchant.sample;
 
-import com.skplanet.openapi.external.framework.AbstractManagerFactory;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
+import org.springframework.core.io.ClassPathResource;
+
 import com.skplanet.openapi.external.framework.Environment;
 import com.skplanet.openapi.external.framework.ManagerProducer;
 import com.skplanet.openapi.external.oauth.OAuthAccessToken;
@@ -9,19 +15,8 @@ import com.skplanet.openapi.external.oauth.OAuthManager;
 import com.skplanet.openapi.external.payment.OpenApiManager;
 import com.skplanet.openapi.vo.payment.FilePaymentHeader;
 import com.skplanet.openapi.vo.payment.FilePaymentResult;
-import org.springframework.core.io.ClassPathResource;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 
 public class ServiceConsoleForPaySandBox {
-
-
-	private static String getPropertiesPath() throws IOException{
-		return new ClassPathResource("properties/rel_config.properties").getFile().getAbsolutePath();
-	}
 
 	private static String getLogPath() throws IOException{
 		return new ClassPathResource("properties/log4j.properties").getFile().getAbsolutePath();
@@ -35,11 +30,11 @@ public class ServiceConsoleForPaySandBox {
 		// Token for Release
 //		String devJwToken = "VTFqvgcLbyyFdG2wZtEzBgbRB++RAp4WLWURY7g8Rvg=";
 //		String devJwToken2 = "dxHw4bH8HU0f0+pmVsuvvfATdD8OXr85nL1ZTkmdVig=";
-
+		
 		// SandBox, 00686847
 		final String clientId = "dCzM2NuHr1dOBQVqSpJO2VKzqguuuwgrddcMrXgFEyod0wDBNfm1YfCRKRsZ5CQ3";
 		final String clientSecret = "6XV9AWDxsarQZpF8cF+425zQg96NYhziAB7pdsD7/5E=";
-
+		
 		// Get New AccessToken
 		final OAuthClientInfo oauthClientInfo = new OAuthClientInfo(clientId, clientSecret, "client_credentials");
 
