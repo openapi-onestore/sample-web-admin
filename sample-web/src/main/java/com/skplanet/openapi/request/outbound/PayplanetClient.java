@@ -69,8 +69,8 @@ public class PayplanetClient {
 		System.out.println("Initiation for Manager");
 		try {
 			String path = new ClassPathResource("properties/config.properties").getFile().getAbsolutePath();
-			openApiManager.setPropertyFile(path);
-			notiManagerImpl.setPropertyFile(path);
+//			openApiManager.setPropertyFile(path);
+//			notiManagerImpl.setPropertyFile(path);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -82,7 +82,7 @@ public class PayplanetClient {
 		String accessToken = null;
 		
 		OAuthClientInfo oauthClientInfo = new OAuthClientInfo(clientId, clientSecret, "client_credentials");
-		oauthManager.setClientInfo(oauthClientInfo);
+//		oauthManager.setClientInfo(oauthClientInfo);
 		accessToken = oauthManager.createAccessToken().getAccessToken();
 		
 		FilePaymentResult filePaymentResult = openApiManager.createFilePayment(getFilepaymentHeader(processingCount), requestFile, accessToken);
@@ -216,7 +216,7 @@ public class PayplanetClient {
 		String accessToken = null;
 		
 		OAuthClientInfo oauthClientInfo = new OAuthClientInfo(clientId, clientSecret, "client_credentials");
-		oauthManager.setClientInfo(oauthClientInfo);
+//		oauthManager.setClientInfo(oauthClientInfo);
 		accessToken = oauthManager.createAccessToken().getAccessToken();
 		
 		return accessToken;
