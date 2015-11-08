@@ -11,24 +11,42 @@ import com.skplanet.openapi.external.payment.OpenApiManagerImpl;
 public class ManagerFactory extends AbstractManagerFactory {
 
 	private String logPropertyPath = null;
+	private Environment env = null;
 	
-	public ManagerFactory(String propertyPath) {
-		this.logPropertyPath = propertyPath;
+	public ManagerFactory(String logPropertyPath) {
+		this.logPropertyPath = logPropertyPath;
+	}
+	
+	public ManagerFactory(Environment env, String logPropetyFilePath) {
+		this.logPropertyPath = logPropetyFilePath;
+		this.env = env;
 	}
 	
 	@Override
 	public OAuthManager getOAuthManager(OAuthClientInfo oauthClientInfo) {
-		return new OAuthManagerImpl(oauthClientInfo, logPropertyPath);
+		if (env == Environment.SANDBOX) {
+			return new OAuthManagerImpl(true, oauthClientInfo, logPropertyPath);
+		} else {
+			return new OAuthManagerImpl(false, oauthClientInfo, logPropertyPath);			
+		}
 	}
 	
 	@Override
 	public NotiManager getNotiManager() {
-		return new NotiManagerImpl(logPropertyPath);
+		if (env == Environment.SANDBOX) {
+			return new NotiManagerImpl(true, logPropertyPath);
+		} else {
+			return new NotiManagerImpl(false, logPropertyPath);			
+		}		
 	}
 	
 	@Override
 	public OpenApiManager getOpenApiManager() {
-		return new OpenApiManagerImpl(logPropertyPath);
+		if (env == Environment.SANDBOX) {
+			return new OpenApiManagerImpl(true, logPropertyPath);
+		} else {
+			return new OpenApiManagerImpl(false, logPropertyPath);
+		}
 	}
 	
 }

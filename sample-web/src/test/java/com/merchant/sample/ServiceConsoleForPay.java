@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import org.springframework.core.io.ClassPathResource;
 
+import com.skplanet.openapi.external.framework.Environment;
 import com.skplanet.openapi.external.framework.ManagerProducer;
 import com.skplanet.openapi.external.oauth.OAuthAccessToken;
 import com.skplanet.openapi.external.oauth.OAuthClientInfo;
@@ -39,10 +40,9 @@ public class ServiceConsoleForPay {
 		
 		// Get New AccessToken
 		OAuthClientInfo oauthClientInfo = new OAuthClientInfo(devJwToken, devJwToken2, "client_credentials");
-		OAuthManager oauthManager = ManagerProducer.getFactory(logPath).getOAuthManager(oauthClientInfo);
+		OAuthManager oauthManager = ManagerProducer.getFactory(Environment.SANDBOX, logPath).getOAuthManager(oauthClientInfo);
 		
 		try {
-			oauthManager.setPropertyFile(path);
 			OAuthAccessToken accessTokenObj = oauthManager.createAccessToken();
 			accessToken = accessTokenObj.getAccessToken();
 			System.out.println("AccessToken >>>" + accessToken);
@@ -53,7 +53,7 @@ public class ServiceConsoleForPay {
 		}
 		
 		// Create File Payment
-		OpenApiManager service = ManagerProducer.getFactory(logPath).getOpenApiManager();
+		OpenApiManager service = ManagerProducer.getFactory(Environment.SANDBOX, logPath).getOpenApiManager();
 		try {
 			service.setPropertyFile(path);
 		} catch (Exception e1) {

@@ -14,8 +14,10 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.skplanet.openapi.external.framework.Environment;
+import com.skplanet.openapi.external.framework.ManagerProducer;
 import com.skplanet.openapi.external.oauth.OAuthClientInfo;
-import com.skplanet.openapi.external.oauth.OAuthManagerImpl;
+import com.skplanet.openapi.external.oauth.OAuthManager;
 import com.skplanet.openapi.external.oauth.OAuthManagingException;
 import com.skplanet.openapi.external.payment.OpenApiException;
 import com.skplanet.openapi.external.payment.OpenApiManager;
@@ -37,7 +39,7 @@ import com.skplanet.openapi.vo.refund.RefundTransactionRequest;
 public class OpenApiManagerTest {
 
 	private ObjectMapper objectMapper;
-	private OAuthManagerImpl oauthManager;
+	private OAuthManager oauthManager;
 	private OAuthClientInfo oauthClientInfo;
 	private String accessToken;
 	
@@ -46,8 +48,7 @@ public class OpenApiManagerTest {
 		objectMapper = new ObjectMapper();
 		
 		oauthClientInfo = new OAuthClientInfo("84xK38rx9iCrFRJVOynsRA0MT0o3LTs83OqDLEJf5g0=", "GS1qrhoHMJWpmS6QwLNaG5NcFWFqzh5TrmY5476a2nA=", "client_credentials");
-		
-		oauthManager = new OAuthManagerImpl(oauthClientInfo);
+		oauthManager = ManagerProducer.getFactory(Environment.SANDBOX, "").getOAuthManager(oauthClientInfo);
 		try {
 			accessToken = oauthManager.createAccessToken().getAccessToken();
 		} catch (OAuthManagingException e) {
@@ -129,7 +130,7 @@ public class OpenApiManagerTest {
 		OpenApiManager openApiManager = new OpenApiManagerImpl();
 		
 		Payer payer = new Payer();
-		payer.setAuthkey("AUTHKEY");
+		payer.setAuthKey("AUTHKEY");
 		
 		PaymentMethods paymentMethods = new PaymentMethods();
 		paymentMethods.setAmount(1000);

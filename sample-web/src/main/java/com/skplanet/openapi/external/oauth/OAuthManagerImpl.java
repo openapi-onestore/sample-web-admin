@@ -1,10 +1,7 @@
 package com.skplanet.openapi.external.oauth;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.PropertyConfigurator;
@@ -22,10 +19,23 @@ public class OAuthManagerImpl implements OAuthManager {
 	private ObjectMapper objectMapper = new ObjectMapper();
 	
 	// url default setting
-	private String oauthAccessTokenUrl = "http://172.21.60.143:8080/oauth/service/accessToken";
+	private final String sandboxOauthTokenUrl = "https://sandbox.apiauth.payplanet.co.kr/oauth/service/accessToken";
+	private final String releaseOauthTokenUrl = "https://apiauth.payplanet.co.kr/oauth/service/accessToken";
+	private String oauthAccessTokenUrl;
 	
-	public OAuthManagerImpl(OAuthClientInfo oauthClientInfo) {
+	public OAuthManagerImpl(Boolean isSandboxMode, OAuthClientInfo oauthClientInfo, String logPath) {
+		if (isSandboxMode) {
+			this.oauthAccessTokenUrl = sandboxOauthTokenUrl;
+		} else {
+			this.oauthAccessTokenUrl = releaseOauthTokenUrl;			
+		}
 		this.clientInfo = oauthClientInfo;
+		
+		if (logPath != null) {
+			if (logPath.length() > 0) {
+				PropertyConfigurator.configure(logPath);
+			}
+		}		
 	}
 	
 	public OAuthManagerImpl(OAuthClientInfo oauthClientInfo, String logPath) {
@@ -75,39 +85,6 @@ public class OAuthManagerImpl implements OAuthManager {
 		}
 		
 		return accessToken;
-	}	
-	
-	@Override
-	public void setClientInfo(OAuthClientInfo clientInfo) {
-		this.clientInfo = clientInfo;
-	}
-	
-	@Override
-	public void setPropertyFile(String path) throws Exception {
-		Properties props = new Properties();
-
-		if (path == null) {
-			throw new OAuthManagingException(OAuthManaging.OAUTH_OBJECT_NULL,"Property path is null");
-		}
-
-		FileInputStream fis = null;
-		
-		try {
-			fis = new FileInputStream(path);
-			props.load(new BufferedInputStream(fis));
-			
-			String propAccessTokenUrl = props.getProperty("oauth.token_create_url");
-			
-			if (propAccessTokenUrl != null) {
-				oauthAccessTokenUrl = propAccessTokenUrl;
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new OAuthManagingException(OAuthManaging.UNKNOWN_ERROR, "File read error!!");
-		} finally {
-			fis.close();
-		}
 	}
 	
 	private Map<String, String> getOAuthHttpRequestHeader() {

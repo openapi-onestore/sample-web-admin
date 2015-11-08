@@ -1,12 +1,9 @@
 package com.skplanet.openapi.external.payment;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -31,15 +28,35 @@ public class OpenApiManagerImpl implements OpenApiManager {
 			.getLogger(OpenApiManagerImpl.class);
 	private ObjectMapper objectMapper = new ObjectMapper();
 
+	private final String sandboxFileJobUrl = "https://sandbox.openapi.payplanet.co.kr/v1/payment/fileJob";
+	private final String sandboxResultFileUrl = "https://sandbox.openapi.payplanet.co.kr/v1/payment/job";
+	private final String sandboxTxidInfoUrl = "https://sandbox.openapi.payplanet.co.kr/v1/payment/transaction";
+	private final String sandboxRefundUrl = "https://sandbox.openapi.payplanet.co.kr/v1/payment/refund";
+	
+	private final String releaseFileJobUrl = "https://openapi.payplanet.co.kr/v1/payment/fileJob";
+	private final String releaseResultFileUrl = "https://openapi.payplanet.co.kr/v1/payment/job";
+	private final String releaseTxidInfoUrl = "https://openapi.payplanet.co.kr/v1/payment/transaction";
+	private final String releaseRefundUrl = "https://openapi.payplanet.co.kr/v1/payment/refund";
+	
 	// Property values, uri is default setting
-	private String fileJobUrl = "http://172.21.60.141/v1/payment/fileJob";
-	private String resultFileUrl = "http://172.21.60.141/v1/payment/job";
-	private String txidInfoUrl = "http://172.21.60.141/v1/payment/transaction";
-	private String refundUrl = "http://172.21.60.141/v1/payment/refund";
-
-	public OpenApiManagerImpl() { }
-
-	public OpenApiManagerImpl(String logPath) {
+	private String fileJobUrl = null;
+	private String resultFileUrl = null;
+	private String txidInfoUrl = null;
+	private String refundUrl = null;
+	
+	public OpenApiManagerImpl(Boolean isSandboxMode, String logPath) {
+		if (isSandboxMode) {
+			this.fileJobUrl = sandboxFileJobUrl;
+			this.resultFileUrl = sandboxResultFileUrl;
+			this.txidInfoUrl = sandboxTxidInfoUrl;
+			this.refundUrl = sandboxRefundUrl;
+		} else {
+			this.fileJobUrl = releaseFileJobUrl;
+			this.resultFileUrl = releaseResultFileUrl;
+			this.txidInfoUrl = releaseTxidInfoUrl;
+			this.refundUrl = releaseRefundUrl;	
+		}
+				
 		if (logPath != null) {
 			if (logPath.length() > 0) {
 				PropertyConfigurator.configure(logPath);				
@@ -195,52 +212,6 @@ public class OpenApiManagerImpl implements OpenApiManager {
 		}
 		
 		return cancelResponse;
-	}
-
-	@Override
-	public void setPropertyFile(String path) throws Exception {
-		Properties props = new Properties();
-		StringBuilder stringBuilder = new StringBuilder();
-
-		if (path == null) {
-			throw new OpenApiException(OpenApi.OPENAPI_PROPERTY_SETTING_ERROR,
-					"{'reason':'Property path is null.'}");
-		}
-
-		FileInputStream fis = null;
-
-		try {
-			fis = new FileInputStream(path);
-			props.load(new BufferedInputStream(fis));
-
-			String propsFileJobUrl = props.getProperty("openapi.file_payment_url");
-			String propsResultFileUrl = props.getProperty("openapi.file_payment_info_url");
-			String propsTxidInfoUrl = props.getProperty("openapi.payment_transaction_detail_url");
-			String propsRefundUrl = props.getProperty("openapi.payment_cancel_url");
-			
-			if (propsFileJobUrl != null)
-				fileJobUrl = propsFileJobUrl;
-			
-			if (propsResultFileUrl != null)
-				resultFileUrl = propsResultFileUrl;
-			
-			if (propsTxidInfoUrl != null)
-				txidInfoUrl = propsTxidInfoUrl;
-			
-			if (propsRefundUrl != null)
-				refundUrl = propsRefundUrl;
-			
-			stringBuilder.append("[setPropertyFile] ").append(fileJobUrl)
-					.append("|").append(resultFileUrl).append("|")
-					.append(txidInfoUrl).append("|").append(refundUrl);
-			logger.info(stringBuilder.toString());
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new OpenApiException(OpenApi.OPENAPI_PROPERTY_SETTING_ERROR,
-					"{'reason':'File creation is incorect!!'}");
-		} finally {
-			fis.close();
-		}
 	}
 
 }

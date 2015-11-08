@@ -21,13 +21,15 @@ import org.springframework.stereotype.Component;
 
 import com.skplanet.openapi.dao.FilePaymentDAO;
 import com.skplanet.openapi.dao.NotificationDAO;
+import com.skplanet.openapi.external.framework.Environment;
+import com.skplanet.openapi.external.framework.ManagerProducer;
 import com.skplanet.openapi.external.notification.NotiException;
 import com.skplanet.openapi.external.notification.NotiManagerImpl;
 import com.skplanet.openapi.external.notification.NotiReceive;
 import com.skplanet.openapi.external.notification.NotiVerifyResult;
 import com.skplanet.openapi.external.oauth.OAuthClientInfo;
-import com.skplanet.openapi.external.oauth.OAuthManagerImpl;
-import com.skplanet.openapi.external.payment.OpenApiManagerImpl;
+import com.skplanet.openapi.external.oauth.OAuthManager;
+import com.skplanet.openapi.external.payment.OpenApiManager;
 import com.skplanet.openapi.vo.NotificationResult;
 import com.skplanet.openapi.vo.payment.FilePaymentHeader;
 import com.skplanet.openapi.vo.payment.FilePaymentResult;
@@ -56,8 +58,8 @@ public class PayplanetClient {
 	@Autowired
 	private NotificationDAO notificationDAO;
 	
-	private OAuthManagerImpl oauthManager = new OAuthManagerImpl(new OAuthClientInfo(clientId, clientSecret, "client_credentials"));
-	private OpenApiManagerImpl openApiManager = new OpenApiManagerImpl();
+	private OAuthManager oauthManager = ManagerProducer.getFactory(Environment.LIVE, "").getOAuthManager(new OAuthClientInfo(clientId, clientSecret, ""));
+	private OpenApiManager openApiManager = ManagerProducer.getFactory(Environment.LIVE, "").getOpenApiManager();
 	private NotiManagerImpl notiManagerImpl = new NotiManagerImpl();
 	
 	private ObjectMapper objectMapper = new ObjectMapper();
@@ -67,7 +69,6 @@ public class PayplanetClient {
 		System.out.println("Initiation for Manager");
 		try {
 			String path = new ClassPathResource("properties/config.properties").getFile().getAbsolutePath();
-			oauthManager.setPropertyFile(path);
 			openApiManager.setPropertyFile(path);
 			notiManagerImpl.setPropertyFile(path);
 		} catch (Exception e) {
@@ -248,7 +249,7 @@ public class PayplanetClient {
 		refundTransactionRequest.setPaymentMethods(paymentMethods);
 		refundTransactionRequest.setNote("Test refund request");
 		
-		payer.setAuthkey("AuthKey");
+		payer.setAuthKey("AuthKey");
 		
 		Links links = new Links();
 		links.setName("refundurl");

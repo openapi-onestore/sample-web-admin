@@ -1,10 +1,7 @@
 package com.skplanet.openapi.external.notification;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -18,10 +15,26 @@ public class NotiManagerImpl implements NotiManager {
 
 	private static final Logger logger = LoggerFactory.getLogger(NotiManagerImpl.class);
 	private ObjectMapper objectMapper = new ObjectMapper();
+	
+	private final String sandboxVerifyUrl = "http://172.21.60.142/openapi/v1/payment/notification/verify";
+	private final String releaseVerifyUrl = "http://172.21.60.142/openapi/v1/payment/notification/verify";
 	private String verifyUrl = "http://172.21.60.142/openapi/v1/payment/notification/verify";
 	
 	public NotiManagerImpl() { }
 	public NotiManagerImpl(String logPath) {
+		if (logPath != null) {
+			if (logPath.length() > 0) {
+				PropertyConfigurator.configure(logPath);
+			}
+		}
+	}
+
+	public NotiManagerImpl(Boolean isSandboxMode,String logPath) {
+		if (isSandboxMode) {
+			this.verifyUrl = sandboxVerifyUrl;
+		} else {
+			this.verifyUrl = releaseVerifyUrl;			
+		}
 		if (logPath != null) {
 			if (logPath.length() > 0) {
 				PropertyConfigurator.configure(logPath);
@@ -84,33 +97,6 @@ public class NotiManagerImpl implements NotiManager {
 		}
 		
 		return notiVerifyResult;
-	}
-	
-	@Override
-	public void setPropertyFile(String path) throws Exception {
-		Properties props = new Properties();
-
-		if (path == null) {
-			throw new NotiException(Noti.NOTI_PROPERTY_SETTING_ERROR,"Property path is null");
-		}
-		
-		FileInputStream fis = null;
-		
-		try {
-			fis = new FileInputStream(path);
-			props.load(new BufferedInputStream(fis));
-			
-			String propVerifyUrl = props.getProperty("notification.verify_url");
-			if (propVerifyUrl != null) {
-				verifyUrl = propVerifyUrl;				
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new NotiException(Noti.NOTI_PROPERTY_SETTING_ERROR, "File creation is incorect!!");
-		} finally {
-			fis.close();
-		}
 	}
 	
 }
