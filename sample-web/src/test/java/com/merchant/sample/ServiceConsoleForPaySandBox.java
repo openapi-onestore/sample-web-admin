@@ -1,6 +1,9 @@
 package com.merchant.sample;
 
+<<<<<<< HEAD
 import com.skplanet.openapi.external.framework.Environment;
+=======
+>>>>>>> d63a03bb2aa477b2acaef4c54ef576695a4235b5
 import com.skplanet.openapi.external.framework.ManagerProducer;
 import com.skplanet.openapi.external.oauth.OAuthAccessToken;
 import com.skplanet.openapi.external.oauth.OAuthClientInfo;
@@ -8,7 +11,10 @@ import com.skplanet.openapi.external.oauth.OAuthManager;
 import com.skplanet.openapi.external.payment.OpenApiManager;
 import com.skplanet.openapi.vo.payment.FilePaymentHeader;
 import com.skplanet.openapi.vo.payment.FilePaymentResult;
+<<<<<<< HEAD
 
+=======
+>>>>>>> d63a03bb2aa477b2acaef4c54ef576695a4235b5
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.BufferedReader;
@@ -35,15 +41,25 @@ public class ServiceConsoleForPaySandBox {
 		// Token for Release
 //		String devJwToken = "VTFqvgcLbyyFdG2wZtEzBgbRB++RAp4WLWURY7g8Rvg=";
 //		String devJwToken2 = "dxHw4bH8HU0f0+pmVsuvvfATdD8OXr85nL1ZTkmdVig=";
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> d63a03bb2aa477b2acaef4c54ef576695a4235b5
 		// SandBox, 00686847
 		final String clientId = "dCzM2NuHr1dOBQVqSpJO2VKzqguuuwgrddcMrXgFEyod0wDBNfm1YfCRKRsZ5CQ3";
 		final String clientSecret = "6XV9AWDxsarQZpF8cF+425zQg96NYhziAB7pdsD7/5E=";
 
 		// Get New AccessToken
 		final OAuthClientInfo oauthClientInfo = new OAuthClientInfo(clientId, clientSecret, "client_credentials");
+<<<<<<< HEAD
 		final OAuthManager oauthManager = ManagerProducer.getFactory(Environment.SANDBOX, getLogPath()).getOAuthManager(oauthClientInfo);
 		
+=======
+		final OAuthManager oauthManager = ManagerProducer.getFactory(getLogPath()).getOAuthManager(oauthClientInfo);
+		oauthManager.setPropertyFile(getPropertiesPath());
+
+>>>>>>> d63a03bb2aa477b2acaef4c54ef576695a4235b5
 		final OAuthAccessToken accessTokenObj = oauthManager.createAccessToken();
 		final String accessToken = accessTokenObj.getAccessToken();
 
@@ -59,7 +75,11 @@ public class ServiceConsoleForPaySandBox {
 			final String accessToken = getAccessToken();
 
 			// Create File Payment
+<<<<<<< HEAD
 			final OpenApiManager service = ManagerProducer.getFactory(Environment.SANDBOX, getLogPath()).getOpenApiManager();
+=======
+			final OpenApiManager service = ManagerProducer.getFactory(getLogPath()).getOpenApiManager();
+>>>>>>> d63a03bb2aa477b2acaef4c54ef576695a4235b5
 			service.setPropertyFile(getPropertiesPath());
 
 			final FilePaymentHeader filePaymentHeader = new FilePaymentHeader();

@@ -1,6 +1,9 @@
 package com.merchant.sample;
 
+<<<<<<< HEAD
 import com.skplanet.openapi.external.framework.Environment;
+=======
+>>>>>>> d63a03bb2aa477b2acaef4c54ef576695a4235b5
 import com.skplanet.openapi.external.framework.ManagerProducer;
 import com.skplanet.openapi.external.oauth.OAuthAccessToken;
 import com.skplanet.openapi.external.oauth.OAuthClientInfo;
@@ -8,7 +11,10 @@ import com.skplanet.openapi.external.oauth.OAuthManager;
 import com.skplanet.openapi.external.payment.OpenApiException;
 import com.skplanet.openapi.external.payment.OpenApiManager;
 import com.skplanet.openapi.vo.payment.TransactionDetail;
+<<<<<<< HEAD
 
+=======
+>>>>>>> d63a03bb2aa477b2acaef4c54ef576695a4235b5
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.core.io.ClassPathResource;
 
@@ -42,9 +48,16 @@ public class ServiceConsoleForInfoSandBox {
 				clientId,
 				clientSecret,
 				"client_credentials");
+<<<<<<< HEAD
 		OAuthManager oauthManager = ManagerProducer.getFactory(Environment.SANDBOX, logPath).getOAuthManager(oauthClientInfo);
 		
 		try {
+=======
+		OAuthManager oauthManager = ManagerProducer.getFactory(logPath).getOAuthManager(oauthClientInfo);
+		
+		try {
+			oauthManager.setPropertyFile(path);
+>>>>>>> d63a03bb2aa477b2acaef4c54ef576695a4235b5
 			OAuthAccessToken accessTokenObj = oauthManager.createAccessToken();
 			accessToken = accessTokenObj.getAccessToken();
 			System.out.println("AccessToken >>>" + accessToken);
@@ -55,7 +68,11 @@ public class ServiceConsoleForInfoSandBox {
 		}
 		
 		// Get result file of payment job status
+<<<<<<< HEAD
 		OpenApiManager service = ManagerProducer.getFactory(Environment.SANDBOX, logPath).getOpenApiManager();
+=======
+		OpenApiManager service = ManagerProducer.getFactory(logPath).getOpenApiManager();
+>>>>>>> d63a03bb2aa477b2acaef4c54ef576695a4235b5
 		try {
 			service.setPropertyFile(path);
 		} catch (Exception e1) {
