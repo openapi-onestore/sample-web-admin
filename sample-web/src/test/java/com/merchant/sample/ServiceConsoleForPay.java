@@ -27,6 +27,10 @@ public class ServiceConsoleForPay {
 		String devJwToken = "VTFqvgcLbyyFdG2wZtEzBgbRB++RAp4WLWURY7g8Rvg=";
 		String devJwToken2 = "dxHw4bH8HU0f0+pmVsuvvfATdD8OXr85nL1ZTkmdVig=";
 		
+		// Token for Live and only for sample_release_with_iap.pay
+		devJwToken = "G9AZgIWrLNTg/5sRlMzNU1nSh6PT7FMmNM2QuE1jdtwxUE2OgYLeZo2mcPcFMasO";
+		devJwToken2 = "1wuASE1sopz28LO7xiTVyP0QWro5v0fhQ6eM8WtGYXE=";
+		
 		String accessToken = null;
 		String logPath = null;
 		
@@ -60,7 +64,8 @@ public class ServiceConsoleForPay {
 		filePaymentHeader.setCntTotalTrans(1);
 		filePaymentHeader.setPriority("Instant");
 		
-		File file = new File("res/sample_release.pay");
+//		File file = new File("res/sample_release.pay");
+		File file = new File("res/sample_release_with_iap.pay");
 		
 		System.out.println(">>>" + file.getAbsolutePath() + ">>>" + file.exists());
 		String jobId = null;
@@ -76,7 +81,7 @@ public class ServiceConsoleForPay {
 			// Get File Payment Job Result
 			Thread.sleep(3000);
 			
-			File resFile = new File("d:/samplefolder/sample-web/resFileinMerchant.txt");
+			File resFile = new File("temp_iap_" + System.currentTimeMillis() + ".log");
 			if (!resFile.createNewFile()) {
 				System.exit(-1);
 			}
