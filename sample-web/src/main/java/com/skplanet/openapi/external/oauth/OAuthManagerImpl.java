@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.skplanet.openapi.external.oauth.OAuthManagingException.OAuthManaging;
+import com.skplanet.openapi.external.payment.OpenApiManagerImpl.OPEN_API_MODE;
 import com.skplanet.openapi.external.util.KvpPostRequest;
 
 public class OAuthManagerImpl implements OAuthManager {
@@ -19,12 +20,15 @@ public class OAuthManagerImpl implements OAuthManager {
 	private ObjectMapper objectMapper = new ObjectMapper();
 	
 	// url default setting
+	private final String developmentOauthTokenUrl = "http://172.21.60.143:8080/oauth/service/accessToken";
 	private final String sandboxOauthTokenUrl = "https://sandbox.apiauth.payplanet.co.kr/oauth/service/accessToken";
 	private final String releaseOauthTokenUrl = "https://apiauth.payplanet.co.kr/oauth/service/accessToken";
 	private String oauthAccessTokenUrl;
 	
-	public OAuthManagerImpl(Boolean isSandboxMode, OAuthClientInfo oauthClientInfo, String logPath) {
-		if (isSandboxMode) {
+	public OAuthManagerImpl(OPEN_API_MODE mode, OAuthClientInfo oauthClientInfo, String logPath) {
+		if (mode == OPEN_API_MODE.DEVELOPMENT) {
+			this.oauthAccessTokenUrl = developmentOauthTokenUrl;
+		} else if (mode == OPEN_API_MODE.SANDBOX) {
 			this.oauthAccessTokenUrl = sandboxOauthTokenUrl;
 		} else {
 			this.oauthAccessTokenUrl = releaseOauthTokenUrl;			
@@ -38,8 +42,7 @@ public class OAuthManagerImpl implements OAuthManager {
 		}		
 	}
 	
-	public OAuthManagerImpl(OAuthClientInfo oauthClientInfo, String logPath) {
-		this.clientInfo = oauthClientInfo;
+	public OAuthManagerImpl(Boolean isSandBoxMode, String logPath) {
 		if (logPath != null) {
 			if (logPath.length() > 0) {
 				PropertyConfigurator.configure(logPath);
@@ -47,6 +50,14 @@ public class OAuthManagerImpl implements OAuthManager {
 		}
 	}
 	
+	@Override
+	public OAuthAccessToken createAccessToken(OAuthClientInfo oauthClientInfo)
+			throws OAuthManagingException {
+		this.clientInfo = oauthClientInfo;
+		return createAccessToken();
+	}
+	
+	@Override
 	public OAuthAccessToken createAccessToken() throws OAuthManagingException {
 		
 		if (clientInfo == null) {
@@ -72,6 +83,7 @@ public class OAuthManagerImpl implements OAuthManager {
 			logger.info("Set call uri : " + oauthAccessTokenUrl);
 			response = kvpPostRequest.executeRequest();
 			logger.info("Post response : " + response);
+			System.out.println(response);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new OAuthManagingException(OAuthManaging.OAUTH_HTTP_REQUEST_FAIL, "OAUTH http request is failure!!");
@@ -98,6 +110,6 @@ public class OAuthManagerImpl implements OAuthManager {
 		logger.info("Authorization : " + sb.toString());
 		
 		return headerMap;
-	}	
+	}
 	
 }

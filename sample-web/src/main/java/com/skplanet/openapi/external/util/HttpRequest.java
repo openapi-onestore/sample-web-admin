@@ -48,21 +48,24 @@ public abstract class HttpRequest<T, R> {
 	}
 
 	private boolean validationUrl() {
+		boolean result = true;
 		if (callUrl == null)
-			return false;
-		return true;
+			result = false;
+		return result;
 	}
 
 	protected boolean validationParameter() {
+		boolean result = true;
 		if (parameter == null)
-			return false;
-		return true;
+			result = false;
+		return result;
 	}
 
 	protected boolean validationHeader() {
+		boolean result = true;
 		if (headers == null)
-			return false;
-		return true;
+			result = false;
+		return result;
 	}
 
 	protected String getParameter() {

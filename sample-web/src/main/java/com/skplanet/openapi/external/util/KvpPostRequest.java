@@ -1,5 +1,6 @@
 package com.skplanet.openapi.external.util;
 
+import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -25,8 +26,9 @@ public class KvpPostRequest extends HttpRequest<Map<String, String>, String> {
 		// Url check
 		checkCallurl();
 		
-		if (!validationParameter())
+		if (!validationParameter()) {
 			return null;
+		}
 		
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(callUrl);
@@ -42,7 +44,7 @@ public class KvpPostRequest extends HttpRequest<Map<String, String>, String> {
 		
 		try {
 			checkHttpStatus(response);
-			result = EntityUtils.toString(response.getEntity());			
+			result = EntityUtils.toString(response.getEntity(), Charset.forName("UTF-8"));			
 		} catch (Exception e) {
 			throw new Exception(e);
 		} finally {

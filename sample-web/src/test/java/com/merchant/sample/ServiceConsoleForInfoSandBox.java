@@ -82,7 +82,7 @@ public class ServiceConsoleForInfoSandBox {
 				txDetail = service.getPaymentTransactionDetail(txid, accessToken);
 				System.out.println("Transaction detail result >>>" + txDetail.getResultCode() + "|" + txDetail.getResultMsg() + "|" + txDetail.getPayer().getAuthKey());
 				System.out.println(objectMapper.writeValueAsString(txDetail));
-			} catch (OpenApiException | IOException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			

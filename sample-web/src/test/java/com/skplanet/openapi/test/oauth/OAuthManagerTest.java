@@ -30,7 +30,7 @@ public class OAuthManagerTest {
 	
 	@Before
 	public void setUp() {
-		oauthClientInfo = new OAuthClientInfo("84xK38rx9iCrFRJVOynsRA0MT0o3LTs83OqDLEJf5g0=", "GS1qrhoHMJWpmS6QwLNaG5NcFWFqzh5TrmY5476a2nA=", "client_credentials");
+		oauthClientInfo = new OAuthClientInfo("rcWGYj7tu3PnsBAOsWCplsaFbadMlaWpNSwcZxEIPx1YhAK6xrFDF1HXOEe9ilCS", "T/Va54I5n/5ULmINeJELK7rUpYtWC38BgnTbmmtQvSk=", "client_credentials");
 	}
 	
 	@Test
@@ -45,6 +45,7 @@ public class OAuthManagerTest {
 			e.printStackTrace();
 		}
 		
+		Assert.assertNotNull(oauth);
 		Assert.assertEquals(32, oauth.getAccessToken().length());
 		Assert.assertEquals("Bearer", oauth.getTokenType());
 		

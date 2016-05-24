@@ -27,7 +27,18 @@ public class OpenApiManagerImpl implements OpenApiManager {
 	private static final Logger logger = LoggerFactory
 			.getLogger(OpenApiManagerImpl.class);
 	private ObjectMapper objectMapper = new ObjectMapper();
-
+	
+	public enum OPEN_API_MODE {
+		DEVELOPMENT,
+		SANDBOX,
+		RELEASE		
+	}
+	
+	private final String developmentFileJobUrl = "http://172.21.60.141/v1/payment/fileJob";
+	private final String developmentResultFileUrl = "http://172.21.60.141/v1/payment/job";
+	private final String developmentTxidInfoUrl = "http://172.21.60.141/v1/payment/transaction";
+	private final String developmentRefundUrl = "http://172.21.60.141/v1/payment/refund";
+	
 	private final String sandboxFileJobUrl = "https://sandbox.openapi.payplanet.co.kr/v1/payment/fileJob";
 	private final String sandboxResultFileUrl = "https://sandbox.openapi.payplanet.co.kr/v1/payment/job";
 	private final String sandboxTxidInfoUrl = "https://sandbox.openapi.payplanet.co.kr/v1/payment/transaction";
@@ -44,8 +55,13 @@ public class OpenApiManagerImpl implements OpenApiManager {
 	private String txidInfoUrl = null;
 	private String refundUrl = null;
 	
-	public OpenApiManagerImpl(Boolean isSandboxMode, String logPath) {
-		if (isSandboxMode) {
+	public OpenApiManagerImpl(OPEN_API_MODE mode, String logPath) {
+		if (mode == OPEN_API_MODE.DEVELOPMENT) {
+			this.fileJobUrl = developmentFileJobUrl;
+			this.resultFileUrl = developmentResultFileUrl;
+			this.txidInfoUrl = developmentTxidInfoUrl;
+			this.refundUrl = developmentRefundUrl;
+		} else if (mode == OPEN_API_MODE.SANDBOX) {
 			this.fileJobUrl = sandboxFileJobUrl;
 			this.resultFileUrl = sandboxResultFileUrl;
 			this.txidInfoUrl = sandboxTxidInfoUrl;
@@ -54,7 +70,7 @@ public class OpenApiManagerImpl implements OpenApiManager {
 			this.fileJobUrl = releaseFileJobUrl;
 			this.resultFileUrl = releaseResultFileUrl;
 			this.txidInfoUrl = releaseTxidInfoUrl;
-			this.refundUrl = releaseRefundUrl;	
+			this.refundUrl = releaseRefundUrl;				
 		}
 				
 		if (logPath != null) {
@@ -181,6 +197,7 @@ public class OpenApiManagerImpl implements OpenApiManager {
 			throw new OpenApiException(OpenApi.OPENAPI_JOB_EXECUTE_ERROR,
 					e.getMessage());
 		}
+		
 		return transactionDetail;
 	}
 

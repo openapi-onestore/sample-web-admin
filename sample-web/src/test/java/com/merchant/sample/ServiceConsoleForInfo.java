@@ -55,7 +55,7 @@ public class ServiceConsoleForInfo {
 		
 		try {
 			File resFile = new File("d:/samplefolder/sample-web/resFileinMerchant.txt");			
-			service.getFilePaymentJobStatus("35", resFile, accessToken);				
+			service.getFilePaymentJobStatus("37", resFile, accessToken);				
 			System.out.println("Path >>> " + resFile.getAbsolutePath());
 			printFile(resFile);
 			resFile.delete();
@@ -68,7 +68,7 @@ public class ServiceConsoleForInfo {
 		
 		if ( switchBool ) {
 			// Change a txid from information
-			String txid = "TSTORE0004_20151108163027850842776563868";
+			String txid = "TSTORE0004_20151109160520978193556705391";
 			
 			// Get Payment Transaction Details
 			TransactionDetail txDetail;
@@ -76,7 +76,7 @@ public class ServiceConsoleForInfo {
 				txDetail = service.getPaymentTransactionDetail(txid, accessToken);					
 				System.out.println("Transaction detail result >>>" + txDetail.getResultCode() + "|" + txDetail.getResultMsg() + "|" + txDetail.getPayer().getAuthKey());
 				System.out.println(objectMapper.writeValueAsString(txDetail));
-			} catch (OpenApiException | IOException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			

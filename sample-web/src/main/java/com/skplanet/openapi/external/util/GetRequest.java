@@ -1,5 +1,7 @@
 package com.skplanet.openapi.external.util;
 
+import java.nio.charset.Charset;
+
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -25,7 +27,7 @@ public class GetRequest extends HttpRequest<String, String> {
 		CloseableHttpResponse response = httpClient.execute(httpGet);
 		try {
 			checkHttpStatus(response);
-			result = EntityUtils.toString(response.getEntity());
+			result = EntityUtils.toString(response.getEntity(), Charset.forName("UTF-8"));
 		} catch (Exception e) {
 			throw new Exception(e);
 		} finally {

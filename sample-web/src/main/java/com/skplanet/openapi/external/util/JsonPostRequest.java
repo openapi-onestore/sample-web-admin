@@ -1,5 +1,7 @@
 package com.skplanet.openapi.external.util;
 
+import java.nio.charset.Charset;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -37,7 +39,7 @@ public class JsonPostRequest extends HttpRequest<String, String> {
 		
 		try {
 			checkHttpStatus(response);
-			result = EntityUtils.toString(response.getEntity());
+			result = EntityUtils.toString(response.getEntity(), Charset.forName("UTF-8"));
 		} catch (Exception e) {
 			throw new Exception(e);
 		} finally {

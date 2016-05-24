@@ -2,6 +2,7 @@ package com.skplanet.openapi.external.util;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.nio.charset.Charset;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -41,7 +42,7 @@ public class FilePostRequest extends HttpRequest<File, String> {
 		
 		try {
 			checkHttpStatus(response);
-			result = EntityUtils.toString(response.getEntity());
+			result = EntityUtils.toString(response.getEntity(), Charset.forName("UTF-8"));
 		} catch (Exception e) {
 			throw new Exception(e);
 		} finally {

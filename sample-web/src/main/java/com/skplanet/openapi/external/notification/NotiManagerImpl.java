@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.skplanet.openapi.external.notification.NotiException.Noti;
+import com.skplanet.openapi.external.payment.OpenApiManagerImpl.OPEN_API_MODE;
 import com.skplanet.openapi.external.util.JsonPostRequest;
 
 public class NotiManagerImpl implements NotiManager {
@@ -16,6 +17,7 @@ public class NotiManagerImpl implements NotiManager {
 	private static final Logger logger = LoggerFactory.getLogger(NotiManagerImpl.class);
 	private ObjectMapper objectMapper = new ObjectMapper();
 	
+	private final String developmentVerifyUrl = "http://172.21.60.142/openapi/v1/payment/notification/verify";
 	private final String sandboxVerifyUrl = "http://172.21.60.142/openapi/v1/payment/notification/verify";
 	private final String releaseVerifyUrl = "http://172.21.60.142/openapi/v1/payment/notification/verify";
 	private String verifyUrl = "http://172.21.60.142/openapi/v1/payment/notification/verify";
@@ -29,8 +31,10 @@ public class NotiManagerImpl implements NotiManager {
 		}
 	}
 
-	public NotiManagerImpl(Boolean isSandboxMode,String logPath) {
-		if (isSandboxMode) {
+	public NotiManagerImpl(OPEN_API_MODE mode,String logPath) {
+		if (mode == OPEN_API_MODE.DEVELOPMENT) {
+			this.verifyUrl = developmentVerifyUrl;
+		} else if (mode == OPEN_API_MODE.SANDBOX) {
 			this.verifyUrl = sandboxVerifyUrl;
 		} else {
 			this.verifyUrl = releaseVerifyUrl;			

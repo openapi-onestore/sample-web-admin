@@ -2,6 +2,7 @@ package com.skplanet.openapi.util;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -55,7 +56,7 @@ public class HttpClient {
 		CloseableHttpResponse response = httpclient.execute(httpGet);
 		try {
 			setStatusLine(response.getStatusLine());
-			return EntityUtils.toString(response.getEntity());
+			return EntityUtils.toString(response.getEntity(), Charset.forName("UTF-8"));
 		} finally {
 			response.close();
 		}
@@ -79,7 +80,7 @@ public class HttpClient {
 
 		try {
 			setStatusLine(response.getStatusLine());
-			return EntityUtils.toString(response.getEntity());
+			return EntityUtils.toString(response.getEntity(), Charset.forName("UTF-8"));
 		} finally {
 			response.close();
 		}
@@ -98,7 +99,7 @@ public class HttpClient {
 
 		try {
 			setStatusLine(response.getStatusLine());
-			return EntityUtils.toString(response.getEntity());
+			return EntityUtils.toString(response.getEntity(), Charset.forName("UTF-8"));
 		} finally {
 			response.close();
 		}
@@ -130,7 +131,7 @@ public class HttpClient {
 			CloseableHttpResponse response = httpclient.execute(httpPost);
 			try {
 				setStatusLine(response.getStatusLine());
-				return EntityUtils.toString(response.getEntity());
+				return EntityUtils.toString(response.getEntity(), Charset.forName("UTF-8"));
 			} finally {
 				response.close();
 			}

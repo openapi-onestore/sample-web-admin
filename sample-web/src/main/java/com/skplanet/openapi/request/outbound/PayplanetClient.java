@@ -15,7 +15,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.skplanet.openapi.dao.FilePaymentDAO;
@@ -46,10 +45,14 @@ public class PayplanetClient {
 	
 	private static final Logger logger = LoggerFactory.getLogger(PayplanetClient.class);
 
-	@Value("${oauth.client_id}") private String clientId;
-	@Value("${oauth.client_secret}") private String clientSecret;
-	@Value("${notification.verify_url}") private String verifyUrl;
-	@Value("${openapi.notification_url}") private String notificationUrl;
+//	@Value("${oauth.client_id}") private String clientId;
+//	@Value("${oauth.client_secret}") private String clientSecret;
+//	@Value("${notification.verify_url}") private String verifyUrl;
+//	@Value("${openapi.notification_url}") private String notificationUrl;
+	
+	private String clientId = "rcWGYj7tu3PnsBAOsWCplsaFbadMlaWpNSwcZxEIPx1YhAK6xrFDF1HXOEe9ilCS";
+	private String clientSecret = "T/Va54I5n/5ULmINeJELK7rUpYtWC38BgnTbmmtQvSk=";
+	private String notificationUrl = "http://172.21.60.143:8181/sample-web/openapi/notification/noti_listener";
 	
 	@Autowired
 	private FilePaymentDAO filePaymentDAO;
@@ -57,8 +60,8 @@ public class PayplanetClient {
 	@Autowired
 	private NotificationDAO notificationDAO;
 	
-	private OAuthManager oauthManager = ManagerProducer.getFactory(Environment.SANDBOX, "").getOAuthManager(new OAuthClientInfo(clientId, clientSecret, ""));
-	private OpenApiManager openApiManager = ManagerProducer.getFactory(Environment.SANDBOX, "").getOpenApiManager();
+	private OAuthManager oauthManager = ManagerProducer.getFactory(Environment.DEVELOPMENT, "").getOAuthManager(new OAuthClientInfo(clientId, clientSecret, "client_credentials"));
+	private OpenApiManager openApiManager = ManagerProducer.getFactory(Environment.DEVELOPMENT, "").getOpenApiManager();
 	private NotiManagerImpl notiManagerImpl = new NotiManagerImpl();
 	
 	private ObjectMapper objectMapper = new ObjectMapper();
@@ -120,7 +123,7 @@ public class PayplanetClient {
 		logger.debug("getFilePaymentResultFile() called");		
 		String accessToken = getAccessTokenFromOauthManager();
 		String jobId = param.get("jobId");
-		File resultFile = new File("d:/sample_folder/file_result.txt");
+		File resultFile = new File("/home/1000720/sample_folder/download/file_result.txt");
 		
 		openApiManager.getFilePaymentJobStatus(jobId, resultFile, accessToken);
 		
